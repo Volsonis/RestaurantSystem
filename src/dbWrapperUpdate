@@ -1,0 +1,2 @@
+#!/bin/bash
+java -classpath $HOME/workspace/RestaurantSystem/src/libs:/home/S10/lesnjas0/workspace/RestaurantSystem/libs/mysql-connector-java-5.1.23:. com.javaranch.db.Jenny db.properties
