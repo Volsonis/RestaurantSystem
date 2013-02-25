@@ -6,6 +6,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.JList;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -17,6 +18,8 @@ import javax.swing.SwingConstants;
 import javax.swing.JDesktopPane;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.JLayeredPane;
+import javax.swing.JSeparator;
 
 public class Management extends JFrame {
 
@@ -117,20 +120,13 @@ public class Management extends JFrame {
 		btnStaff.setIcon(new ImageIcon(Management.class.getResource("/gui/resources/img32x32/identity.png")));
 		toolBar.add(btnStaff);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		contentPane.add(scrollPane, BorderLayout.CENTER);
+		JPanel panel = new JPanel();
+		contentPane.add(panel, BorderLayout.CENTER);
+		panel.setLayout(new BorderLayout(0, 0));
 		
+		IngredientsFrame ingredientsFrame = new IngredientsFrame();
+		panel.add(ingredientsFrame);
 		
-		JPanel[] ip = new JPanel[10];
-		int coordinate = 0;
-		for(int i=0; i<10; i++)
-		{
-			ip[i] = new IngredientPanel();
-			scrollPane.add(ip[i], coordinate);
-			ip[i].setVisible(true);
-			ip[i].setSize(800, 56);
-			coordinate = coordinate+1;
-		}
 	}
 
 }
