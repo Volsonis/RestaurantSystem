@@ -10,31 +10,30 @@ public class DBtester
 		Double price = 0.99;
 		int stock = 5;
 		
-		DBInterface dbif = new DBInterface();
 		
 		//test as I go along
 		
 		//add
-		dbif.addIngredient(name, price, stock);
+		DBInterface.addIngredient(name, price, stock);
 		
 		//String[] ingredients = {"rice"};
-		//dbif.addDish("Boiled Rice", "Simply boiled rice", 1.99, ingredients);
+		//DBInterface.addDish("Boiled Rice", "Simply boiled rice", 1.99, ingredients);
 		
 		//edit
-		//dbif.editIngredientStock("rice", 5);
-		//dbif.editIngredientPrice("rice", 0.5);
+		//DBInterface.editIngredientStock("rice", 5);
+		//DBInterface.editIngredientPrice("rice", 0.5);
 		
-		//dbif.editDishName(0, "Boiled Rice");
-		//dbif.editDishDescription(0, "Rice");
-		//dbif.editDishDescription("Boiled Rice", "Simply boiled rice");
+		//DBInterface.editDishName(0, "Boiled Rice");
+		//DBInterface.editDishDescription(0, "Rice");
+		//DBInterface.editDishDescription("Boiled Rice", "Simply boiled rice");
 		
-		//dbif.deleteIngredients("Boiled Rice", "rice");
-		dbif.addIngredients("Boiled Rice", "rice");
+		//DBInterface.deleteIngredients("Boiled Rice", "rice");
+		DBInterface.addIngredients("Boiled Rice", "rice");
 		
 		//delete
-		//dbif.deleteDish(0);
+		//DBInterface.deleteDish(0);
 		
-		//dbif.deleteIngredient("rice");
+		//DBInterface.deleteIngredient("rice");
 		
 		
 		
