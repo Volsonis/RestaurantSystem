@@ -49,10 +49,11 @@ public class OrderTable
     public static final String numberColumnName = "number";
     public static final String valueColumnName = "value";
     public static final String customer_idColumnName = "customer_id";
+    public static final String tablenumberColumnName = "tablenumber";
 
     private static String[] allColumns =
     {
-        numberColumnName , valueColumnName , customer_idColumnName , 
+        numberColumnName , valueColumnName , customer_idColumnName , tablenumberColumnName , 
     };
 
     /** You probably want to use the static methods for most of your access, but once in a while you might need to
@@ -183,8 +184,12 @@ public class OrderTable
         private boolean dataLoadedFromDatabase = false ;
 
         private int number ;
-        private String value ;
+        private double value ;
+        private boolean valueNull = true ;
         private int customer_id ;
+        private boolean customer_idNull = true ;
+        private int tablenumber ;
+        private boolean tablenumberNull = true ;
 
         /** for internal use only!   If you need a row object, use getRow(). */
         Row()
@@ -196,8 +201,12 @@ public class OrderTable
             if ( data != null )
             {
                 this.number =  Str.toInt( data[0] );
-                this.value = data[1];
-                this.customer_id =  Str.toInt( data[2] );
+                this.valueNull = ( data[1] == null );
+                this.value = valueNull ? 0.0 : Str.toDouble( data[1] );
+                this.customer_idNull = ( data[2] == null );
+                this.customer_id = customer_idNull ? 0 : Str.toInt( data[2] );
+                this.tablenumberNull = ( data[3] == null );
+                this.tablenumber = tablenumberNull ? 0 : Str.toInt( data[3] );
                 dataLoadedFromDatabase = true ;
             }
         }
@@ -218,14 +227,42 @@ public class OrderTable
         }
 
 
-        public String getValue()
+        public double getValue()
         {
             return value ;
         }
 
-        public void setValue( String value )
+        public void setValue( double value )
         {
             this.value = value ;
+            valueNull = false ;
+        }
+
+        public void setValue( Double value )
+        {
+            valueNull = ( value == null );
+            if ( valueNull )
+            {
+                this.value = 0.0 ;
+            }
+            else
+            {
+                this.value = value.doubleValue() ;
+            }
+        }
+
+        public boolean isValueNull()
+        {
+            return valueNull ;
+        }
+
+        public void setValueNull( boolean valueNull )
+        {
+            this.valueNull = valueNull ;
+            if ( valueNull )
+            {
+                value = 0.0 ;
+            }
         }
 
 
@@ -237,6 +274,73 @@ public class OrderTable
         public void setCustomer_id( int customer_id )
         {
             this.customer_id = customer_id ;
+            customer_idNull = false ;
+        }
+
+        public void setCustomer_id( Integer customer_id )
+        {
+            customer_idNull = ( customer_id == null );
+            if ( customer_idNull )
+            {
+                this.customer_id = 0 ;
+            }
+            else
+            {
+                this.customer_id = customer_id.intValue() ;
+            }
+        }
+
+        public boolean isCustomer_idNull()
+        {
+            return customer_idNull ;
+        }
+
+        public void setCustomer_idNull( boolean customer_idNull )
+        {
+            this.customer_idNull = customer_idNull ;
+            if ( customer_idNull )
+            {
+                customer_id = 0 ;
+            }
+        }
+
+
+        public int getTablenumber()
+        {
+            return tablenumber ;
+        }
+
+        public void setTablenumber( int tablenumber )
+        {
+            this.tablenumber = tablenumber ;
+            tablenumberNull = false ;
+        }
+
+        public void setTablenumber( Integer tablenumber )
+        {
+            tablenumberNull = ( tablenumber == null );
+            if ( tablenumberNull )
+            {
+                this.tablenumber = 0 ;
+            }
+            else
+            {
+                this.tablenumber = tablenumber.intValue() ;
+            }
+        }
+
+        public boolean isTablenumberNull()
+        {
+            return tablenumberNull ;
+        }
+
+        public void setTablenumberNull( boolean tablenumberNull )
+        {
+            this.tablenumberNull = tablenumberNull ;
+            if ( tablenumberNull )
+            {
+                tablenumber = 0 ;
+            }
         }
 
 
@@ -251,8 +355,9 @@ public class OrderTable
         {
             Map data = new HashMap();
             data.put( numberColumnName , String.valueOf(  this.number ) );
-            data.put( valueColumnName , this.value );
-            data.put( customer_idColumnName , String.valueOf(  this.customer_id ) );
+            data.put( valueColumnName , this.valueNull ? null : String.valueOf( this.value ) );
+            data.put( customer_idColumnName , this.customer_idNull ? null : String.valueOf( this.customer_id ) );
+            data.put( tablenumberColumnName , this.tablenumberNull ? null : String.valueOf( this.tablenumber ) );
             return data ;
         }
 

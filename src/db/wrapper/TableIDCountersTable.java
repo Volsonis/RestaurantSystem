@@ -183,10 +183,8 @@ public class TableIDCountersTable
         private boolean dataLoadedFromDatabase = false ;
 
         private String tableName ;
-        private int counter ;
-        private boolean counterNull = true ;
-        private int skip ;
-        private boolean skipNull = true ;
+        private String counter ;
+        private String skip ;
 
         /** for internal use only!   If you need a row object, use getRow(). */
         Row()
@@ -198,10 +196,8 @@ public class TableIDCountersTable
             if ( data != null )
             {
                 this.tableName = data[0];
-                this.counterNull = ( data[1] == null );
-                this.counter = counterNull ? 0 : Str.toInt( data[1] );
-                this.skipNull = ( data[2] == null );
-                this.skip = skipNull ? 0 : Str.toInt( data[2] );
+                this.counter = data[1];
+                this.skip = data[2];
                 dataLoadedFromDatabase = true ;
             }
         }
@@ -222,81 +218,25 @@ public class TableIDCountersTable
         }
 
 
-        public int getCounter()
+        public String getCounter()
         {
             return counter ;
         }
 
-        public void setCounter( int counter )
+        public void setCounter( String counter )
         {
             this.counter = counter ;
-            counterNull = false ;
-        }
-
-        public void setCounter( Integer counter )
-        {
-            counterNull = ( counter == null );
-            if ( counterNull )
-            {
-                this.counter = 0 ;
-            }
-            else
-            {
-                this.counter = counter.intValue() ;
-            }
-        }
-
-        public boolean isCounterNull()
-        {
-            return counterNull ;
-        }
-
-        public void setCounterNull( boolean counterNull )
-        {
-            this.counterNull = counterNull ;
-            if ( counterNull )
-            {
-                counter = 0 ;
-            }
         }
 
 
-        public int getSkip()
+        public String getSkip()
         {
             return skip ;
         }
 
-        public void setSkip( int skip )
+        public void setSkip( String skip )
         {
             this.skip = skip ;
-            skipNull = false ;
-        }
-
-        public void setSkip( Integer skip )
-        {
-            skipNull = ( skip == null );
-            if ( skipNull )
-            {
-                this.skip = 0 ;
-            }
-            else
-            {
-                this.skip = skip.intValue() ;
-            }
-        }
-
-        public boolean isSkipNull()
-        {
-            return skipNull ;
-        }
-
-        public void setSkipNull( boolean skipNull )
-        {
-            this.skipNull = skipNull ;
-            if ( skipNull )
-            {
-                skip = 0 ;
-            }
         }
 
 
@@ -311,8 +251,8 @@ public class TableIDCountersTable
         {
             Map data = new HashMap();
             data.put( tableNameColumnName , this.tableName );
-            data.put( counterColumnName , this.counterNull ? null : String.valueOf( this.counter ) );
-            data.put( skipColumnName , this.skipNull ? null : String.valueOf( this.skip ) );
+            data.put( counterColumnName , this.counter );
+            data.put( skipColumnName , this.skip );
             return data ;
         }
 

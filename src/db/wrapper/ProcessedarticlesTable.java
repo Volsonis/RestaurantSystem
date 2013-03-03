@@ -48,10 +48,11 @@ public class ProcessedarticlesTable
 
     public static final String processedorders_idColumnName = "processedorders_id";
     public static final String dish_idColumnName = "dish_id";
+    public static final String processedarticles_idColumnName = "processedarticles_id";
 
     private static String[] allColumns =
     {
-        processedorders_idColumnName , dish_idColumnName , 
+        processedorders_idColumnName , dish_idColumnName , processedarticles_idColumnName , 
     };
 
     /** You probably want to use the static methods for most of your access, but once in a while you might need to
@@ -103,6 +104,26 @@ public class ProcessedarticlesTable
             // The idea is that during unit testing, a different test object will be returned here.
             // To learn more about unit testing with Jenny generated code, visit <a href="http://www.javaranch.com/jenny.jsp">www.javaranch.com/jenny.jsp</a>
             return new Row();
+        }
+
+        /** Instantiate a Row object and fill its content based on a search for the ID. 
+         *
+         * Return null if not found.  Return first item if more than one found.
+         */
+        public Row getRow( Connection con , int processedarticles_id ) throws SQLException
+        {
+            Row row = new Row( this.search( con , "processedarticles_id" , String.valueOf( processedarticles_id ) , allColumns ) );
+            return row.dataLoadedFromDatabase() ? row : null ;
+        }
+
+        /** Instantiate a Row object and fill its content based on a search for the ID.
+         *
+         * Return null if not found.
+         */
+        public Row getRow( long processedarticles_id ) throws SQLException
+        {
+            Row row = new Row( this.search( "processedarticles_id" , String.valueOf( processedarticles_id ) , allColumns ) );
+            return row.dataLoadedFromDatabase() ? row : null ;
         }
 
         /** Instantiate a Row object and fill its content based on a search
@@ -173,6 +194,36 @@ public class ProcessedarticlesTable
             return rowArray( this.search( allColumns ) );
         }
 
+        public void update( Connection con , int processedarticles_id , Map data ) throws SQLException
+        {
+            this.update( con , "processedarticles_id" , String.valueOf( processedarticles_id ) , data );
+        }
+
+        public void update( int processedarticles_id , Map data ) throws SQLException
+        {
+            this.update( "processedarticles_id" , String.valueOf( processedarticles_id ) , data );
+        }
+
+        public void delete( Connection con , long processedarticles_id ) throws SQLException
+        {
+            this.delete( con , "processedarticles_id" , String.valueOf( processedarticles_id ) );
+        }
+
+        public void delete( long processedarticles_id ) throws SQLException
+        {
+            this.delete( "processedarticles_id" , String.valueOf( processedarticles_id ) );
+        }
+
+        public long insertAndGetID( Connection con , Map data ) throws SQLException
+        {
+            return this.insertAndGetID( con , data , "processedarticles_id" );
+        }
+
+        public long insertAndGetID( Map data ) throws SQLException
+        {
+            return this.insertAndGetID( data , "processedarticles_id" );
+        }
+
 
     }
 
@@ -183,6 +234,7 @@ public class ProcessedarticlesTable
 
         private int processedorders_id ;
         private int dish_id ;
+        private int processedarticles_id ;
 
         /** for internal use only!   If you need a row object, use getRow(). */
         Row()
@@ -195,6 +247,7 @@ public class ProcessedarticlesTable
             {
                 this.processedorders_id =  Str.toInt( data[0] );
                 this.dish_id =  Str.toInt( data[1] );
+                this.processedarticles_id =  Str.toInt( data[2] );
                 dataLoadedFromDatabase = true ;
             }
         }
@@ -226,6 +279,17 @@ public class ProcessedarticlesTable
         }
 
 
+        public int getProcessedarticles_id()
+        {
+            return processedarticles_id ;
+        }
+
+        public void setProcessedarticles_id( int processedarticles_id )
+        {
+            this.processedarticles_id = processedarticles_id ;
+        }
+
+
 
         
         private boolean dataLoadedFromDatabase()
@@ -238,6 +302,7 @@ public class ProcessedarticlesTable
             Map data = new HashMap();
             data.put( processedorders_idColumnName , String.valueOf(  this.processedorders_id ) );
             data.put( dish_idColumnName , String.valueOf(  this.dish_id ) );
+            data.put( processedarticles_idColumnName , String.valueOf(  this.processedarticles_id ) );
             return data ;
         }
 
@@ -253,16 +318,50 @@ public class ProcessedarticlesTable
             imp.update( column , searchText , buildDataMap() );
         }
 
-        /** create a new row.*/
-        public void insert( Connection con ) throws SQLException
+        /** update a row object based on the id */
+        public void update( Connection con ) throws SQLException
         {
-            imp.insert( con , buildDataMap() );
+            imp.update( con , processedarticles_id , buildDataMap() );
         }
 
-        /** create a new row.*/
-        public void insert() throws SQLException
+        /** update a row object based on the id */
+        public void update() throws SQLException
         {
-            imp.insert( buildDataMap() );
+            imp.update( processedarticles_id , buildDataMap() );
+        }
+
+        /** create a new row complete with a new ID.
+
+            The current ID is ignored.  The new ID is placed in the row.
+
+            @return the new row ID 
+        */
+        public long insert( Connection con ) throws SQLException
+        {
+            return imp.insertAndGetID( con , buildDataMap() );
+        }
+
+        /** create a new row complete with a new ID.
+
+            The current ID is ignored.  The new ID is placed in the row.
+
+            @return the new row ID 
+        */
+        public long insert() throws SQLException
+        {
+            return imp.insertAndGetID( buildDataMap() );
+        }
+
+        /** delete a row object based on the id */
+        public void delete( Connection con ) throws SQLException
+        {
+            imp.delete( con , processedarticles_id );
+        }
+
+        /** delete a row object based on the id */
+        public void delete() throws SQLException
+        {
+            imp.delete( processedarticles_id );
         }
 
 
@@ -272,6 +371,24 @@ public class ProcessedarticlesTable
     public static Row getRow()
     {
         return imp.getRow();
+    }
+
+    /** Instantiate a Row object and fill its content based on a search for the ID. 
+     *
+     * Return null if not found.
+     */
+    public static Row getRow( Connection con , int processedarticles_id ) throws SQLException
+    {
+        return imp.getRow( con , processedarticles_id );
+    }
+
+    /** Instantiate a Row object and fill its content based on a search for the ID. 
+     *
+     * Return null if not found.
+     */
+    public static Row getRow( long processedarticles_id ) throws SQLException
+    {
+        return imp.getRow( processedarticles_id );
     }
 
     /** Instantiate a Row object and fill its content based on a search
@@ -434,6 +551,16 @@ public class ProcessedarticlesTable
         imp.update( column , searchText , data );
     }
 
+    public static void delete( Connection con , long processedarticles_id ) throws SQLException
+    {
+        imp.delete( con , processedarticles_id );
+    }
+
+    public static void delete( long processedarticles_id ) throws SQLException
+    {
+        imp.delete( processedarticles_id );
+    }
+
     public static void delete( Connection con , String column , String searchText ) throws SQLException
     {
         imp.delete( con , column , searchText );
@@ -444,14 +571,14 @@ public class ProcessedarticlesTable
         imp.delete( column , searchText );
     }
 
-    public static void insert( Connection con , Map data ) throws SQLException
+    public static long insert( Connection con , Map data ) throws SQLException
     {
-        imp.insert( con , data );
+        return imp.insertAndGetID( con , data );
     }
 
-    public static void insert( Map data ) throws SQLException
+    public static long insert( Map data ) throws SQLException
     {
-        imp.insert( data );
+        return imp.insertAndGetID( data );
     }
 
 

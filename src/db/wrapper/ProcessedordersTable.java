@@ -52,10 +52,11 @@ public class ProcessedordersTable
     public static final String dateColumnName = "date";
     public static final String processedorderscolColumnName = "processedorderscol";
     public static final String customer_idColumnName = "customer_id";
+    public static final String tables_tablenumberColumnName = "tables_tablenumber";
 
     private static String[] allColumns =
     {
-        processedorders_idColumnName , valueColumnName , dateColumnName , processedorderscolColumnName , customer_idColumnName , 
+        processedorders_idColumnName , valueColumnName , dateColumnName , processedorderscolColumnName , customer_idColumnName , tables_tablenumberColumnName , 
     };
 
     /** You probably want to use the static methods for most of your access, but once in a while you might need to
@@ -236,11 +237,14 @@ public class ProcessedordersTable
         private boolean dataLoadedFromDatabase = false ;
 
         private int processedorders_id ;
-        private String value ;
+        private double value ;
+        private boolean valueNull = true ;
         private Timestamp date ;
         private String processedorderscol ;
         private int customer_id ;
         private boolean customer_idNull = true ;
+        private int tables_tablenumber ;
+        private boolean tables_tablenumberNull = true ;
 
         /** for internal use only!   If you need a row object, use getRow(). */
         Row()
@@ -252,11 +256,14 @@ public class ProcessedordersTable
             if ( data != null )
             {
                 this.processedorders_id =  Str.toInt( data[0] );
-                this.value = data[1];
+                this.valueNull = ( data[1] == null );
+                this.value = valueNull ? 0.0 : Str.toDouble( data[1] );
                 this.date = Str.toTimestamp( data[2] );
                 this.processedorderscol = data[3];
                 this.customer_idNull = ( data[4] == null );
                 this.customer_id = customer_idNull ? 0 : Str.toInt( data[4] );
+                this.tables_tablenumberNull = ( data[5] == null );
+                this.tables_tablenumber = tables_tablenumberNull ? 0 : Str.toInt( data[5] );
                 dataLoadedFromDatabase = true ;
             }
         }
@@ -277,14 +284,42 @@ public class ProcessedordersTable
         }
 
 
-        public String getValue()
+        public double getValue()
         {
             return value ;
         }
 
-        public void setValue( String value )
+        public void setValue( double value )
         {
             this.value = value ;
+            valueNull = false ;
+        }
+
+        public void setValue( Double value )
+        {
+            valueNull = ( value == null );
+            if ( valueNull )
+            {
+                this.value = 0.0 ;
+            }
+            else
+            {
+                this.value = value.doubleValue() ;
+            }
+        }
+
+        public boolean isValueNull()
+        {
+            return valueNull ;
+        }
+
+        public void setValueNull( boolean valueNull )
+        {
+            this.valueNull = valueNull ;
+            if ( valueNull )
+            {
+                value = 0.0 ;
+            }
         }
 
 
@@ -349,6 +384,45 @@ public class ProcessedordersTable
         }
 
 
+        public int getTables_tablenumber()
+        {
+            return tables_tablenumber ;
+        }
+
+        public void setTables_tablenumber( int tables_tablenumber )
+        {
+            this.tables_tablenumber = tables_tablenumber ;
+            tables_tablenumberNull = false ;
+        }
+
+        public void setTables_tablenumber( Integer tables_tablenumber )
+        {
+            tables_tablenumberNull = ( tables_tablenumber == null );
+            if ( tables_tablenumberNull )
+            {
+                this.tables_tablenumber = 0 ;
+            }
+            else
+            {
+                this.tables_tablenumber = tables_tablenumber.intValue() ;
+            }
+        }
+
+        public boolean isTables_tablenumberNull()
+        {
+            return tables_tablenumberNull ;
+        }
+
+        public void setTables_tablenumberNull( boolean tables_tablenumberNull )
+        {
+            this.tables_tablenumberNull = tables_tablenumberNull ;
+            if ( tables_tablenumberNull )
+            {
+                tables_tablenumber = 0 ;
+            }
+        }
+
+
 
         
         private boolean dataLoadedFromDatabase()
@@ -360,10 +434,11 @@ public class ProcessedordersTable
         {
             Map data = new HashMap();
             data.put( processedorders_idColumnName , String.valueOf(  this.processedorders_id ) );
-            data.put( valueColumnName , this.value );
+            data.put( valueColumnName , this.valueNull ? null : String.valueOf( this.value ) );
             data.put( dateColumnName , this.date == null ? null : this.date.toString() );
             data.put( processedorderscolColumnName , this.processedorderscol );
             data.put( customer_idColumnName , this.customer_idNull ? null : String.valueOf( this.customer_id ) );
+            data.put( tables_tablenumberColumnName , this.tables_tablenumberNull ? null : String.valueOf( this.tables_tablenumber ) );
             return data ;
         }
 

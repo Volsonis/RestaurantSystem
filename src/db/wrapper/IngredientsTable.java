@@ -46,12 +46,13 @@ public class IngredientsTable
 
     public static final String tableName = "ingredients";
 
+    public static final String ingredients_idColumnName = "ingredients_id";
+    public static final String ingredient_idColumnName = "ingredient_id";
     public static final String dish_idColumnName = "dish_id";
-    public static final String ingredient_nameColumnName = "ingredient_name";
 
     private static String[] allColumns =
     {
-        dish_idColumnName , ingredient_nameColumnName , 
+        ingredients_idColumnName , ingredient_idColumnName , dish_idColumnName , 
     };
 
     /** You probably want to use the static methods for most of your access, but once in a while you might need to
@@ -103,6 +104,26 @@ public class IngredientsTable
             // The idea is that during unit testing, a different test object will be returned here.
             // To learn more about unit testing with Jenny generated code, visit <a href="http://www.javaranch.com/jenny.jsp">www.javaranch.com/jenny.jsp</a>
             return new Row();
+        }
+
+        /** Instantiate a Row object and fill its content based on a search for the ID. 
+         *
+         * Return null if not found.  Return first item if more than one found.
+         */
+        public Row getRow( Connection con , int ingredients_id ) throws SQLException
+        {
+            Row row = new Row( this.search( con , "ingredients_id" , String.valueOf( ingredients_id ) , allColumns ) );
+            return row.dataLoadedFromDatabase() ? row : null ;
+        }
+
+        /** Instantiate a Row object and fill its content based on a search for the ID.
+         *
+         * Return null if not found.
+         */
+        public Row getRow( long ingredients_id ) throws SQLException
+        {
+            Row row = new Row( this.search( "ingredients_id" , String.valueOf( ingredients_id ) , allColumns ) );
+            return row.dataLoadedFromDatabase() ? row : null ;
         }
 
         /** Instantiate a Row object and fill its content based on a search
@@ -173,6 +194,36 @@ public class IngredientsTable
             return rowArray( this.search( allColumns ) );
         }
 
+        public void update( Connection con , int ingredients_id , Map data ) throws SQLException
+        {
+            this.update( con , "ingredients_id" , String.valueOf( ingredients_id ) , data );
+        }
+
+        public void update( int ingredients_id , Map data ) throws SQLException
+        {
+            this.update( "ingredients_id" , String.valueOf( ingredients_id ) , data );
+        }
+
+        public void delete( Connection con , long ingredients_id ) throws SQLException
+        {
+            this.delete( con , "ingredients_id" , String.valueOf( ingredients_id ) );
+        }
+
+        public void delete( long ingredients_id ) throws SQLException
+        {
+            this.delete( "ingredients_id" , String.valueOf( ingredients_id ) );
+        }
+
+        public long insertAndGetID( Connection con , Map data ) throws SQLException
+        {
+            return this.insertAndGetID( con , data , "ingredients_id" );
+        }
+
+        public long insertAndGetID( Map data ) throws SQLException
+        {
+            return this.insertAndGetID( data , "ingredients_id" );
+        }
+
 
     }
 
@@ -181,8 +232,9 @@ public class IngredientsTable
 
         private boolean dataLoadedFromDatabase = false ;
 
+        private int ingredients_id ;
+        private int ingredient_id ;
         private int dish_id ;
-        private String ingredient_name ;
 
         /** for internal use only!   If you need a row object, use getRow(). */
         Row()
@@ -193,8 +245,9 @@ public class IngredientsTable
         {
             if ( data != null )
             {
-                this.dish_id =  Str.toInt( data[0] );
-                this.ingredient_name = data[1];
+                this.ingredients_id =  Str.toInt( data[0] );
+                this.ingredient_id =  Str.toInt( data[1] );
+                this.dish_id =  Str.toInt( data[2] );
                 dataLoadedFromDatabase = true ;
             }
         }
@@ -204,6 +257,28 @@ public class IngredientsTable
             this( results.getRow(0) );
         }
 
+        public int getIngredients_id()
+        {
+            return ingredients_id ;
+        }
+
+        public void setIngredients_id( int ingredients_id )
+        {
+            this.ingredients_id = ingredients_id ;
+        }
+
+
+        public int getIngredient_id()
+        {
+            return ingredient_id ;
+        }
+
+        public void setIngredient_id( int ingredient_id )
+        {
+            this.ingredient_id = ingredient_id ;
+        }
+
+
         public int getDish_id()
         {
             return dish_id ;
@@ -212,17 +287,6 @@ public class IngredientsTable
         public void setDish_id( int dish_id )
         {
             this.dish_id = dish_id ;
-        }
-
-
-        public String getIngredient_name()
-        {
-            return ingredient_name ;
-        }
-
-        public void setIngredient_name( String ingredient_name )
-        {
-            this.ingredient_name = ingredient_name ;
         }
 
 
@@ -236,8 +300,9 @@ public class IngredientsTable
         private Map buildDataMap()
         {
             Map data = new HashMap();
+            data.put( ingredients_idColumnName , String.valueOf(  this.ingredients_id ) );
+            data.put( ingredient_idColumnName , String.valueOf(  this.ingredient_id ) );
             data.put( dish_idColumnName , String.valueOf(  this.dish_id ) );
-            data.put( ingredient_nameColumnName , this.ingredient_name );
             return data ;
         }
 
@@ -253,16 +318,50 @@ public class IngredientsTable
             imp.update( column , searchText , buildDataMap() );
         }
 
-        /** create a new row.*/
-        public void insert( Connection con ) throws SQLException
+        /** update a row object based on the id */
+        public void update( Connection con ) throws SQLException
         {
-            imp.insert( con , buildDataMap() );
+            imp.update( con , ingredients_id , buildDataMap() );
         }
 
-        /** create a new row.*/
-        public void insert() throws SQLException
+        /** update a row object based on the id */
+        public void update() throws SQLException
         {
-            imp.insert( buildDataMap() );
+            imp.update( ingredients_id , buildDataMap() );
+        }
+
+        /** create a new row complete with a new ID.
+
+            The current ID is ignored.  The new ID is placed in the row.
+
+            @return the new row ID 
+        */
+        public long insert( Connection con ) throws SQLException
+        {
+            return imp.insertAndGetID( con , buildDataMap() );
+        }
+
+        /** create a new row complete with a new ID.
+
+            The current ID is ignored.  The new ID is placed in the row.
+
+            @return the new row ID 
+        */
+        public long insert() throws SQLException
+        {
+            return imp.insertAndGetID( buildDataMap() );
+        }
+
+        /** delete a row object based on the id */
+        public void delete( Connection con ) throws SQLException
+        {
+            imp.delete( con , ingredients_id );
+        }
+
+        /** delete a row object based on the id */
+        public void delete() throws SQLException
+        {
+            imp.delete( ingredients_id );
         }
 
 
@@ -272,6 +371,24 @@ public class IngredientsTable
     public static Row getRow()
     {
         return imp.getRow();
+    }
+
+    /** Instantiate a Row object and fill its content based on a search for the ID. 
+     *
+     * Return null if not found.
+     */
+    public static Row getRow( Connection con , int ingredients_id ) throws SQLException
+    {
+        return imp.getRow( con , ingredients_id );
+    }
+
+    /** Instantiate a Row object and fill its content based on a search for the ID. 
+     *
+     * Return null if not found.
+     */
+    public static Row getRow( long ingredients_id ) throws SQLException
+    {
+        return imp.getRow( ingredients_id );
     }
 
     /** Instantiate a Row object and fill its content based on a search
@@ -434,6 +551,16 @@ public class IngredientsTable
         imp.update( column , searchText , data );
     }
 
+    public static void delete( Connection con , long ingredients_id ) throws SQLException
+    {
+        imp.delete( con , ingredients_id );
+    }
+
+    public static void delete( long ingredients_id ) throws SQLException
+    {
+        imp.delete( ingredients_id );
+    }
+
     public static void delete( Connection con , String column , String searchText ) throws SQLException
     {
         imp.delete( con , column , searchText );
@@ -444,14 +571,14 @@ public class IngredientsTable
         imp.delete( column , searchText );
     }
 
-    public static void insert( Connection con , Map data ) throws SQLException
+    public static long insert( Connection con , Map data ) throws SQLException
     {
-        imp.insert( con , data );
+        return imp.insertAndGetID( con , data );
     }
 
-    public static void insert( Map data ) throws SQLException
+    public static long insert( Map data ) throws SQLException
     {
-        imp.insert( data );
+        return imp.insertAndGetID( data );
     }
 
 
