@@ -6,13 +6,27 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import db.*;
 import db.wrapper.DishTable;
+import db.wrapper.IngredientsTable;
+import db.wrapper.IngredientTable;
 
 public class DishFactory
 {
-	public ArrayList<Dish> getAllDishes()
+	
+	
+	public DishFactory()
 	{
+		
+	}
+	
+	//get all dishes from the database into a java ArrayList
+	public ArrayList<Dish> createDishes()
+	{
+		//initialize the arraylist
 		ArrayList<Dish> dishes = new ArrayList<Dish>();
-		DishTable.Row rows[];
+		//create needed variables
+		DishTable.Row drows[]; //rows of dishes
+		IngredientTable.Row irow; //current ingredient row
+		IngredientsTable.Row isrows[]; //row of all ingredients of a dish
 		try
     {
       Class.forName( "com.mysql.jdbc.Driver" ).newInstance();
@@ -21,10 +35,20 @@ public class DishFactory
       	Connection con = DBInterface.connect();
       	try
       	{
-      		rows = DBInterface.getAllDishes(con);
-      		for(int i=0; i<rows.length; i++)
+      		//get all dishes
+      		drows = DishTable.getAllRows(con);
+      		for(int i=0; i<drows.length; i++)
       		{
-      			dishes.add(new Dish(rows[i].getDish_id(), rows[i].getName(), rows[i].getDescription(), rows[i].getPrice()));
+      			//get ingredients of this dish
+      			isrows = DBInterface.getIngredientsOf(drows[i].getDish_id());
+						String[] ingredients = new String[isrows.length];
+      			for(int j=0; j<isrows.length; j++)
+      			{
+      				//add an ingredient of that dish to the string array
+      				irow = IngredientTable.getRow(con, isrows[j].getIngredient_id());
+      				ingredients[j] = irow.getName();
+      			}
+      			dishes.add(new Dish(drows[i].getDish_id(), drows[i].getName(), drows[i].getDescription(), drows[i].getPrice(), ingredients));
       		}
       	}
       	catch(Exception e)
@@ -47,6 +71,14 @@ public class DishFactory
     }    
 		
 		return dishes;
+	}
+	
+	public ArrayList<Dish> refreshDishes(ArrayList<Dish> dishes)
+	{
+		dishes.clear();
 		
+		dishes = createDishes();
+		
+		return dishes;
 	}
 }

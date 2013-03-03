@@ -17,7 +17,7 @@ import db.wrapper.IngredientsTable;
 public class DBInterface
 {
 	
-	//establish connection
+	//establish connection and return it
 	public static Connection connect() throws Exception
 	{
 		Class.forName("com.mysql.jdbc.Driver") ;
@@ -47,6 +47,16 @@ public class DBInterface
 		row.insert();
   }
   
+  public static void addIngredient(String ingredient, Double price, int stock, String expiryDate) throws SQLException
+  {
+		IngredientTable.Row row = IngredientTable.getRow();
+		row.setExpires(expiryDate);
+		row.setName(ingredient);
+		row.setPrice(price);
+		row.setStock(stock);
+		row.insert();
+  } 
+  
   
   //Dish
   //just to test, later it should not be possible to add a dish without ingredients again
@@ -61,7 +71,7 @@ public class DBInterface
   }
   
   //automatic ID
-  public static void addDish(String name,String description, Double price, String[] ingredients) throws SQLException
+  public static void addDish(String name, String description, Double price, int[] ingredients) throws SQLException
   {
   	//add dish
   	DishTable.Row drow = DishTable.getRow();
@@ -73,17 +83,44 @@ public class DBInterface
   	Row row = DishTable.getRow("name", name);
   	int dish_id = row.getDish_id();
   	
-  	//add ingredient
+  	//add ingredients by id
   	for(int i=0; i < ingredients.length; i++)
   	{
   		IngredientsTable.Row irow = IngredientsTable.getRow();
   		irow.setDish_id(dish_id);
-  		irow.setIngredient_name(ingredients[i]);
+  		irow.setIngredient_id(ingredients[i]);
   		irow.insert();
   	}//for
   }//addDish
   
+  //TODO
+  //order
+  public static void addExtOrder(int value, int customer_id)
+  {
+  	//if it was ordered online
+  }
   
+  public static void addOrder(int value, int tablenumber)
+  {
+  	
+  }
+  
+  public static void addOrder(int value,int customer_id, int tablenumber)
+  {
+  	
+  }
+  
+  //customer
+  public static void addCustomer()
+  {
+  	
+  }
+  
+  //reservation
+  public static void addReservation()
+  {
+  	
+  }
   
   //EDIT
   //Ingredient
@@ -147,21 +184,21 @@ public class DBInterface
    * this is slightly more complicated as the "ingredients" table is linked to this to store this information
    * 
    */
-  public static void addIngredients(String name, String ingredient) throws SQLException
+  public static void addIngredients(String name, int ingredient) throws SQLException
   {
   	DishTable.Row drow = DishTable.getRow("name", name);
   	
   	IngredientsTable.Row irow = IngredientsTable.getRow();
   	irow.setDish_id(drow.getDish_id());
-  	irow.setIngredient_name(ingredient);
+  	irow.setIngredient_id(ingredient);
   	irow.insert();
   }
   
-  public static void addIngredients(int dish_id, String ingredient) throws SQLException
+  public static void addIngredients(int dish_id, int ingredient) throws SQLException
   {
   	IngredientsTable.Row row = IngredientsTable.getRow();
   	row.setDish_id(dish_id);
-  	row.setIngredient_name(ingredient);
+  	row.setIngredient_id(ingredient);
   	row.insert();
   }
   
@@ -220,11 +257,20 @@ public class DBInterface
   
   
   
-  //GET ALL
-  public static Row[] getAllDishes()
+  //GET
+  //ingredients of
+  public static IngredientsTable.Row[] getIngredientsOf(int dish_id) throws SQLException
   {
-  	return DishTable.getAllRows();
-  }  
+  	return IngredientsTable.getRows("dish_id", dish_id);
+  }
+  
+  //number of ingredients of
+  public static int getNoOfIngredients(int dish_id) throws SQLException
+  {
+  	return IngredientsTable.getRows("dish_id", dish_id).length;
+  }
+  
+  
   
   
   //for efficiency, there should be a way to provide a connection for the SQL queries, so that jenny doesn't have to establish a new one every time
@@ -243,7 +289,7 @@ public class DBInterface
   {
   	IngredientTable.Row row = IngredientTable.getRow(con, "name", name);
   	row.setPrice(price);
-  	row.update("name", name);
+  	row.update(con, "name", name);
   }
   
   
@@ -252,7 +298,7 @@ public class DBInterface
   {
   	DishTable.Row row = DishTable.getRow(con, dish_id);
   	row.setName(name);
-  	row.update();
+  	row.update(con);
   }
   
   //edit description by id
@@ -260,7 +306,7 @@ public class DBInterface
   {
   	DishTable.Row row = DishTable.getRow(con, dish_id);
   	row.setDescription(description);
-  	row.update();
+  	row.update(con);
   }
   
   //edit description by name
@@ -268,7 +314,7 @@ public class DBInterface
   {
   	DishTable.Row row = DishTable.getRow(con, "name", name);
   	row.setDescription(description);
-  	row.update("name", name);
+  	row.update(con, "name", name);
   }
   
   //by id
@@ -276,7 +322,7 @@ public class DBInterface
   {
   	DishTable.Row row = DishTable.getRow(con, dish_id);
   	row.setPrice(price);
-  	row.update();
+  	row.update(con);
   }
   
   //by name
@@ -284,7 +330,7 @@ public class DBInterface
   {
   	DishTable.Row row = DishTable.getRow(con, "name", name);
   	row.setPrice(price);
-  	row.update("name", name);
+  	row.update(con, "name", name);
   }
    
   //DELETE
@@ -316,10 +362,17 @@ public class DBInterface
   	DishTable.delete(con, dish_id);
   }
   
-  public static Row[] getAllDishes(Connection con)
+  //ingredients of
+  public static IngredientsTable.Row[] getIngredientsOf(int dish_id, Connection con) throws SQLException
   {
-  	return DishTable.getAllRows(con);
-  }  
+  	return IngredientsTable.getRows(con, "dish_id", dish_id);
+  }
+  
+  //number of ingredients of
+  public static int getNoOfIngredients(int dish_id, Connection con) throws SQLException
+  {
+  	return IngredientsTable.getRows(con, "dish_id", dish_id).length;
+  }
   
   
 }

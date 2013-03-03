@@ -6,7 +6,17 @@ public class Dish
 	private String name;
 	private String descripton;
 	private double price;
+	private String[] ingredients;
 	
+	public Dish(int iD, String name, String descripton, double price, String[] ingredients)
+	{
+		super();
+		ID = iD;
+		this.name = name;
+		this.descripton = descripton;
+		this.price = price;
+		this.ingredients = ingredients;
+	}
 	
 	public Dish(int iD, String name, String descripton, double price)
 	{
@@ -15,6 +25,16 @@ public class Dish
 		this.name = name;
 		this.descripton = descripton;
 		this.price = price;
+	}
+
+	public String[] getIngredients()
+	{
+		return ingredients;
+	}
+
+	public void setIngredients(String[] ingredients)
+	{
+		this.ingredients = ingredients;
 	}
 
 	public String getName() {

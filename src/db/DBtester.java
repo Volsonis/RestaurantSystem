@@ -28,7 +28,7 @@ public class DBtester
 		//DBInterface.editDishDescription("Boiled Rice", "Simply boiled rice");
 		
 		//DBInterface.deleteIngredients("Boiled Rice", "rice");
-		DBInterface.addIngredients("Boiled Rice", "rice");
+		//DBInterface.addIngredients("Boiled Rice", "rice");
 		
 		//delete
 		//DBInterface.deleteDish(0);
