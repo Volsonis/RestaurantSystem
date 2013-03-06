@@ -15,6 +15,8 @@ import javax.swing.JList;
 import javax.swing.JTable;
 import java.awt.Font;
 import javax.swing.ScrollPaneConstants;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class IngredientsFrame extends JPanel {
 
@@ -37,6 +39,11 @@ public class IngredientsFrame extends JPanel {
 		add(toolBar, BorderLayout.WEST);
 		
 		JButton btnAdd = new JButton("New");
+		btnAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+			}
+		});
 		toolBar.add(btnAdd);
 		btnAdd.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnAdd.setHorizontalTextPosition(SwingConstants.CENTER);

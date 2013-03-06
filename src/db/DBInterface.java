@@ -11,8 +11,10 @@ import com.javaranch.db.* ;
 
 import db.wrapper.DishTable;
 import db.wrapper.DishTable.Row;
+import db.wrapper.ArticlesTable;
 import db.wrapper.IngredientTable;
 import db.wrapper.IngredientsTable;
+import db.wrapper.OrderTable;
 
 public class DBInterface
 {
@@ -86,18 +88,62 @@ public class DBInterface
   	//add ingredients by id
   	for(int i=0; i < ingredients.length; i++)
   	{
-  		IngredientsTable.Row irow = IngredientsTable.getRow();
+  	  IngredientsTable.Row irow = IngredientsTable.getRow();
   		irow.setDish_id(dish_id);
   		irow.setIngredient_id(ingredients[i]);
   		irow.insert();
   	}//for
   }//addDish
   
+  //articles
+  public static void addArticle(int dish_id, int order_number) throws SQLException
+  {
+	  ArticlesTable.Row row = ArticlesTable.getRow();
+	  row.setDish_id(dish_id);
+	  row.setOrder_number(order_number);
+	  row.insert();
+  }
+  
+  public static void addArticles(int[] dish_ids, int order_number) throws SQLException
+  {
+	  ArticlesTable.Row row;
+	  for(int i=0; i<dish_ids.length ; i++)
+	  {
+	    row = ArticlesTable.getRow();
+	    row.setOrder_number(order_number);
+	    row.setDish_id(dish_ids[i]);
+	    row.insert();
+	  }
+  }
+  
+  public static void addArticles(String[] dishes, int order_number) throws SQLException
+  {
+    ArticlesTable.Row row;
+    for(int i=0; i<dishes.length ; i++)
+    {
+      //TODO check input
+      /*
+      if(dishes[i] == null)
+        throw new InvalidInputException("Array passed to addArticles by string has values == null");
+      */
+      row = ArticlesTable.getRow();
+      row.setOrder_number(order_number);
+      row.setDish_id(DishTable.getRow("name", dishes[i]).getDish_id());
+      row.insert();
+    }
+  }
   //TODO
   //order
-  public static void addExtOrder(int value, int customer_id)
+  public static void addExtOrder(int[] dish_ids, double value, int customer_id) throws SQLException
   {
   	//if it was ordered online
+	  OrderTable.Row row = OrderTable.getRow();
+	  row.setCustomer_id(customer_id);
+	  row.setValue(value);
+	  row.insert();
+	  
+	  // we also need to pass a list of whats been ordered into the articles table
+	  addArticles(dish_ids, row.getNumber());
   }
   
   public static void addOrder(int value, int tablenumber)
@@ -272,7 +318,7 @@ public class DBInterface
   
   
   
-  
+  //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   //for efficiency, there should be a way to provide a connection for the SQL queries, so that jenny doesn't have to establish a new one every time
   //therefore i will provide all the previous methods, with an option for a given SQL connection
   //EDIT

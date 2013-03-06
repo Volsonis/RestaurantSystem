@@ -6,9 +6,6 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
 import java.awt.Toolkit;
 import javax.swing.JSplitPane;
 import java.awt.Component;
@@ -21,7 +18,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JTextField;
-import com.jgoodies.forms.factories.FormFactory;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class NewIngredient extends JFrame {
 
@@ -77,11 +75,30 @@ public class NewIngredient extends JFrame {
 		panelButtons.setLayout(null);
 		
 		JButton btnAccept = new JButton("Accept");
+		btnAccept.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				//TODO validate input
+				
+				//after validation propagate input through to database
+				
+				//refresh the main window
+				
+				//close this window
+			}
+		});
 		btnAccept.setIcon(new ImageIcon(NewIngredient.class.getResource("/gui/resources/img32x32/dialog-ok-apply-2.png")));
 		btnAccept.setBounds(69, 0, 118, 38);
 		panelButtons.add(btnAccept);
 		
 		JButton btnCancel = new JButton("Cancel");
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				// logic goes here
+				// on cancel button just close the window without omitting any changes
+				contentPane.setVisible(false);
+			}
+		});
 		btnCancel.setIcon(new ImageIcon(NewIngredient.class.getResource("/gui/resources/img32x32/dialog-cancel-2.png")));
 		btnCancel.setBounds(199, 0, 118, 38);
 		panelButtons.add(btnCancel);
