@@ -1,6 +1,7 @@
 package db;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
@@ -49,10 +50,10 @@ public class DBInterface
 		row.insert();
   }
   
-  public static void addIngredient(String ingredient, Double price, int stock, String expiryDate) throws SQLException
+  public static void addIngredient(String ingredient, Double price, int stock, Date expiryDate) throws SQLException
   {
 		IngredientTable.Row row = IngredientTable.getRow();
-		row.setExpires(expiryDate);
+		row.setExpires(expiryDate.toString());
 		row.setName(ingredient);
 		row.setPrice(price);
 		row.setStock(stock);

@@ -5,6 +5,7 @@ import javax.swing.JScrollPane;
 import java.awt.BorderLayout;
 
 import javax.swing.Box;
+import javax.swing.JDialog;
 import javax.swing.JSeparator;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
@@ -41,7 +42,9 @@ public class IngredientsFrame extends JPanel {
 		JButton btnAdd = new JButton("New");
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				JDialog addIngredient = new AddIngredient();
 				
+				addIngredient.setVisible(true);
 			}
 		});
 		toolBar.add(btnAdd);

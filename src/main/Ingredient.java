@@ -1,5 +1,7 @@
 package main;
 
+import java.sql.Date;
+
 public class Ingredient
 {
 	
@@ -7,7 +9,7 @@ public class Ingredient
 	private String name;
 	private int stock;
 	private double price;
-	private String expires;
+	private Date expires;
 	
 	public Ingredient(int id, String name, int stock, double price, String expires)
 	{
@@ -16,20 +18,26 @@ public class Ingredient
 		this.name = name;
 		this.stock = stock;
 		this.price = price;
-		this.expires = expires;
+		this.expires = Date.valueOf(expires);
 	}
 
-	public String getExpires()
-	{
-		return expires;
-	}
+	
 
-	public void setExpires(String expires)
-	{
-		this.expires = expires;
-	}
+	public Date getExpires()
+  {
+    return expires;
+  }
 
-	public int getId()
+
+
+  public void setExpires(Date expires)
+  {
+    this.expires = expires;
+  }
+
+
+
+  public int getId()
 	{
 		return id;
 	}
