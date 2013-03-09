@@ -16,6 +16,7 @@ import db.wrapper.ArticlesTable;
 import db.wrapper.IngredientTable;
 import db.wrapper.IngredientsTable;
 import db.wrapper.OrderTable;
+import main.*;
 
 public class DBInterface
 {
@@ -30,6 +31,18 @@ public class DBInterface
 	
 	//ADD
 	//Ingredient
+	//this is the right way it should be done
+	public static void addIngredient(Ingredient ingredient) throws SQLException
+	{
+	  IngredientTable.Row row = IngredientTable.getRow(); //this will create a new row
+	  row.setName(ingredient.getName());
+	  row.setPrice(ingredient.getPrice());
+	  row.setStock(ingredient.getStock());
+	  row.setExpires(ingredient.getExpires().toString());
+	  row.insert();
+	}
+	
+	//deprecated
   //without stock(=0)
 	public static void addIngredient(String ingredient, Double price) throws SQLException
 	{
@@ -38,9 +51,7 @@ public class DBInterface
 		row.setPrice(price);
 		row.setStock(0);
 		row.insert();
-		
 	}
-	
   public static void addIngredient(String ingredient, Double price, int stock) throws SQLException
   {
 		IngredientTable.Row row = IngredientTable.getRow();
@@ -49,7 +60,6 @@ public class DBInterface
 		row.setStock(stock);
 		row.insert();
   }
-  
   public static void addIngredient(String ingredient, Double price, int stock, Date expiryDate) throws SQLException
   {
 		IngredientTable.Row row = IngredientTable.getRow();
@@ -62,6 +72,30 @@ public class DBInterface
   
   
   //Dish
+  public static void addDish(Dish dish) throws SQLException
+  {
+    DishTable.Row row = DishTable.getRow();
+    row.setName(dish.getName());
+    row.setDescription(dish.getDescripton());
+    row.setPrice(dish.getPrice());
+    row.insert();
+    
+    Row drow = DishTable.getRow("name", dish.getName());
+    int dish_id = drow.getDish_id();
+    
+    //add ingredients by id
+    for(int i=0; i < dish.getIngredient_id().length; i++)
+    {
+      IngredientsTable.Row irow = IngredientsTable.getRow(); //creates a new row in the ingredients table
+      irow.setDish_id(dish_id);
+      irow.setIngredient_id(dish.getIngredient_id()[i]);
+      irow.insert();
+    }//for
+    
+  }
+  
+  
+  //deprecated
   //just to test, later it should not be possible to add a dish without ingredients again
   public static void addDish(int dish_id, String name,String description, Double price) throws SQLException
   {
@@ -72,7 +106,6 @@ public class DBInterface
   	row.setPrice(price);
   	row.insert();
   }
-  
   //automatic ID
   public static void addDish(String name, String description, Double price, int[] ingredients) throws SQLException
   {
@@ -104,7 +137,6 @@ public class DBInterface
 	  row.setOrder_number(order_number);
 	  row.insert();
   }
-  
   public static void addArticles(int[] dish_ids, int order_number) throws SQLException
   {
 	  ArticlesTable.Row row;
@@ -116,7 +148,6 @@ public class DBInterface
 	    row.insert();
 	  }
   }
-  
   public static void addArticles(String[] dishes, int order_number) throws SQLException
   {
     ArticlesTable.Row row;
@@ -133,30 +164,14 @@ public class DBInterface
       row.insert();
     }
   }
-  //TODO
+ 
+  
   //order
-  public static void addExtOrder(int[] dish_ids, double value, int customer_id) throws SQLException
+  public static void addOrder(Order order)
   {
-  	//if it was ordered online
-	  OrderTable.Row row = OrderTable.getRow();
-	  row.setCustomer_id(customer_id);
-	  row.setValue(value);
-	  row.insert();
-	  
-	  // we also need to pass a list of whats been ordered into the articles table
-	  addArticles(dish_ids, row.getNumber());
+    OrderTable.Row row = OrderTable.getRow();
+    row.setValue(order.getPrice());
   }
-  
-  public static void addOrder(int value, int tablenumber)
-  {
-  	
-  }
-  
-  public static void addOrder(int value,int customer_id, int tablenumber)
-  {
-  	
-  }
-  
   //customer
   public static void addCustomer()
   {

@@ -41,12 +41,12 @@ public class DishFactory
       		{
       			//get ingredients of this dish
       			isrows = DBInterface.getIngredientsOf(drows[i].getDish_id());
-						String[] ingredients = new String[isrows.length];
+						int[] ingredients = new int[isrows.length];
       			for(int j=0; j<isrows.length; j++)
       			{
       				//add an ingredient of that dish to the string array
       				irow = IngredientTable.getRow(con, isrows[j].getIngredient_id());
-      				ingredients[j] = irow.getName();
+      				ingredients[j] = irow.getIngredient_id();
       			}
       			dishes.add(new Dish(drows[i].getDish_id(), drows[i].getName(), drows[i].getDescription(), drows[i].getPrice(), ingredients));
       		}

@@ -8,7 +8,7 @@ public class Ingredient
 	private int id;
 	private String name;
 	private int stock;
-	private double price;
+	private Double price;
 	private Date expires;
 	
 	public Ingredient(int id, String name, int stock, double price, String expires)
