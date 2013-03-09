@@ -11,6 +11,10 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
+
+import java.awt.Toolkit;
 
 public class Error extends JFrame {
 
@@ -36,6 +40,8 @@ public class Error extends JFrame {
 	 * Create the frame.
 	 */
 	public Error() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Error.class.getResource("/gui/resources/img16x16/dialog-close-2.png")));
+		setTitle("Error");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 218);
 		contentPane = new JPanel();
@@ -62,14 +68,17 @@ public class Error extends JFrame {
 					.addComponent(btnOk)
 					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
+		panel.setLayout(new BorderLayout(0, 0));
 		
-		JLabel lblError = new JLabel("Error");
-		panel.add(lblError);
+		JScrollPane scrollPane = new JScrollPane();
+		panel.add(scrollPane, BorderLayout.CENTER);
 		contentPane.setLayout(gl_contentPane);
 	}
 	
 	public Error(String message)
 	{
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Error.class.getResource("/gui/resources/img16x16/dialog-close-2.png")));
+		setTitle("Error");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 218);
 		contentPane = new JPanel();
@@ -96,10 +105,13 @@ public class Error extends JFrame {
 					.addComponent(btnOk)
 					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
+		panel.setLayout(new BorderLayout(0, 0));
 		
-		JLabel lblError = new JLabel(message);
-		panel.add(lblError);
+		JScrollPane scrollPane = new JScrollPane();
+		panel.add(scrollPane, BorderLayout.CENTER);
 		contentPane.setLayout(gl_contentPane);
+		JLabel label = new JLabel(message);
+		scrollPane.setViewportView(label);
+		label.setVerticalAlignment(SwingConstants.TOP);
 	}
-
 }
