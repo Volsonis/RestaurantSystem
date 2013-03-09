@@ -167,10 +167,25 @@ public class DBInterface
  
   
   //order
-  public static void addOrder(Order order)
+  public static void addOrder(Order order) throws SQLException
   {
     OrderTable.Row row = OrderTable.getRow();
     row.setValue(order.getPrice());
+    row.setNotes(order.getNotes());
+    row.setCustomer_id(order.getCustomer_id());
+    row.setTablenumber(order.getTablenumber());
+    row.insert();
+    
+    //now insert the dishes associated with the order into the articles table
+    int order_number = row.getNumber();
+    
+    for(int i=0; i<order.getDish_id().length; i++)
+    {
+      ArticlesTable.Row arow = ArticlesTable.getRow();
+      arow.setOrder_number(order_number);
+      arow.setDish_id(order.getDish_id()[i]);
+      arow.insert();
+    }
   }
   //customer
   public static void addCustomer()
