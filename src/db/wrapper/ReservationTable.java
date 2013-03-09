@@ -51,11 +51,12 @@ public class ReservationTable
     public static final String dateColumnName = "date";
     public static final String timeColumnName = "time";
     public static final String nameColumnName = "name";
+    public static final String peopleColumnName = "people";
     public static final String customer_idColumnName = "customer_id";
 
     private static String[] allColumns =
     {
-        reservation_idColumnName , tablenumberColumnName , dateColumnName , timeColumnName , nameColumnName , customer_idColumnName , 
+        reservation_idColumnName , tablenumberColumnName , dateColumnName , timeColumnName , nameColumnName , peopleColumnName , customer_idColumnName , 
     };
 
     /** You probably want to use the static methods for most of your access, but once in a while you might need to
@@ -240,6 +241,8 @@ public class ReservationTable
         private String date ;
         private String time ;
         private String name ;
+        private int people ;
+        private boolean peopleNull = true ;
         private int customer_id ;
         private boolean customer_idNull = true ;
 
@@ -257,8 +260,10 @@ public class ReservationTable
                 this.date = data[2];
                 this.time = data[3];
                 this.name = data[4];
-                this.customer_idNull = ( data[5] == null );
-                this.customer_id = customer_idNull ? 0 : Str.toInt( data[5] );
+                this.peopleNull = ( data[5] == null );
+                this.people = peopleNull ? 0 : Str.toInt( data[5] );
+                this.customer_idNull = ( data[6] == null );
+                this.customer_id = customer_idNull ? 0 : Str.toInt( data[6] );
                 dataLoadedFromDatabase = true ;
             }
         }
@@ -323,6 +328,45 @@ public class ReservationTable
         }
 
 
+        public int getPeople()
+        {
+            return people ;
+        }
+
+        public void setPeople( int people )
+        {
+            this.people = people ;
+            peopleNull = false ;
+        }
+
+        public void setPeople( Integer people )
+        {
+            peopleNull = ( people == null );
+            if ( peopleNull )
+            {
+                this.people = 0 ;
+            }
+            else
+            {
+                this.people = people.intValue() ;
+            }
+        }
+
+        public boolean isPeopleNull()
+        {
+            return peopleNull ;
+        }
+
+        public void setPeopleNull( boolean peopleNull )
+        {
+            this.peopleNull = peopleNull ;
+            if ( peopleNull )
+            {
+                people = 0 ;
+            }
+        }
+
+
         public int getCustomer_id()
         {
             return customer_id ;
@@ -377,6 +421,7 @@ public class ReservationTable
             data.put( dateColumnName , this.date );
             data.put( timeColumnName , this.time );
             data.put( nameColumnName , this.name );
+            data.put( peopleColumnName , this.peopleNull ? null : String.valueOf( this.people ) );
             data.put( customer_idColumnName , this.customer_idNull ? null : String.valueOf( this.customer_id ) );
             return data ;
         }

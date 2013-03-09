@@ -48,12 +48,13 @@ public class OrderTable
 
     public static final String numberColumnName = "number";
     public static final String valueColumnName = "value";
+    public static final String notesColumnName = "notes";
     public static final String customer_idColumnName = "customer_id";
     public static final String tablenumberColumnName = "tablenumber";
 
     private static String[] allColumns =
     {
-        numberColumnName , valueColumnName , customer_idColumnName , tablenumberColumnName , 
+        numberColumnName , valueColumnName , notesColumnName , customer_idColumnName , tablenumberColumnName , 
     };
 
     /** You probably want to use the static methods for most of your access, but once in a while you might need to
@@ -186,6 +187,7 @@ public class OrderTable
         private int number ;
         private double value ;
         private boolean valueNull = true ;
+        private String notes ;
         private int customer_id ;
         private boolean customer_idNull = true ;
         private int tablenumber ;
@@ -203,10 +205,11 @@ public class OrderTable
                 this.number =  Str.toInt( data[0] );
                 this.valueNull = ( data[1] == null );
                 this.value = valueNull ? 0.0 : Str.toDouble( data[1] );
-                this.customer_idNull = ( data[2] == null );
-                this.customer_id = customer_idNull ? 0 : Str.toInt( data[2] );
-                this.tablenumberNull = ( data[3] == null );
-                this.tablenumber = tablenumberNull ? 0 : Str.toInt( data[3] );
+                this.notes = data[2];
+                this.customer_idNull = ( data[3] == null );
+                this.customer_id = customer_idNull ? 0 : Str.toInt( data[3] );
+                this.tablenumberNull = ( data[4] == null );
+                this.tablenumber = tablenumberNull ? 0 : Str.toInt( data[4] );
                 dataLoadedFromDatabase = true ;
             }
         }
@@ -263,6 +266,17 @@ public class OrderTable
             {
                 value = 0.0 ;
             }
+        }
+
+
+        public String getNotes()
+        {
+            return notes ;
+        }
+
+        public void setNotes( String notes )
+        {
+            this.notes = notes ;
         }
 
 
@@ -356,6 +370,7 @@ public class OrderTable
             Map data = new HashMap();
             data.put( numberColumnName , String.valueOf(  this.number ) );
             data.put( valueColumnName , this.valueNull ? null : String.valueOf( this.value ) );
+            data.put( notesColumnName , this.notes );
             data.put( customer_idColumnName , this.customer_idNull ? null : String.valueOf( this.customer_id ) );
             data.put( tablenumberColumnName , this.tablenumberNull ? null : String.valueOf( this.tablenumber ) );
             return data ;

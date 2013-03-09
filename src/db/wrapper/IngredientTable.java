@@ -46,15 +46,15 @@ public class IngredientTable
 
     public static final String tableName = "ingredient";
 
+    public static final String ingredient_idColumnName = "ingredient_id";
     public static final String nameColumnName = "name";
     public static final String priceColumnName = "price";
     public static final String stockColumnName = "stock";
-    public static final String ingredient_idColumnName = "ingredient_id";
     public static final String expiresColumnName = "expires";
 
     private static String[] allColumns =
     {
-        nameColumnName , priceColumnName , stockColumnName , ingredient_idColumnName , expiresColumnName , 
+        ingredient_idColumnName , nameColumnName , priceColumnName , stockColumnName , expiresColumnName , 
     };
 
     /** You probably want to use the static methods for most of your access, but once in a while you might need to
@@ -234,12 +234,12 @@ public class IngredientTable
 
         private boolean dataLoadedFromDatabase = false ;
 
+        private int ingredient_id ;
         private String name ;
         private double price ;
         private boolean priceNull = true ;
         private int stock ;
         private boolean stockNull = true ;
-        private int ingredient_id ;
         private String expires ;
 
         /** for internal use only!   If you need a row object, use getRow(). */
@@ -251,12 +251,12 @@ public class IngredientTable
         {
             if ( data != null )
             {
-                this.name = data[0];
-                this.priceNull = ( data[1] == null );
-                this.price = priceNull ? 0.0 : Str.toDouble( data[1] );
-                this.stockNull = ( data[2] == null );
-                this.stock = stockNull ? 0 : Str.toInt( data[2] );
-                this.ingredient_id =  Str.toInt( data[3] );
+                this.ingredient_id =  Str.toInt( data[0] );
+                this.name = data[1];
+                this.priceNull = ( data[2] == null );
+                this.price = priceNull ? 0.0 : Str.toDouble( data[2] );
+                this.stockNull = ( data[3] == null );
+                this.stock = stockNull ? 0 : Str.toInt( data[3] );
                 this.expires = data[4];
                 dataLoadedFromDatabase = true ;
             }
@@ -266,6 +266,17 @@ public class IngredientTable
         {
             this( results.getRow(0) );
         }
+
+        public int getIngredient_id()
+        {
+            return ingredient_id ;
+        }
+
+        public void setIngredient_id( int ingredient_id )
+        {
+            this.ingredient_id = ingredient_id ;
+        }
+
 
         public String getName()
         {
@@ -356,17 +367,6 @@ public class IngredientTable
         }
 
 
-        public int getIngredient_id()
-        {
-            return ingredient_id ;
-        }
-
-        public void setIngredient_id( int ingredient_id )
-        {
-            this.ingredient_id = ingredient_id ;
-        }
-
-
         public String getExpires()
         {
             return expires ;
@@ -388,10 +388,10 @@ public class IngredientTable
         private Map buildDataMap()
         {
             Map data = new HashMap();
+            data.put( ingredient_idColumnName , String.valueOf(  this.ingredient_id ) );
             data.put( nameColumnName , this.name );
             data.put( priceColumnName , this.priceNull ? null : String.valueOf( this.price ) );
             data.put( stockColumnName , this.stockNull ? null : String.valueOf( this.stock ) );
-            data.put( ingredient_idColumnName , String.valueOf(  this.ingredient_id ) );
             data.put( expiresColumnName , this.expires );
             return data ;
         }

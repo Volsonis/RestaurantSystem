@@ -48,10 +48,11 @@ public class Table
 
     public static final String tablenumberColumnName = "tablenumber";
     public static final String tabledetailsColumnName = "tabledetails";
+    public static final String revenueColumnName = "revenue";
 
     private static String[] allColumns =
     {
-        tablenumberColumnName , tabledetailsColumnName , 
+        tablenumberColumnName , tabledetailsColumnName , revenueColumnName , 
     };
 
     /** You probably want to use the static methods for most of your access, but once in a while you might need to
@@ -183,6 +184,8 @@ public class Table
 
         private int tablenumber ;
         private String tabledetails ;
+        private double revenue ;
+        private boolean revenueNull = true ;
 
         /** for internal use only!   If you need a row object, use getRow(). */
         Row()
@@ -195,6 +198,8 @@ public class Table
             {
                 this.tablenumber =  Str.toInt( data[0] );
                 this.tabledetails = data[1];
+                this.revenueNull = ( data[2] == null );
+                this.revenue = revenueNull ? 0.0 : Str.toDouble( data[2] );
                 dataLoadedFromDatabase = true ;
             }
         }
@@ -226,6 +231,45 @@ public class Table
         }
 
 
+        public double getRevenue()
+        {
+            return revenue ;
+        }
+
+        public void setRevenue( double revenue )
+        {
+            this.revenue = revenue ;
+            revenueNull = false ;
+        }
+
+        public void setRevenue( Double revenue )
+        {
+            revenueNull = ( revenue == null );
+            if ( revenueNull )
+            {
+                this.revenue = 0.0 ;
+            }
+            else
+            {
+                this.revenue = revenue.doubleValue() ;
+            }
+        }
+
+        public boolean isRevenueNull()
+        {
+            return revenueNull ;
+        }
+
+        public void setRevenueNull( boolean revenueNull )
+        {
+            this.revenueNull = revenueNull ;
+            if ( revenueNull )
+            {
+                revenue = 0.0 ;
+            }
+        }
+
+
 
         
         private boolean dataLoadedFromDatabase()
@@ -238,6 +282,7 @@ public class Table
             Map data = new HashMap();
             data.put( tablenumberColumnName , String.valueOf(  this.tablenumber ) );
             data.put( tabledetailsColumnName , this.tabledetails );
+            data.put( revenueColumnName , this.revenueNull ? null : String.valueOf( this.revenue ) );
             return data ;
         }
 
