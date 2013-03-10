@@ -76,11 +76,11 @@ public class Error extends JDialog {
     label.setVerticalAlignment(SwingConstants.TOP);
 	}
 	
-	public Error(Component parent, String message)
+	public Error(Component parent, String errortype, String message)
 	{
 	  super((Frame) parent);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Error.class.getResource("/gui/resources/img16x16/dialog-close-2.png")));
-		setTitle("Error");
+		setTitle(errortype);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setModalityType(Dialog.ModalityType.DOCUMENT_MODAL);
 		setBounds(100, 100, 450, 218);

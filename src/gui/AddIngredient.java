@@ -153,12 +153,14 @@ public class AddIngredient extends JDialog {
 				      
             } catch (SQLException e)
             {
+              Error err = new Error(parentFrame,"Database Error", e.getMessage());
+              err.setVisible(true);
               // TODO Auto-generated catch block
               e.printStackTrace();
             }
 				    catch(Exception e)
 				    {
-				      Error err = new Error(parentFrame, e.getMessage());
+				      Error err = new Error(parentFrame,"Error", e.getMessage());
 				      err.setVisible(true);
               e.printStackTrace();
 				    }
