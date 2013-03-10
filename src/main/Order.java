@@ -1,5 +1,7 @@
 package main;
 
+import java.util.Date;
+
 public class Order
 {
 
@@ -32,6 +34,21 @@ public class Order
     this.tablenumber = tablenumber;
     this.dish_id = dish_id;
     this.dishes = dishes;
+  }
+  
+  public ProcessedOrder process()
+  {
+    Date date = new Date();
+    ProcessedOrder procOrder = new ProcessedOrder(number, price, date, notes, customer_id, tablenumber, dish_id, dishes);
+    
+    //remove itself from the databse
+    
+    //put itself into the ProcessedOrder Table
+    
+    //TODO implement delete Order in DBInterface
+    
+    
+    return procOrder;
   }
 
   public double getPrice()

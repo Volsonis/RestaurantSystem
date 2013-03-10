@@ -2,7 +2,7 @@ package gui;
 
 import javax.swing.JFrame;
 
-public class TestGuis
+public class TestManagement
 {
 	public static void main(String[] args)
 	{

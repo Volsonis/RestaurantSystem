@@ -14,6 +14,19 @@ public class ProcessedOrder
   private int tablenumber;
   private int[] dish_id;
   private String[] dishes;
+  
+  public ProcessedOrder(int number, double price, Date date, String notes,
+      int customer_id, int tablenumber, int[] dish_id, String[] dishes) {
+    super();
+    this.number = number;
+    this.price = price;
+    this.date = date;
+    this.notes = notes;
+    this.customer_id = customer_id;
+    this.tablenumber = tablenumber;
+    this.dish_id = dish_id;
+    this.dishes = dishes;
+  }
 
   public ProcessedOrder(int processedorders_id, int number, double price,
       Date date, String notes, int customer_id, int tablenumber, int[] dish_id,

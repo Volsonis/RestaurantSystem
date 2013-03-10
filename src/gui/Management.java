@@ -20,6 +20,8 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JLayeredPane;
 import javax.swing.JSeparator;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Management extends JFrame {
 
@@ -61,6 +63,11 @@ public class Management extends JFrame {
 		menuBar.add(mnFile);
 		
 		JMenuItem mntmExit = new JMenuItem("Exit");
+		mntmExit.addActionListener(new ActionListener() {
+		  public void actionPerformed(ActionEvent arg0) {
+		    System.exit(0);
+		  }
+		});
 		mntmExit.setIcon(new ImageIcon(Management.class.getResource("/gui/resources/img16x16/dialog-close-2.png")));
 		mnFile.add(mntmExit);
 		
@@ -124,6 +131,7 @@ public class Management extends JFrame {
 		contentPane.add(panel, BorderLayout.CENTER);
 		panel.setLayout(new BorderLayout(0, 0));
 		
+		//i added this
 		IngredientsFrame ingredientsFrame = new IngredientsFrame(this);
 		panel.add(ingredientsFrame);
 		
