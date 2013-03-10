@@ -1,13 +1,17 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dialog;
 import java.awt.EventQueue;
+import java.awt.Frame;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -15,35 +19,24 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 import java.awt.Toolkit;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
-public class Error extends JFrame {
+public class Error extends JDialog {
 
 	private JPanel contentPane;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Error frame = new Error();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
 	 * Create the frame.
+	 * @wbp.parser.constructor
 	 */
-	public Error() {
+	public Error(Component parent) {
+	  super((Frame) parent);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Error.class.getResource("/gui/resources/img16x16/dialog-close-2.png")));
 		setTitle("Error");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 218);
+		setModalityType(Dialog.ModalityType.DOCUMENT_MODAL);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -51,6 +44,11 @@ public class Error extends JFrame {
 		JPanel panel = new JPanel();
 		
 		JButton btnOk = new JButton("OK");
+		btnOk.addActionListener(new ActionListener() {
+		  public void actionPerformed(ActionEvent arg0) {
+		    setVisible(false);
+		  }
+		});
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -71,15 +69,20 @@ public class Error extends JFrame {
 		panel.setLayout(new BorderLayout(0, 0));
 		
 		JScrollPane scrollPane = new JScrollPane();
-		panel.add(scrollPane, BorderLayout.CENTER);
-		contentPane.setLayout(gl_contentPane);
+    panel.add(scrollPane, BorderLayout.CENTER);
+    contentPane.setLayout(gl_contentPane);
+    JLabel label = new JLabel("Error: An unknown Error occured!");
+    scrollPane.setViewportView(label);
+    label.setVerticalAlignment(SwingConstants.TOP);
 	}
 	
-	public Error(String message)
+	public Error(Component parent, String message)
 	{
+	  super((Frame) parent);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Error.class.getResource("/gui/resources/img16x16/dialog-close-2.png")));
 		setTitle("Error");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setModalityType(Dialog.ModalityType.DOCUMENT_MODAL);
 		setBounds(100, 100, 450, 218);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -88,6 +91,11 @@ public class Error extends JFrame {
 		JPanel panel = new JPanel();
 		
 		JButton btnOk = new JButton("OK");
+		btnOk.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent arg0) {
+        setVisible(false);
+      }
+		});
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)

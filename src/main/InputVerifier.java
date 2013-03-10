@@ -118,6 +118,12 @@ public class InputVerifier
 	    throw new Exception("Email address too long! (120 characters maximum!)");
 	  //TODO verify valid email address format "*@*.*"
 	  
+	  //name
+	  if(input.getName() == null)
+	    throw new Exception("Please enter a customer name!");
+	  if(input.getName().length() > 80)
+	    throw new Exception("Name too long! (80 character maximum!)");
+	  
 	  //password
 	  if(input.getPassword().length() > 45)
 	    throw new Exception("Password too long! (45 characters maximum!)");

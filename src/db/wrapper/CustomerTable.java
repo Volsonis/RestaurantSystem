@@ -47,6 +47,7 @@ public class CustomerTable
     public static final String tableName = "customer";
 
     public static final String customer_idColumnName = "customer_id";
+    public static final String nameColumnName = "name";
     public static final String emailColumnName = "email";
     public static final String passwordColumnName = "password";
     public static final String addressColumnName = "address";
@@ -54,7 +55,7 @@ public class CustomerTable
 
     private static String[] allColumns =
     {
-        customer_idColumnName , emailColumnName , passwordColumnName , addressColumnName , phoneColumnName , 
+        customer_idColumnName , nameColumnName , emailColumnName , passwordColumnName , addressColumnName , phoneColumnName , 
     };
 
     /** You probably want to use the static methods for most of your access, but once in a while you might need to
@@ -235,6 +236,7 @@ public class CustomerTable
         private boolean dataLoadedFromDatabase = false ;
 
         private int customer_id ;
+        private String name ;
         private String email ;
         private String password ;
         private String address ;
@@ -250,10 +252,11 @@ public class CustomerTable
             if ( data != null )
             {
                 this.customer_id =  Str.toInt( data[0] );
-                this.email = data[1];
-                this.password = data[2];
-                this.address = data[3];
-                this.phone = data[4];
+                this.name = data[1];
+                this.email = data[2];
+                this.password = data[3];
+                this.address = data[4];
+                this.phone = data[5];
                 dataLoadedFromDatabase = true ;
             }
         }
@@ -271,6 +274,17 @@ public class CustomerTable
         public void setCustomer_id( int customer_id )
         {
             this.customer_id = customer_id ;
+        }
+
+
+        public String getName()
+        {
+            return name ;
+        }
+
+        public void setName( String name )
+        {
+            this.name = name ;
         }
 
 
@@ -329,6 +343,7 @@ public class CustomerTable
         {
             Map data = new HashMap();
             data.put( customer_idColumnName , String.valueOf(  this.customer_id ) );
+            data.put( nameColumnName , this.name );
             data.put( emailColumnName , this.email );
             data.put( passwordColumnName , this.password );
             data.put( addressColumnName , this.address );

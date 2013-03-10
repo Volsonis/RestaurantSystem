@@ -5,19 +5,37 @@ public class Customer
 
   private int customer_id;
   private String email;
+  private String name;
   private String password;
   private String address;
   private String phone;
-  
-  public Customer(int customer_id, String email, String password,
+
+  public Customer(int customer_id, String email, String name, String password,
       String address, String phone) {
     super();
     this.customer_id = customer_id;
     this.email = email;
+    this.name = name;
     this.password = password;
     this.address = address;
     this.phone = phone;
   }
+  
+  
+
+  public String getName()
+  {
+    return name;
+  }
+
+
+
+  public void setName(String name)
+  {
+    this.name = name;
+  }
+
+
 
   public String getEmail()
   {

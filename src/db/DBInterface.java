@@ -13,9 +13,11 @@ import com.javaranch.db.* ;
 import db.wrapper.DishTable;
 import db.wrapper.DishTable.Row;
 import db.wrapper.ArticlesTable;
+import db.wrapper.CustomerTable;
 import db.wrapper.IngredientTable;
 import db.wrapper.IngredientsTable;
 import db.wrapper.OrderTable;
+import db.wrapper.ReservationTable;
 import main.*;
 
 public class DBInterface
@@ -130,6 +132,7 @@ public class DBInterface
   }//addDish
   
   //articles
+  //deprecated
   public static void addArticle(int dish_id, int order_number) throws SQLException
   {
 	  ArticlesTable.Row row = ArticlesTable.getRow();
@@ -187,18 +190,51 @@ public class DBInterface
       arow.insert();
     }
   }
+  
   //customer
-  public static void addCustomer()
+  public static void addCustomer(Customer customer) throws SQLException
   {
-  	
+  	CustomerTable.Row row = CustomerTable.getRow();
+  	row.setName(customer.getName());
+  	row.setEmail(customer.getEmail());
+  	row.setPassword(customer.getPassword());
+  	row.setAddress(customer.getAddress());
+  	row.setPhone(customer.getPhone());
+  	row.insert();
   }
   
   //reservation
-  public static void addReservation()
+  public static void addReservation(Reservation reservation) throws SQLException
   {
+  	ReservationTable.Row row = ReservationTable.getRow();
+  	row.setTablenumber(reservation.getTablenumber());
   	
+  	java.sql.Date date = new java.sql.Date(reservation.getDateandtime().getTime());
+  	row.setDate(date.toString()); //this needs to be converted into a sql date toString
+  	
+  	java.sql.Time time = new java.sql.Time(reservation.getDateandtime().getTime());
+  	row.setTime(time.toString()); //this needs to be converted into a sql date toString
+  	
+  	row.setName(reservation.getName());
+  	row.setPeople(reservation.getPeople());
+  	row.setCustomer_id(reservation.getCustomer_id());
+  	row.insert();
   }
   
+  //table
+  public static void addTable(Table table) throws SQLException
+  {
+    db.wrapper.Table.Row row = db.wrapper.Table.getRow();
+    row.setTabledetails(table.getTabledetails());
+    row.setRevenue(table.getRevenue());
+    row.insert();
+  }
+  
+  //Staff
+  public static void addStaff(Staff staff)
+  {
+    
+  }
   //EDIT
   //Ingredient
   //stock

@@ -1,6 +1,7 @@
 package main;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -32,7 +33,8 @@ public class IngredientFactory extends ArrayList
       		for(int i=0; i<rows.length; i++)
       		{
       			//get ingredients of this dish
-      			ingredients.add(new Ingredient(rows[i].getIngredient_id(), rows[i].getName(), rows[i].getStock(), rows[i].getPrice(), rows[i].getExpires()));
+      		  Date date = Date.valueOf(rows[i].getExpires()); //converts a string in JDBC date escape format to a Date value
+      			ingredients.add(new Ingredient(rows[i].getIngredient_id(), rows[i].getName(), rows[i].getStock(), rows[i].getPrice(), date));
       		}
       	}
       	catch(Exception e)

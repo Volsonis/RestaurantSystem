@@ -11,19 +11,25 @@ public class Ingredient
 	private Double price;
 	private Date expires;
 	
-	public Ingredient(int id, String name, int stock, double price, String expires)
+	public Ingredient(int id, String name, int stock, double price, Date expires)
 	{
 		super();
 		this.id = id;
 		this.name = name;
 		this.stock = stock;
 		this.price = price;
-		this.expires = Date.valueOf(expires);
+		this.expires = expires;
 	}
 
-	
+	public Ingredient(String name, int stock, Double price, Date expires) {
+    super();
+    this.name = name;
+    this.stock = stock;
+    this.price = price;
+    this.expires = expires;
+  }
 
-	public Date getExpires()
+  public Date getExpires()
   {
     return expires;
   }

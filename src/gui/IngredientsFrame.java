@@ -3,6 +3,7 @@ package gui;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import java.awt.BorderLayout;
+import java.awt.Dialog;
 
 import javax.swing.Box;
 import javax.swing.JDialog;
@@ -27,9 +28,9 @@ public class IngredientsFrame extends JPanel {
 	
 	Box box;
 	
-	public IngredientsFrame() {
+	public IngredientsFrame(Component parent) {
 		setLayout(new BorderLayout(0, 0));
-		
+		final Component frameParent = parent;
 		JSeparator separator = new JSeparator();
 		this.add(separator, BorderLayout.NORTH);
 		
@@ -42,8 +43,7 @@ public class IngredientsFrame extends JPanel {
 		JButton btnAdd = new JButton("New");
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				JDialog addIngredient = new AddIngredient();
-				
+				JDialog addIngredient = new AddIngredient(frameParent);
 				addIngredient.setVisible(true);
 			}
 		});

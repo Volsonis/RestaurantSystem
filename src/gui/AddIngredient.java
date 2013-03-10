@@ -1,7 +1,10 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dialog;
 import java.awt.FlowLayout;
+import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,13 +18,15 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import com.toedter.calendar.JDateChooser;
 
 import db.DBInterface;
-
+import main.*;
 
 public class AddIngredient extends JDialog {
 
@@ -30,9 +35,10 @@ public class AddIngredient extends JDialog {
 	private JTextField textField_1;
 	private JTextField textField_2;
 
+	/*
 	/**
 	 * Launch the application.
-	 */
+	 
 	public static void main(String[] args) {
 		try {
 			AddIngredient dialog = new AddIngredient();
@@ -46,10 +52,13 @@ public class AddIngredient extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public AddIngredient() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(NewIngredient.class.getResource("/gui/resources/img16x16/list-add-5.png")));
+	public AddIngredient(Component parent) {
+	  super((Frame) parent); //for modailty i need to pass the parent through to here and use the super constructor to lock that parent down
+	  final Component parentFrame = parent;
+		setIconImage(Toolkit.getDefaultToolkit().getImage(AddIngredient.class.getResource("/gui/resources/img16x16/list-add-5.png")));
 		setTitle("Add Ingredient");
 		setBounds(100, 100, 450, 243);
+		setModalityType(Dialog.ModalityType.DOCUMENT_MODAL);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.WEST);
@@ -133,29 +142,33 @@ public class AddIngredient extends JDialog {
 				JButton okButton = new JButton("Accept");
 				okButton.addActionListener(new ActionListener() {
 				  public void actionPerformed(ActionEvent arg0) {
-				    //TODO check the format of the entered values
-				    
-				    //get all the values from the fields
-				    String name = textField.getText();
-				    Double price = Double.parseDouble(textField_1.getText());
-				    int stock = Integer.parseInt(textField_2.getText());
-				    Date date = new java.sql.Date(dateChooser.getDate().getTime());
-				    
 				    try
             {
-              DBInterface.addIngredient(name, price, stock, date);
+				      Ingredient ingredient = new Ingredient(textField.getText(), Integer.parseInt(textField_2.getText()),  
+				                                            Double.parseDouble(textField_1.getText()), new java.sql.Date(dateChooser.getDate().getTime()));
+				      
+				      InputVerifier.verifyIngredient(ingredient);
+				      
+				      DBInterface.addIngredient(ingredient);
+				      
             } catch (SQLException e)
             {
               // TODO Auto-generated catch block
               e.printStackTrace();
             }
+				    catch(Exception e)
+				    {
+				      Error err = new Error(parentFrame, e.getMessage());
+				      err.setVisible(true);
+              e.printStackTrace();
+				    }
 				    
 				    
 				    
 				  }
 				});
 				okButton.setActionCommand("OK");
-				okButton.setIcon(new ImageIcon(NewIngredient.class.getResource("/gui/resources/img32x32/dialog-ok-apply-2.png")));
+				okButton.setIcon(new ImageIcon(AddIngredient.class.getResource("/gui/resources/img32x32/dialog-ok-apply-2.png")));
 				okButton.setBounds(69, 0, 118, 38);
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
@@ -169,7 +182,7 @@ public class AddIngredient extends JDialog {
 						setVisible(false);
 					}
 				});
-				cancelButton.setIcon(new ImageIcon(NewIngredient.class.getResource("/gui/resources/img32x32/dialog-cancel-2.png")));
+				cancelButton.setIcon(new ImageIcon(AddIngredient.class.getResource("/gui/resources/img32x32/dialog-cancel-2.png")));
 				cancelButton.setBounds(199, 0, 118, 38);
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);

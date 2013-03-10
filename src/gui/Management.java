@@ -124,7 +124,7 @@ public class Management extends JFrame {
 		contentPane.add(panel, BorderLayout.CENTER);
 		panel.setLayout(new BorderLayout(0, 0));
 		
-		IngredientsFrame ingredientsFrame = new IngredientsFrame();
+		IngredientsFrame ingredientsFrame = new IngredientsFrame(this);
 		panel.add(ingredientsFrame);
 		
 	}
