@@ -43,6 +43,11 @@ public class Ingredient
 
 
 
+  public void setName(String name)
+  {
+    this.name = name;
+  }
+
   public int getId()
 	{
 		return id;
@@ -72,6 +77,13 @@ public class Ingredient
 	{
 		this.price = price;
 	}
+
+  @Override
+  public String toString()
+  {
+    return "Ingredient [id=" + id + ", name=" + name + ", stock=" + stock
+        + ", price=" + price + ", expires=" + expires + "]";
+  }
 	
 	
 }

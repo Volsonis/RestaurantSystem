@@ -1,5 +1,6 @@
 package gui;
 
+import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTextPane;
@@ -20,47 +21,64 @@ import java.awt.Insets;
 import java.awt.Dimension;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
+import java.sql.SQLException;
+
 import javax.swing.SpinnerNumberModel;
+
+import main.Ingredient;
+import com.toedter.calendar.JDateChooser;
+
+import db.DBInterface;
 
 public class IngredientPanel extends JPanel {
 
 	/**
 	 * Create the panel.
 	 */
-	public IngredientPanel() {
+	public IngredientPanel(final Component parentFrame, final Ingredient ingredient) {
+	  setMaximumSize(new Dimension(730, 40));
 		setBorder(new LineBorder(Color.LIGHT_GRAY));
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{250, 61, 65, 87, 101, 136, 0, 0};
+		gridBagLayout.columnWidths = new int[]{203, 61, 118, 62, 101, 136, 0, 0};
 		gridBagLayout.rowHeights = new int[]{32, 0};
 		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		gridBagLayout.rowWeights = new double[]{0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
 		
-		JLabel label = new JLabel("");
-		label.setFont(new Font("Calibri", Font.PLAIN, 14));
-		GridBagConstraints gbc_label = new GridBagConstraints();
-		gbc_label.fill = GridBagConstraints.BOTH;
-		gbc_label.insets = new Insets(0, 0, 0, 5);
-		gbc_label.gridx = 0;
-		gbc_label.gridy = 0;
-		add(label, gbc_label);
+		JLabel nameLabel = new JLabel(ingredient.getName());
+		nameLabel.setFont(new Font("Calibri", Font.PLAIN, 14));
+		GridBagConstraints gbc_nameLabel = new GridBagConstraints();
+		gbc_nameLabel.fill = GridBagConstraints.BOTH;
+		gbc_nameLabel.insets = new Insets(0, 0, 0, 5);
+		gbc_nameLabel.gridx = 0;
+		gbc_nameLabel.gridy = 0;
+		add(nameLabel, gbc_nameLabel);
 		
-		JLabel label_1 = new JLabel("");
-		GridBagConstraints gbc_label_1 = new GridBagConstraints();
-		gbc_label_1.fill = GridBagConstraints.BOTH;
-		gbc_label_1.insets = new Insets(0, 0, 0, 5);
-		gbc_label_1.gridx = 1;
-		gbc_label_1.gridy = 0;
-		add(label_1, gbc_label_1);
+		JLabel priceLabel = new JLabel(String.valueOf(ingredient.getPrice()));
+		GridBagConstraints gbc_priceLabel = new GridBagConstraints();
+		gbc_priceLabel.fill = GridBagConstraints.BOTH;
+		gbc_priceLabel.insets = new Insets(0, 0, 0, 5);
+		gbc_priceLabel.gridx = 1;
+		gbc_priceLabel.gridy = 0;
+		add(priceLabel, gbc_priceLabel);
 		
-		JSpinner spinner = new JSpinner();
+		final JDateChooser dateChooser = new JDateChooser(ingredient.getExpires());
+		GridBagConstraints gbc_dateChooser = new GridBagConstraints();
+		gbc_dateChooser.insets = new Insets(0, 0, 0, 5);
+		gbc_dateChooser.fill = GridBagConstraints.BOTH;
+		gbc_dateChooser.gridx = 2;
+		gbc_dateChooser.gridy = 0;
+		add(dateChooser, gbc_dateChooser);
+		
+		final JSpinner spinner = new JSpinner();
 		spinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
 		spinner.setPreferredSize(new Dimension(29, 15));
 		spinner.setFont(new Font("Calibri", Font.PLAIN, 14));
+		spinner.setValue(ingredient.getStock());
 		GridBagConstraints gbc_spinner = new GridBagConstraints();
-		gbc_spinner.fill = GridBagConstraints.BOTH;
 		gbc_spinner.insets = new Insets(0, 0, 0, 5);
-		gbc_spinner.gridx = 2;
+		gbc_spinner.fill = GridBagConstraints.BOTH;
+		gbc_spinner.gridx = 3;
 		gbc_spinner.gridy = 0;
 		add(spinner, gbc_spinner);
 		
@@ -69,20 +87,37 @@ public class IngredientPanel extends JPanel {
 		GridBagConstraints gbc_toolBar_1 = new GridBagConstraints();
 		gbc_toolBar_1.fill = GridBagConstraints.BOTH;
 		gbc_toolBar_1.insets = new Insets(0, 0, 0, 5);
-		gbc_toolBar_1.gridx = 3;
+		gbc_toolBar_1.gridx = 4;
 		gbc_toolBar_1.gridy = 0;
 		add(toolBar_1, gbc_toolBar_1);
 		
 		JButton btnUpdate = new JButton("Update");
-		btnUpdate.setIcon(new ImageIcon(IngredientPanel.class.getResource("/gui/resources/img22x22/run-build.png")));
+		btnUpdate.addActionListener(new ActionListener() {
+		  public void actionPerformed(ActionEvent arg0) {
+		    //when this button is pressed we just want to update stock and expiry date in the database and the instantiated list, nothing else
+		    
+		    try
+        {
+          DBInterface.editIngredient(ingredient.getId(), dateChooser.getDate(), (Integer)spinner.getValue());
+          revalidate();
+          repaint();
+        } catch (SQLException e)
+        {
+          Error err = new Error(parentFrame,"Database Error", e.getMessage());
+          err.setVisible(true);
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
+		  }
+		});
 		toolBar_1.add(btnUpdate);
+		btnUpdate.setIcon(new ImageIcon(IngredientPanel.class.getResource("/gui/resources/img22x22/run-build.png")));
 		
 		JToolBar toolBar = new JToolBar();
 		toolBar.setFloatable(false);
 		GridBagConstraints gbc_toolBar = new GridBagConstraints();
 		gbc_toolBar.insets = new Insets(0, 0, 0, 5);
-		gbc_toolBar.anchor = GridBagConstraints.WEST;
-		gbc_toolBar.fill = GridBagConstraints.VERTICAL;
+		gbc_toolBar.fill = GridBagConstraints.BOTH;
 		gbc_toolBar.gridx = 5;
 		gbc_toolBar.gridy = 0;
 		add(toolBar, gbc_toolBar);
@@ -90,6 +125,8 @@ public class IngredientPanel extends JPanel {
 		JButton btnEdit = new JButton("Edit");
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+			  JDialog editIngredient = new EditIngredient(parentFrame, ingredient);
+        editIngredient.setVisible(true);
 			}
 		});
 		

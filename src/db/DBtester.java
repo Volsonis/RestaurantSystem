@@ -1,6 +1,7 @@
 package db;
 
 import java.sql.SQLException;
+import java.util.Date;
 
 public class DBtester
 {
@@ -14,12 +15,13 @@ public class DBtester
 		//test as I go along
 		
 		//add
-		DBInterface.addIngredient(name, price, stock);
+		//DBInterface.addIngredient(name, price, stock);
 		
 		//String[] ingredients = {"rice"};
 		//DBInterface.addDish("Boiled Rice", "Simply boiled rice", 1.99, ingredients);
 		
 		//edit
+		DBInterface.editIngredient(3, new Date(), 125);
 		//DBInterface.editIngredientStock("rice", 5);
 		//DBInterface.editIngredientPrice("rice", 0.5);
 		

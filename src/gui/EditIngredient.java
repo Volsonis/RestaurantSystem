@@ -28,12 +28,12 @@ import com.toedter.calendar.JDateChooser;
 import db.DBInterface;
 import main.*;
 
-public class AddIngredient extends JDialog {
+public class EditIngredient extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
+	private JTextField nameTextField;
+	private JTextField priceTextField;
+	private JTextField stockTextField;
 
 	/*
 	/**
@@ -52,10 +52,10 @@ public class AddIngredient extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public AddIngredient(Component parent) {
+	public EditIngredient(Component parent, final Ingredient ingredient) {
 	  super((Frame) parent); //for modailty i need to pass the parent through to here and use the super constructor to lock that parent down
 	  final Component parentFrame = parent;
-		setIconImage(Toolkit.getDefaultToolkit().getImage(AddIngredient.class.getResource("/gui/resources/img16x16/list-add-5.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(EditIngredient.class.getResource("/gui/resources/img16x16/list-add-5.png")));
 		setTitle("Add Ingredient");
 		setBounds(100, 100, 450, 243);
 		setModalityType(Dialog.ModalityType.DOCUMENT_MODAL);
@@ -67,65 +67,75 @@ public class AddIngredient extends JDialog {
 		
 		JLabel label_1 = new JLabel("Name:");
 		
-		textField = new JTextField();
-		textField.setColumns(10);
+		nameTextField = new JTextField();
+		nameTextField.setColumns(10);
+		nameTextField.setText(ingredient.getName());
 		
-		textField_1 = new JTextField();
-		textField_1.setColumns(10);
+		priceTextField = new JTextField();
+		priceTextField.setColumns(10);
+		priceTextField.setText(String.valueOf(ingredient.getPrice()));
 		
 		JLabel label_2 = new JLabel("Stock:");
 		
-		textField_2 = new JTextField();
-		textField_2.setColumns(10);
+		stockTextField = new JTextField();
+		stockTextField.setColumns(10);
+		stockTextField.setText(String.valueOf(ingredient.getStock()));
 		
 		final JDateChooser dateChooser = new JDateChooser();
+		dateChooser.setDate(ingredient.getExpires());
 		
 		JLabel lblBestBeforeDate = new JLabel("Due Date:");
+		
+		JLabel lblId = new JLabel(String.valueOf(ingredient.getId()));
 		GroupLayout gl_contentPanel = new GroupLayout(contentPanel);
 		gl_contentPanel.setHorizontalGroup(
-		  gl_contentPanel.createParallelGroup(Alignment.LEADING)
+		  gl_contentPanel.createParallelGroup(Alignment.TRAILING)
 		    .addGroup(gl_contentPanel.createSequentialGroup()
-		      .addGap(31)
 		      .addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-		        .addComponent(label_1, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)
 		        .addGroup(gl_contentPanel.createSequentialGroup()
+		          .addGap(31)
 		          .addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-		            .addComponent(label, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)
-		            .addComponent(lblBestBeforeDate))
-		          .addGap(6)
-		          .addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING, false)
-		            .addComponent(dateChooser, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-		            .addGroup(Alignment.LEADING, gl_contentPanel.createSequentialGroup()
-		              .addComponent(textField_1, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE)
-		              .addGap(32)
+		            .addComponent(label_1, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)
+		            .addGroup(gl_contentPanel.createSequentialGroup()
 		              .addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-		                .addComponent(label_2, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)
+		                .addComponent(label, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)
+		                .addComponent(lblBestBeforeDate))
+		              .addGap(6)
+		              .addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING, false)
+		                .addComponent(dateChooser, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 		                .addGroup(gl_contentPanel.createSequentialGroup()
-		                  .addGap(43)
-		                  .addComponent(textField_2, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE))))
-		            .addComponent(textField, GroupLayout.DEFAULT_SIZE, 307, Short.MAX_VALUE))))
+		                  .addComponent(priceTextField, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE)
+		                  .addGap(32)
+		                  .addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
+		                    .addComponent(label_2, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)
+		                    .addGroup(gl_contentPanel.createSequentialGroup()
+		                      .addGap(43)
+		                      .addComponent(stockTextField, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE))))
+		                .addComponent(nameTextField, GroupLayout.DEFAULT_SIZE, 307, Short.MAX_VALUE)))))
+		        .addComponent(lblId))
 		      .addContainerGap(56, Short.MAX_VALUE))
 		);
 		gl_contentPanel.setVerticalGroup(
 		  gl_contentPanel.createParallelGroup(Alignment.LEADING)
 		    .addGroup(gl_contentPanel.createSequentialGroup()
-		      .addGap(23)
+		      .addComponent(lblId)
+		      .addGap(9)
 		      .addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-		        .addComponent(textField, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)
+		        .addComponent(nameTextField, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)
 		        .addGroup(gl_contentPanel.createSequentialGroup()
 		          .addGap(3)
 		          .addComponent(label_1, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)))
 		      .addGap(23)
-		      .addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-		        .addGroup(Alignment.TRAILING, gl_contentPanel.createSequentialGroup()
+		      .addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING)
+		        .addGroup(gl_contentPanel.createSequentialGroup()
 		          .addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-		            .addComponent(textField_1, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)
+		            .addComponent(priceTextField, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)
 		            .addGroup(gl_contentPanel.createSequentialGroup()
 		              .addGap(3)
 		              .addComponent(label_2, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE))
-		            .addComponent(textField_2, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE))
+		            .addComponent(stockTextField, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE))
 		          .addGap(18))
-		        .addGroup(Alignment.TRAILING, gl_contentPanel.createSequentialGroup()
+		        .addGroup(gl_contentPanel.createSequentialGroup()
 		          .addComponent(label, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
 		          .addGap(21)))
 		      .addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
@@ -144,14 +154,20 @@ public class AddIngredient extends JDialog {
 				  public void actionPerformed(ActionEvent arg0) {
 				    try
             {
-				      Ingredient ingredient = new Ingredient(textField.getText(), Integer.parseInt(textField_2.getText()),  
-				                                            Double.parseDouble(textField_1.getText()), new java.sql.Date(dateChooser.getDate().getTime()));
+				      Ingredient newIngredient = new Ingredient(nameTextField.getText(), Integer.parseInt(stockTextField.getText()),  
+                  Double.parseDouble(priceTextField.getText()), new java.sql.Date(dateChooser.getDate().getTime()));
 				      
-				      InputVerifier.verifyIngredient(ingredient);
+				      /*
+				      ingredient.setName(nameTextField.getText());
+				      ingredient.setExpires(dateChooser.getDate());
+				      ingredient.setPrice(Double.parseDouble(priceTextField.getText()));
+				      ingredient.setStock(Integer.parseInt(stockTextField.getText()));
+				      */
 				      
-				      DBInterface.addIngredient(ingredient);
+				      InputVerifier.verifyIngredient(newIngredient);
 				      
-				      //then close the window
+				      DBInterface.editIngredient(ingredient.getId(), ingredient);
+				      
 				      setVisible(false);
 				      
             } catch (SQLException e)
@@ -173,7 +189,7 @@ public class AddIngredient extends JDialog {
 				  }
 				});
 				okButton.setActionCommand("OK");
-				okButton.setIcon(new ImageIcon(AddIngredient.class.getResource("/gui/resources/img32x32/dialog-ok-apply-2.png")));
+				okButton.setIcon(new ImageIcon(EditIngredient.class.getResource("/gui/resources/img32x32/dialog-ok-apply-2.png")));
 				okButton.setBounds(69, 0, 118, 38);
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
@@ -187,7 +203,7 @@ public class AddIngredient extends JDialog {
 						setVisible(false);
 					}
 				});
-				cancelButton.setIcon(new ImageIcon(AddIngredient.class.getResource("/gui/resources/img32x32/dialog-cancel-2.png")));
+				cancelButton.setIcon(new ImageIcon(EditIngredient.class.getResource("/gui/resources/img32x32/dialog-cancel-2.png")));
 				cancelButton.setBounds(199, 0, 118, 38);
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);

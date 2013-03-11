@@ -17,8 +17,14 @@ import javax.swing.JList;
 import javax.swing.JTable;
 import java.awt.Font;
 import javax.swing.ScrollPaneConstants;
+
+import main.Ingredient;
+import main.IngredientFactory;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.awt.ComponentOrientation;
 
 public class IngredientsFrame extends JPanel {
 
@@ -27,10 +33,15 @@ public class IngredientsFrame extends JPanel {
 	 */
 	
 	Box box;
+	ArrayList<Ingredient> ingredients;
+	final Component parentFrame;
 	
 	public IngredientsFrame(Component parent) {
+	  
+	  ingredients = new ArrayList<Ingredient>();
+	  
 		setLayout(new BorderLayout(0, 0));
-		final Component frameParent = parent;
+		parentFrame = parent;
 		JSeparator separator = new JSeparator();
 		this.add(separator, BorderLayout.NORTH);
 		
@@ -43,8 +54,12 @@ public class IngredientsFrame extends JPanel {
 		JButton btnAdd = new JButton("New");
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				JDialog addIngredient = new AddIngredient(frameParent);
+				JDialog addIngredient = new AddIngredient(parentFrame);
 				addIngredient.setVisible(true);
+				
+				refresh();
+				revalidate();
+				repaint();
 			}
 		});
 		toolBar.add(btnAdd);
@@ -54,6 +69,14 @@ public class IngredientsFrame extends JPanel {
 		btnAdd.setIcon(new ImageIcon(IngredientsFrame.class.getResource("/gui/resources/img32x32/list-add-5.png")));
 		
 		JButton btnRefresh = new JButton("Refresh");
+		btnRefresh.addActionListener(new ActionListener() {
+		  public void actionPerformed(ActionEvent arg0) {
+		    refresh();
+		    
+		    revalidate();
+		    repaint();
+		  }
+		});
 		toolBar.add(btnRefresh);
 		btnRefresh.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnRefresh.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -77,13 +100,26 @@ public class IngredientsFrame extends JPanel {
 		box.setAutoscrolls(true);
 		scrollPane.setViewportView(box);
 		
+		refresh();
 		
-		JPanel[] ip = new JPanel[20];
-		for(int i=0; i<20; i++)
-		{
-			ip[i] = new IngredientPanel();
-			box.add(ip[i]);
-		}
-		
+	}
+	
+	public void refresh()
+	{
+	  
+	  box.removeAll();
+	  
+	  IngredientFactory.refreshIngredients(ingredients);
+	  
+	  JPanel[] ip = new JPanel[ingredients.size()];
+    for(int i=0; i<ingredients.size(); i++)
+    {
+      ip[i] = new IngredientPanel(parentFrame, ingredients.get(i));
+      box.add(ip[i]);
+    }
+    
+    box.revalidate();
+    box.repaint();
+	  
 	}
 }

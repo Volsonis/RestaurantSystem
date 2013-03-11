@@ -237,6 +237,24 @@ public class DBInterface
   }
   //EDIT
   //Ingredient
+  public static void editIngredient(int ingredient_id, Ingredient ingredient) throws SQLException
+  {
+    IngredientTable.Row row = IngredientTable.getRow(ingredient_id);
+    row.setName(ingredient.getName());
+    row.setPrice(ingredient.getPrice());
+    row.setStock(ingredient.getStock());
+    row.setExpires(new java.sql.Date(ingredient.getExpires().getTime()).toString());
+    row.update();
+  }
+  //for the quickupdate of date and stock only
+  public static void editIngredient(int ingredient_id, java.util.Date date, int stock) throws SQLException
+  {
+    IngredientTable.Row row = IngredientTable.getRow(ingredient_id);
+    row.setExpires(new java.sql.Date(date.getTime()).toString());
+    row.setStock(stock);
+    row.update();
+  }
+  //deprecated
   //stock
   public static void editIngredientStock(String name, int stock) throws SQLException
   {
@@ -244,7 +262,6 @@ public class DBInterface
   	row.setStock(stock);
   	row.update("name", name);
   }
-  
   public static void editIngredientPrice(String name, double price) throws SQLException
   {
   	IngredientTable.Row row = IngredientTable.getRow("name", name);

@@ -11,7 +11,7 @@ public class TestManagement
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		//display the window
-		frame.pack();
+		//frame.pack();
 		frame.setVisible(true);
 	}
 }

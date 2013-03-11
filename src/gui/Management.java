@@ -22,6 +22,8 @@ import javax.swing.JLayeredPane;
 import javax.swing.JSeparator;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Component;
+import javax.swing.Box;
 
 public class Management extends JFrame {
 
@@ -116,7 +118,7 @@ public class Management extends JFrame {
 		toolBar.add(btnIngredients);
 		
 		JButton btnDishes = new JButton("Dishes");
-		btnDishes.setIcon(new ImageIcon(Management.class.getResource("/gui/resources/img32x32/food-strawberry_with_light_shadow.png")));
+		btnDishes.setIcon(new ImageIcon(Management.class.getResource("/gui/resources/img32x32/draw-circle-2.png")));
 		toolBar.add(btnDishes);
 		
 		JButton btnMenu = new JButton("Menu");
@@ -126,6 +128,19 @@ public class Management extends JFrame {
 		JButton btnStaff = new JButton("Staff");
 		btnStaff.setIcon(new ImageIcon(Management.class.getResource("/gui/resources/img32x32/identity.png")));
 		toolBar.add(btnStaff);
+		
+		Component horizontalGlue = Box.createHorizontalGlue();
+		toolBar.add(horizontalGlue);
+		
+		JButton button = new JButton("Exit");
+		button.addActionListener(new ActionListener() {
+		  public void actionPerformed(ActionEvent e) {
+		    System.exit(0);
+		  }
+		});
+		button.setIcon(new ImageIcon(Management.class.getResource("/gui/resources/img32x32/dialog-close-2.png")));
+		button.setAlignmentX(1.0f);
+		toolBar.add(button);
 		
 		JPanel panel = new JPanel();
 		contentPane.add(panel, BorderLayout.CENTER);

@@ -8,16 +8,16 @@ import java.util.ArrayList;
 import db.DBInterface;
 import db.wrapper.IngredientTable;
 
-public class IngredientFactory extends ArrayList
+public class IngredientFactory extends ArrayList<Ingredient>
 {
+
 	public IngredientFactory()
 	{
-		
+	  
 	}
 	
-	public ArrayList<Ingredient> createIngredients()
+	public static void createIngredients(ArrayList<Ingredient> ingredients)
 	{
-		ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
 		
 		IngredientTable.Row[] rows;
 		try
@@ -56,15 +56,13 @@ public class IngredientFactory extends ArrayList
     	System.out.println("Could not load DB driver: " + e);
     }
 		
-		return ingredients;
 	}
 	
-	public ArrayList<Ingredient> refreshIngredients(ArrayList<Ingredient> ingredient)
+	public static void refreshIngredients(ArrayList<Ingredient> ingredients)
 	{
-		ingredient.clear();
+	  if(ingredients != null)
+	    ingredients.removeAll(ingredients);
 		
-		ingredient = createIngredients();
-		
-		return ingredient;
+		createIngredients(ingredients);
 	}
 }
