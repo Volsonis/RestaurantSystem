@@ -1,8 +1,9 @@
 package main;
 
 import java.sql.Date;
+import java.util.Comparator;
 
-public class Ingredient
+public class Ingredient implements Comparator<Ingredient>
 {
 	
 	private int id;
@@ -27,6 +28,10 @@ public class Ingredient
     this.stock = stock;
     this.price = price;
     this.expires = expires;
+  }
+
+  public Ingredient() {
+    //empty constructor
   }
 
   public Date getExpires()
@@ -83,6 +88,13 @@ public class Ingredient
   {
     return "Ingredient [id=" + id + ", name=" + name + ", stock=" + stock
         + ", price=" + price + ", expires=" + expires + "]";
+  }
+
+  @Override
+  public int compare(Ingredient arg0, Ingredient arg1)
+  {
+    //standart sorting in an arraylist will be by alphabet
+    return arg0.getName().compareToIgnoreCase(arg1.getName());
   }
 	
 	

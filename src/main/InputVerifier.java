@@ -49,7 +49,7 @@ public class InputVerifier
 	  //TODO price format greater than 4.2f
 	  
 	  //ingredients
-	  //TODO check for multiple entries
+	  //TODO check that there is at least one
 	}
 	
 	public static void verifyOrder(Order input) throws Exception

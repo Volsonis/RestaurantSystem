@@ -114,12 +114,11 @@ public class IngredientsFrame extends JPanel {
 	  JPanel[] ip = new JPanel[ingredients.size()];
     for(int i=0; i<ingredients.size(); i++)
     {
-      ip[i] = new IngredientPanel(parentFrame, ingredients.get(i));
+      ip[i] = new IngredientPanel(parentFrame, ingredients.get(i), this);
       box.add(ip[i]);
     }
     
     box.revalidate();
     box.repaint();
-	  
 	}
 }

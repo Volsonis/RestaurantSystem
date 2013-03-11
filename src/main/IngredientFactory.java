@@ -5,10 +5,12 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
+
 import db.DBInterface;
 import db.wrapper.IngredientTable;
 
-public class IngredientFactory extends ArrayList<Ingredient>
+public class IngredientFactory
 {
 
 	public IngredientFactory()
@@ -39,6 +41,8 @@ public class IngredientFactory extends ArrayList<Ingredient>
       	}
       	catch(Exception e)
       	{
+      	  gui.Error err = new gui.Error(new JFrame(), "Error", e.toString());
+      	  err.setVisible(true);
       		System.out.println("Error: " + e);
       	}
       	finally
@@ -48,11 +52,15 @@ public class IngredientFactory extends ArrayList<Ingredient>
       }//try
       catch(SQLException e)
       {
+        gui.Error err = new gui.Error(new JFrame(), "Error connecting to database: ", e.toString());
+        err.setVisible(true);
       	System.out.println("Could not connect to the database: " + e);
       }
     }//try
     catch (Exception e)
     {
+      gui.Error err = new gui.Error(new JFrame(), "Could not load Database driver: ", e.toString());
+      err.setVisible(true);
     	System.out.println("Could not load DB driver: " + e);
     }
 		

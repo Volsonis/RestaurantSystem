@@ -17,6 +17,7 @@ import db.wrapper.CustomerTable;
 import db.wrapper.IngredientTable;
 import db.wrapper.IngredientsTable;
 import db.wrapper.OrderTable;
+import db.wrapper.ProcessedarticlesTable;
 import db.wrapper.ReservationTable;
 import main.*;
 
@@ -82,6 +83,7 @@ public class DBInterface
     row.setPrice(dish.getPrice());
     row.insert();
     
+    //id gets assigned after insert therefore we need this
     Row drow = DishTable.getRow("name", dish.getName());
     int dish_id = drow.getDish_id();
     
@@ -235,6 +237,8 @@ public class DBInterface
   {
     
   }
+  
+  
   //EDIT
   //Ingredient
   public static void editIngredient(int ingredient_id, Ingredient ingredient) throws SQLException
@@ -358,6 +362,16 @@ public class DBInterface
   
   //DELETE
   //Ingredient
+  public static void deleteIngredient(Ingredient ingredient) throws SQLException
+  {
+    IngredientsTable.delete("ingredient_id", String.valueOf(ingredient.getId()));
+    
+    //TODO make sure there can't be a dish without ingredients
+    
+    IngredientTable.delete(ingredient.getId());
+  }
+  
+  //deprecated
   /* on deleting an ingredient I have to delete all the entries in the IngredientsTable associated with it first*/
   public static void deleteIngredient(String ingredient) throws SQLException
   {
@@ -368,6 +382,24 @@ public class DBInterface
   
   
   //Dish
+  public static void deleteDish(Dish dish) throws SQLException
+  {
+    //delete all references to that dish from associated tables first: articles, ingredients, processedArticles
+    //articles
+    //TODO check for interference and prevent delete eg by throwing a new exception
+    ArticlesTable.delete("dish_id", String.valueOf(dish.getID()));
+    
+    //ingredients
+    IngredientsTable.delete("dish_id", String.valueOf(dish.getID()));
+    
+    //processedArticles
+    ProcessedarticlesTable.delete("dish_id", String.valueOf(dish.getID()));
+    
+    //now i can actually delete the dish
+    DishTable.delete(dish.getID());
+    
+  }
+  //deprecated
   public static void deleteDish(String name) throws SQLException
   {
   	int dish_id = DishTable.getRow("name", name).getDish_id();
@@ -377,7 +409,6 @@ public class DBInterface
   	
   	DishTable.delete("name", name);
   }
-  
   public static void deleteDish(int dish_id) throws SQLException
   {
   	IngredientsTable.delete("dish_id", String.valueOf(dish_id));

@@ -114,6 +114,7 @@ public class Management extends JFrame {
 		contentPane.add(toolBar, BorderLayout.NORTH);
 		
 		JButton btnIngredients = new JButton("Ingredients");
+		
 		btnIngredients.setIcon(new ImageIcon(Management.class.getResource("/gui/resources/img32x32/code-block.png")));
 		toolBar.add(btnIngredients);
 		
@@ -142,13 +143,44 @@ public class Management extends JFrame {
 		button.setAlignmentX(1.0f);
 		toolBar.add(button);
 		
-		JPanel panel = new JPanel();
+		final JPanel panel = new JPanel();
 		contentPane.add(panel, BorderLayout.CENTER);
 		panel.setLayout(new BorderLayout(0, 0));
 		
 		//i added this
-		IngredientsFrame ingredientsFrame = new IngredientsFrame(this);
+		//standard start display: Ingredients Frame
+		final IngredientsFrame ingredientsFrame = new IngredientsFrame(this);
 		panel.add(ingredientsFrame);
+		
+		//action performed on ingredients button
+		btnIngredients.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        //remove whatever was there first
+        panel.removeAll();
+        //load the IngredientsFrame into the main panel
+        panel.add(ingredientsFrame);
+        
+        revalidate();
+        repaint();
+      }
+    });
+		
+		final DishesFrame dishesFrame = new DishesFrame(this);
+		//action performed on dishes button
+		btnDishes.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        //remove whatever was there first
+        panel.removeAll();
+        //load the IngredientsFrame into the main panel
+        panel.add(dishesFrame);
+        
+        revalidate();
+        repaint();
+      }
+    });
+		
+		
+		
 		
 	}
 

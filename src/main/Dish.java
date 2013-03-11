@@ -7,18 +7,37 @@ public class Dish
 	private String descripton;
 	private double price;
 	private int[] ingredient_id;
+	//it would make sense to chache the name of the ingredients as well
+	private String[] ingredients;
 	
-	public Dish(int iD, String name, String descripton, double price,
+	//this is only used to temporarily create the new dish, while the data is still unknown
+	public Dish() {
+    //empty constructor
+  }
+
+  //used to create a new dish
+	public Dish(String name, String descripton, double price,
       int[] ingredient_id) {
+    super();
+    this.name = name;
+    this.descripton = descripton;
+    this.price = price;
+    this.ingredient_id = ingredient_id;
+  }
+	
+	//used to display dishes
+	public Dish(int iD, String name, String descripton, double price,
+      int[] ingredient_id, String[] ingredients) {
     super();
     ID = iD;
     this.name = name;
     this.descripton = descripton;
     this.price = price;
     this.ingredient_id = ingredient_id;
+    this.setIngredients(ingredients);
   }
 
-	//this should not be possible anymore later, just for testing
+  //this should not be possible anymore later, just for testing
   public Dish(int iD, String name, String descripton, double price)
 	{
 		super();
@@ -65,6 +84,30 @@ public class Dish
 	public int getID() {
 		return ID;
 	}
+
+
+
+  public String[] getIngredients()
+  {
+    return ingredients;
+  }
+
+
+
+  public void setIngredients(String[] ingredients)
+  {
+    this.ingredients = ingredients;
+  }
+  
+  public String ingredientsToString()
+  {
+    String names = "";
+    
+    for(int i=0; i<ingredients.length; i++)
+      names += ingredients[i] + ", ";
+    
+    return names;
+  }
 	
 	
 	

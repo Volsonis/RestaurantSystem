@@ -35,7 +35,7 @@ public class IngredientPanel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public IngredientPanel(final Component parentFrame, final Ingredient ingredient) {
+	public IngredientPanel(final Component parentWindow, final Ingredient ingredient, final IngredientsFrame parentFrame) {
 	  setMaximumSize(new Dimension(730, 40));
 		setBorder(new LineBorder(Color.LIGHT_GRAY));
 		GridBagLayout gridBagLayout = new GridBagLayout();
@@ -54,7 +54,7 @@ public class IngredientPanel extends JPanel {
 		gbc_nameLabel.gridy = 0;
 		add(nameLabel, gbc_nameLabel);
 		
-		JLabel priceLabel = new JLabel(String.valueOf(ingredient.getPrice()));
+		JLabel priceLabel = new JLabel(String.valueOf(ingredient.getPrice()) + "£");
 		GridBagConstraints gbc_priceLabel = new GridBagConstraints();
 		gbc_priceLabel.fill = GridBagConstraints.BOTH;
 		gbc_priceLabel.insets = new Insets(0, 0, 0, 5);
@@ -103,7 +103,7 @@ public class IngredientPanel extends JPanel {
           repaint();
         } catch (SQLException e)
         {
-          Error err = new Error(parentFrame,"Database Error", e.getMessage());
+          Error err = new Error(parentWindow,"Database Error", e.getMessage());
           err.setVisible(true);
           // TODO Auto-generated catch block
           e.printStackTrace();
@@ -125,12 +125,31 @@ public class IngredientPanel extends JPanel {
 		JButton btnEdit = new JButton("Edit");
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			  JDialog editIngredient = new EditIngredient(parentFrame, ingredient);
+			  JDialog editIngredient = new EditIngredient(parentWindow, ingredient);
         editIngredient.setVisible(true);
 			}
 		});
 		
 		JButton btnDelete = new JButton("Delete");
+		btnDelete.addActionListener(new ActionListener() {
+		  public void actionPerformed(ActionEvent arg0) {
+		    
+		    //delete Ingredient from db
+		    try
+        {
+          DBInterface.deleteIngredient(ingredient);
+        } catch (SQLException e)
+        {
+          Error err = new Error(parentWindow,"Database Error", e.getMessage());
+          err.setVisible(true);
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
+		    //refresh parent frame
+		    parentFrame.refresh();
+		    
+		  }
+		});
 		btnDelete.setIcon(new ImageIcon(IngredientPanel.class.getResource("/gui/resources/img22x22/dialog-cancel-2.png")));
 		toolBar.add(btnDelete);
 		btnEdit.setAlignmentX(Component.RIGHT_ALIGNMENT);
