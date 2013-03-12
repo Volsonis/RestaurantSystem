@@ -23,5 +23,12 @@ public class TestFactories
     }
     
     
+    ArrayList<Order> orders = new ArrayList<Order>();
+    OrderFactory.refreshOrders(orders);
+    
+    System.out.println("Orders in DB: " + orders.size());
+    for(int i=0; i<orders.size(); i++)
+      System.out.println(orders.get(i).toString());
+    
   }
 }

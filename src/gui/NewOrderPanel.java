@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 
 import javax.swing.Box;
+import javax.swing.JDialog;
 import javax.swing.JTable;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -21,24 +22,42 @@ import javax.swing.border.LineBorder;
 import java.awt.Color;
 import javax.swing.ImageIcon;
 
+import main.Dish;
+import main.DishFactory;
+
+import java.awt.Dimension;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+
 public class NewOrderPanel extends JPanel
 {
   private JTable table;
+  final DefaultTableModel model;
+  final JLabel totalLabel;
+  final main.Order order;
+  final ArrayList<Dish> dishesOrdered;
 
   /**
    * Create the panel.
    */
   public NewOrderPanel(Component parent) {
     
-    table = new JTable();
-    table.setModel(new DefaultTableModel(
-      new Object[][] {
-        {null, null},
-      },
-      new String[] {
-        "New column", "New column"
-      }
-    ));
+    final Component parentFrame = parent;
+    
+    //new order
+    order = new main.Order();
+    dishesOrdered = new ArrayList<Dish>();
+    
+    model = new DefaultTableModel();
+    //table.setModel(new DefaultTableModel(new Object[][] {null, null},new String[] {"New column", "New column"}));
+    //add columns
+    model.addColumn("Dish");
+    model.addColumn("Price");
+    table = new JTable(model);
+    //this is how to add rows
+    //model.addRow(new String[]{"testDish", "testPrice"});
     
     JToolBar toolBar = new JToolBar();
     toolBar.setFloatable(false);
@@ -53,8 +72,8 @@ public class NewOrderPanel extends JPanel
     
     JLabel lblNewLabel_2 = new JLabel("Total:");
     
-    JLabel TotalLabel = new JLabel("0.0");
-    TotalLabel.setBorder(new LineBorder(new Color(0, 0, 0)));
+    totalLabel = new JLabel("0.0");
+    totalLabel.setBorder(new LineBorder(new Color(0, 0, 0)));
     
     JSeparator separator = new JSeparator();
     
@@ -68,35 +87,34 @@ public class NewOrderPanel extends JPanel
     JScrollPane scrollPane = new JScrollPane();
     GroupLayout groupLayout = new GroupLayout(this);
     groupLayout.setHorizontalGroup(
-      groupLayout.createParallelGroup(Alignment.TRAILING)
-        .addComponent(separator, GroupLayout.DEFAULT_SIZE, 780, Short.MAX_VALUE)
+      groupLayout.createParallelGroup(Alignment.LEADING)
+        .addComponent(separator, GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
         .addGroup(groupLayout.createSequentialGroup()
           .addContainerGap()
           .addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-            .addComponent(toolBar_1, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 760, Short.MAX_VALUE)
             .addGroup(groupLayout.createSequentialGroup()
-              .addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-                .addGroup(groupLayout.createSequentialGroup()
-                  .addComponent(lblNewLabel_2, GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)
-                  .addPreferredGap(ComponentPlacement.UNRELATED)
-                  .addComponent(TotalLabel, GroupLayout.PREFERRED_SIZE, 112, GroupLayout.PREFERRED_SIZE))
-                .addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-                  .addGroup(groupLayout.createSequentialGroup()
-                    .addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(ComponentPlacement.UNRELATED)
-                    .addComponent(lblNewLabel_1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                  .addComponent(table, GroupLayout.PREFERRED_SIZE, 210, GroupLayout.PREFERRED_SIZE)))
+              .addComponent(lblNewLabel_2, GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+              .addPreferredGap(ComponentPlacement.UNRELATED)
+              .addComponent(totalLabel, GroupLayout.PREFERRED_SIZE, 112, GroupLayout.PREFERRED_SIZE))
+            .addGroup(groupLayout.createSequentialGroup()
+              .addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+              .addPreferredGap(ComponentPlacement.UNRELATED)
+              .addComponent(lblNewLabel_1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(table, GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE))
+          .addPreferredGap(ComponentPlacement.RELATED)
+          .addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+            .addGroup(groupLayout.createSequentialGroup()
+              .addComponent(lblTable)
               .addPreferredGap(ComponentPlacement.RELATED)
-              .addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-                .addGroup(groupLayout.createSequentialGroup()
-                  .addComponent(lblNewLabel_3)
-                  .addPreferredGap(ComponentPlacement.RELATED, 278, Short.MAX_VALUE)
-                  .addComponent(lblTable)
-                  .addPreferredGap(ComponentPlacement.RELATED)
-                  .addComponent(lblNewLabel_4, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE))
-                .addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 433, GroupLayout.PREFERRED_SIZE))
+              .addComponent(lblNewLabel_4, GroupLayout.PREFERRED_SIZE, 66, GroupLayout.PREFERRED_SIZE)
               .addPreferredGap(ComponentPlacement.RELATED)
-              .addComponent(toolBar, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)))
+              .addComponent(lblNewLabel_3))
+            .addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 448, GroupLayout.PREFERRED_SIZE))
+          .addPreferredGap(ComponentPlacement.RELATED)
+          .addComponent(toolBar, GroupLayout.PREFERRED_SIZE, 108, GroupLayout.PREFERRED_SIZE))
+        .addGroup(groupLayout.createSequentialGroup()
+          .addContainerGap()
+          .addComponent(toolBar_1, GroupLayout.DEFAULT_SIZE, 780, Short.MAX_VALUE)
           .addContainerGap())
     );
     groupLayout.setVerticalGroup(
@@ -105,14 +123,13 @@ public class NewOrderPanel extends JPanel
           .addComponent(separator, GroupLayout.PREFERRED_SIZE, 4, GroupLayout.PREFERRED_SIZE)
           .addGap(9)
           .addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-            .addComponent(toolBar, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE)
             .addGroup(groupLayout.createSequentialGroup()
               .addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
                 .addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
                 .addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE)
-                .addComponent(lblNewLabel_3)
+                .addComponent(lblTable)
                 .addComponent(lblNewLabel_4, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-                .addComponent(lblTable))
+                .addComponent(lblNewLabel_3))
               .addPreferredGap(ComponentPlacement.RELATED)
               .addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
                 .addGroup(groupLayout.createSequentialGroup()
@@ -120,14 +137,23 @@ public class NewOrderPanel extends JPanel
                   .addPreferredGap(ComponentPlacement.RELATED)
                   .addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
                     .addComponent(lblNewLabel_2, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(TotalLabel, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)))
-                .addComponent(scrollPane))))
+                    .addComponent(totalLabel, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)))
+                .addComponent(scrollPane)))
+            .addComponent(toolBar, GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE))
           .addPreferredGap(ComponentPlacement.RELATED)
           .addComponent(toolBar_1, GroupLayout.DEFAULT_SIZE, 62, Short.MAX_VALUE)
           .addContainerGap())
     );
     
     JButton btnStarters = new JButton("Starters");
+    btnStarters.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        //TODO load starters buttons
+      }
+    });
+    btnStarters.setPreferredSize(new Dimension(110, 40));
+    btnStarters.setMinimumSize(new Dimension(110, 40));
+    btnStarters.setMaximumSize(new Dimension(110, 40));
     btnStarters.setIcon(new ImageIcon(NewOrderPanel.class.getResource("/gui/resources/img32x32/food-fried_egg_sunny.png")));
     toolBar.add(btnStarters);
     
@@ -135,6 +161,9 @@ public class NewOrderPanel extends JPanel
     toolBar.add(verticalStrut);
     
     JButton btnMains = new JButton("Mains");
+    btnMains.setPreferredSize(new Dimension(110, 40));
+    btnMains.setMinimumSize(new Dimension(110, 40));
+    btnMains.setMaximumSize(new Dimension(110, 40));
     btnMains.setIcon(new ImageIcon(NewOrderPanel.class.getResource("/gui/resources/img32x32/draw-circle-2.png")));
     toolBar.add(btnMains);
     
@@ -142,13 +171,19 @@ public class NewOrderPanel extends JPanel
     toolBar.add(verticalStrut_1);
     
     JButton btnDeserts = new JButton("Desserts");
+    btnDeserts.setPreferredSize(new Dimension(110, 40));
+    btnDeserts.setMinimumSize(new Dimension(110, 40));
+    btnDeserts.setMaximumSize(new Dimension(110, 40));
     btnDeserts.setIcon(new ImageIcon(NewOrderPanel.class.getResource("/gui/resources/img32x32/food-cupcake_iced_with_cherry.png")));
     toolBar.add(btnDeserts);
     
     Component verticalStrut_2 = Box.createVerticalStrut(20);
     toolBar.add(verticalStrut_2);
     
-    JButton btnSoftDrinks = new JButton("Soft Drinks");
+    JButton btnSoftDrinks = new JButton("S. Drinks");
+    btnSoftDrinks.setPreferredSize(new Dimension(110, 40));
+    btnSoftDrinks.setMinimumSize(new Dimension(110, 40));
+    btnSoftDrinks.setMaximumSize(new Dimension(110, 40));
     btnSoftDrinks.setIcon(new ImageIcon(NewOrderPanel.class.getResource("/gui/resources/img32x32/water_drop_1.png")));
     toolBar.add(btnSoftDrinks);
     
@@ -156,6 +191,9 @@ public class NewOrderPanel extends JPanel
     toolBar.add(verticalStrut_3);
     
     JButton btnDrinks = new JButton("Drinks");
+    btnDrinks.setPreferredSize(new Dimension(110, 40));
+    btnDrinks.setMinimumSize(new Dimension(110, 40));
+    btnDrinks.setMaximumSize(new Dimension(110, 40));
     btnDrinks.setIcon(new ImageIcon(NewOrderPanel.class.getResource("/gui/resources/img32x32/food-beer.png")));
     toolBar.add(btnDrinks);
     
@@ -163,14 +201,33 @@ public class NewOrderPanel extends JPanel
     toolBar.add(verticalStrut_4);
     
     JButton btnAll = new JButton("All");
+    btnAll.setPreferredSize(new Dimension(110, 40));
+    btnAll.setMinimumSize(new Dimension(110, 40));
+    btnAll.setMaximumSize(new Dimension(110, 40));
     btnAll.setIcon(new ImageIcon(NewOrderPanel.class.getResource("/gui/resources/img32x32/draw-donut.png")));
     toolBar.add(btnAll);
     
-    JPanel panel = new JPanel();
-    scrollPane.setViewportView(panel);
-    panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+    JPanel mainButtonPanel = new JPanel();
+    scrollPane.setViewportView(mainButtonPanel);
+    mainButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
     
     JButton btnRemove = new JButton("Remove");
+    btnRemove.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        //if there are still dishes in the list
+        if(model.getRowCount() > 0)
+        {
+          //remove last item added
+          //update price
+          order.setPrice(rtd(order.getPrice() - dishesOrdered.get(dishesOrdered.size()-1).getPrice()));
+          totalLabel.setText(String.valueOf(order.getPrice()));
+          //remove from dish list
+          dishesOrdered.remove(dishesOrdered.size()-1);
+          //remove from table
+          model.removeRow(model.getRowCount()-1);
+        }
+      }
+    });
     btnRemove.setIcon(new ImageIcon(NewOrderPanel.class.getResource("/gui/resources/img32x32/archive-remove.png")));
     toolBar_1.add(btnRemove);
     
@@ -202,6 +259,16 @@ public class NewOrderPanel extends JPanel
     btnCustomer.setIcon(new ImageIcon(NewOrderPanel.class.getResource("/gui/resources/img32x32/identity.png")));
     toolBar_1.add(btnCustomer);
     
+    JButton btnNote = new JButton("Note");
+    btnNote.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        JDialog notesAdder = new NotesAdder(parentFrame, order);
+        notesAdder.setVisible(true);
+      }
+    });
+    btnNote.setIcon(new ImageIcon(NewOrderPanel.class.getResource("/gui/resources/img32x32/view-pim-notes.png")));
+    toolBar_1.add(btnNote);
+    
     JButton btnTable = new JButton("Table");
     btnTable.setIcon(new ImageIcon(NewOrderPanel.class.getResource("/gui/resources/img32x32/draw-square-inverted-corners.png")));
     toolBar_1.add(btnTable);
@@ -210,5 +277,39 @@ public class NewOrderPanel extends JPanel
     btnSubmit.setIcon(new ImageIcon(NewOrderPanel.class.getResource("/gui/resources/img32x32/document-import.png")));
     toolBar_1.add(btnSubmit);
     setLayout(groupLayout);
+    
+    ArrayList<Dish> allDishes = new ArrayList<Dish>();
+    DishFactory.refreshDishes(allDishes);
+    JButton[] allButtons = new JButton[allDishes.size()];
+    for(int i=0 ; i<allDishes.size() ; i++)
+    {
+      allButtons[i] = createDishButton(allDishes.get(i));
+      mainButtonPanel.add(allButtons[i]);
+    }
   }
+  
+  private JButton createDishButton(final Dish dish)
+  {
+    JButton newButton = new JButton(dish.getName());
+    newButton.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        //add to order
+        dishesOrdered.add(dish);
+        //update table
+        model.addRow(new Object[]{dish.getName(), dish.getPrice()});
+        //update price
+        order.setPrice(rtd(order.getPrice() + dish.getPrice()));
+        totalLabel.setText(String.valueOf(rtd(order.getPrice())));
+      }
+    });
+    return newButton;
+  }
+  
+  //round to 2 decimals
+  double rtd(double d) 
+  {
+    DecimalFormat twoDForm = new DecimalFormat("#.##");
+      return Double.valueOf(twoDForm.format(d));
+  }
+  
 }

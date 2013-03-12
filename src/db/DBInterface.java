@@ -16,7 +16,7 @@ import db.wrapper.ArticlesTable;
 import db.wrapper.CustomerTable;
 import db.wrapper.IngredientTable;
 import db.wrapper.IngredientsTable;
-import db.wrapper.OrderTable;
+import db.wrapper.PendingordersTable;
 import db.wrapper.ProcessedarticlesTable;
 import db.wrapper.ReservationTable;
 import main.*;
@@ -170,7 +170,7 @@ public class DBInterface
   //order
   public static void addOrder(Order order) throws SQLException
   {
-    OrderTable.Row row = OrderTable.getRow();
+    PendingordersTable.Row row = PendingordersTable.getRow();
     row.setValue(order.getPrice());
     row.setNotes(order.getNotes());
     row.setCustomer_id(order.getCustomer_id());
@@ -331,7 +331,6 @@ public class DBInterface
     }
     
   }
-  
   //deprecated
   public static void editDishName(int dish_id, String name) throws SQLException
   {
@@ -367,8 +366,7 @@ public class DBInterface
   	row.setPrice(price);
   	row.update("name", name);
   }
-  
-  
+  //deprecated
   /* Ingredients
    * this is slightly more complicated as the "ingredients" table is linked to this to store this information
    * 
@@ -382,7 +380,6 @@ public class DBInterface
   	irow.setIngredient_id(ingredient);
   	irow.insert();
   }
-  
   public static void addIngredients(int dish_id, int ingredient) throws SQLException
   {
   	IngredientsTable.Row row = IngredientsTable.getRow();
@@ -390,7 +387,6 @@ public class DBInterface
   	row.setIngredient_id(ingredient);
   	row.insert();
   }
-  
   public static void deleteIngredients(String name, String ingredient) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException
   {
   	IngredientsTable.Row drow = IngredientsTable.getRow();
@@ -402,7 +398,6 @@ public class DBInterface
   	String sql = "DELETE FROM ingredients WHERE dish_id='"+drow.getDish_id()+"' AND ingredient_name='"+ingredient+"'";
   	Boolean rs = stmt.execute(sql);
   }
-  
   public static void deleteIngredients(int dish_id, String ingredient) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException
   {
     //unfortunately jenny does not provide deleting with 2 clauses
@@ -412,8 +407,76 @@ public class DBInterface
   	String query = "DELETE FROM ingredients WHERE dish_id='"+dish_id+"' AND ingredient_name='"+ingredient+"'";
   	ResultSet rs = stmt.executeQuery(query) ;
   }
-  
-  
+ 
+  //Order
+  public static void editOrder(int ordernumber, Order order) throws SQLException
+  {
+    PendingordersTable.Row row = PendingordersTable.getRow("number", String.valueOf(ordernumber));
+    row.setValue(order.getPrice());
+    row.setNotes(order.getNotes());
+    row.setCustomer_id(order.getCustomer_id());
+    row.setTablenumber(order.getTablenumber());
+    row.update("number", String.valueOf(ordernumber));
+    
+    //now the Dishes
+    ArticlesTable.Row[] arows = ArticlesTable.getRows("order_number", String.valueOf(ordernumber));
+    int[] updatedRows = order.getDish_id();
+    
+    Boolean add = true;
+    ArrayList<Integer> rowsToAdd = new ArrayList<Integer>();
+    ArrayList<Integer> rowsToRemove = new ArrayList<Integer>();
+    
+    //check what should go in and see if it already is in
+    for(int i=0; i<updatedRows.length; i++)
+    {
+      add = true;
+      //rows to add are in newRows, but not in arows
+      for(int j=0; j<arows.length; j++)
+        //if its found, we dont have to add again
+        if(updatedRows[i] == arows[j].getDish_id())//if its already in, dont add
+          add=false;
+      if(add)
+        rowsToAdd.add(updatedRows[i]); //here we want to get the id of the ingredient we want to add
+    }
+    
+    //check whats in and see if its supposed to stay in
+    Boolean remove = true;
+    for(int i=0; i<arows.length; i++)
+    {
+      remove = true;
+      //rows to remove are in arows, but not in newRows
+      for(int j=0; j<updatedRows.length; j++)
+        //
+        if(arows[i].getDish_id() == updatedRows[j])//if it is in the update, dont remove it
+          remove = false;
+      if(remove)
+        rowsToRemove.add(arows[i].getDish_id()); //here we want to get the id of the row in the ingredients table
+    }
+    //rows that are in both can be ignored
+    
+    //add whats to be added
+    ArticlesTable.Row addarow;
+    for(int i=0; i<rowsToAdd.size(); i++)
+    {
+      addarow = ArticlesTable.getRow();
+      addarow.setDish_id(rowsToAdd.get(i));
+      addarow.setOrder_number(ordernumber);
+      addarow.insert();
+    }
+    
+    //delete what needs to be deleted
+    for(int i=0; i<rowsToRemove.size(); i++)
+    {
+      ArticlesTable.delete(rowsToRemove.get(i));
+    }
+    
+  }
+  public static void editOrderNote(Order order) throws SQLException
+  {
+    PendingordersTable.Row row = PendingordersTable.getRow("number", String.valueOf(order.getNumber()));
+    row.setNotes(order.getNotes());
+    row.update("number", String.valueOf(order.getNumber()));
+  }
   
   //DELETE
   //Ingredient
@@ -471,6 +534,14 @@ public class DBInterface
   	DishTable.delete(dish_id);
   }
   
+  //Order
+  public static void deleteOrder(Order order) throws SQLException
+  {
+    //first do the references
+    ArticlesTable.delete("order_number", String.valueOf(order.getNumber()));
+    //then the order
+    PendingordersTable.delete("number", String.valueOf(order.getNumber()));
+  }
   
   
   //GET
@@ -589,6 +660,7 @@ public class DBInterface
   {
   	return IngredientsTable.getRows(con, "dish_id", dish_id).length;
   }
+
   
   
 }

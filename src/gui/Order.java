@@ -48,9 +48,9 @@ public class Order extends JFrame
    */
   public Order() {
     setIconImage(Toolkit.getDefaultToolkit().getImage(Order.class.getResource("/gui/resources/img16x16/cart-go.png")));
-    setTitle("Order");
+    setTitle("RestaurantSystem - Order");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    setBounds(100, 100, 800, 600);
+    setBounds(100, 100, 860, 600);
     contentPane = new JPanel();
     contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
     setContentPane(contentPane);
@@ -60,31 +60,58 @@ public class Order extends JFrame
     toolBar.setFloatable(false);
     contentPane.add(toolBar, BorderLayout.NORTH);
     
-    JButton btnExit = new JButton("New");
-    btnExit.setIcon(new ImageIcon(Order.class.getResource("/gui/resources/img32x32/document-new-6.png")));
-    toolBar.add(btnExit);
+    JButton btnNew = new JButton("New");
+    btnNew.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        
+      }
+    });
+    btnNew.setIcon(new ImageIcon(Order.class.getResource("/gui/resources/img32x32/document-new-6.png")));
+    toolBar.add(btnNew);
     
     JButton btnOrders = new JButton("Orders");
+    
     btnOrders.setIcon(new ImageIcon(Order.class.getResource("/gui/resources/img32x32/edit-copy-9.png")));
     toolBar.add(btnOrders);
     
     //glue to stick components to the right
     toolBar.add(Box.createHorizontalGlue());
-    JButton btnExit_1 = new JButton("Exit");
-    btnExit_1.addActionListener(new ActionListener() {
+    JButton btnExit = new JButton("Exit");
+    btnExit.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent arg0) {
         System.exit(0);
       }
     });
-    btnExit_1.setAlignmentX(Component.RIGHT_ALIGNMENT);
-    toolBar.add(btnExit_1);
-    btnExit_1.setIcon(new ImageIcon(Order.class.getResource("/gui/resources/img32x32/dialog-close-2.png")));
+    btnExit.setAlignmentX(Component.RIGHT_ALIGNMENT);
+    toolBar.add(btnExit);
+    btnExit.setIcon(new ImageIcon(Order.class.getResource("/gui/resources/img32x32/dialog-close-2.png")));
     
-    JPanel panel = new JPanel();
+    final JPanel panel = new JPanel();
     contentPane.add(panel, BorderLayout.CENTER);
     
-    NewOrderPanel newOrderPanel = new NewOrderPanel(this);
+    final NewOrderPanel newOrderPanel = new NewOrderPanel(this);
     panel.add(newOrderPanel);
+    
+    btnNew.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        panel.removeAll();
+        panel.add(newOrderPanel);
+        revalidate();
+        repaint();
+      }
+    });
+    
+    final OrdersFrame ordersFrame = new OrdersFrame(this);
+    
+    btnOrders.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        panel.removeAll();
+        panel.add(ordersFrame);
+        revalidate();
+        repaint();
+      }
+    });
+    
   }
 
 }

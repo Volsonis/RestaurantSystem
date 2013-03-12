@@ -56,7 +56,7 @@ public class Management extends JFrame {
 	public Management() {
 		setTitle("RestaurantSystem - Management");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 800, 600);
+		setBounds(100, 100, 860, 600);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -122,6 +122,10 @@ public class Management extends JFrame {
 		btnDishes.setIcon(new ImageIcon(Management.class.getResource("/gui/resources/img32x32/draw-circle-2.png")));
 		toolBar.add(btnDishes);
 		
+		JButton btnDrinks = new JButton("Drinks");
+		btnDrinks.setIcon(new ImageIcon(Management.class.getResource("/gui/resources/img32x32/water_drop_1.png")));
+		toolBar.add(btnDrinks);
+		
 		JButton btnMenu = new JButton("Menu");
 		btnMenu.setIcon(new ImageIcon(Management.class.getResource("/gui/resources/img32x32/mail-new.png")));
 		toolBar.add(btnMenu);
@@ -129,6 +133,18 @@ public class Management extends JFrame {
 		JButton btnStaff = new JButton("Staff");
 		btnStaff.setIcon(new ImageIcon(Management.class.getResource("/gui/resources/img32x32/identity.png")));
 		toolBar.add(btnStaff);
+		
+		JButton btnTables = new JButton("Tables");
+		btnTables.setIcon(new ImageIcon(Management.class.getResource("/gui/resources/img32x32/draw-square-inverted-corners.png")));
+		toolBar.add(btnTables);
+		
+		JButton btnReservations = new JButton("Reservations");
+		btnReservations.setIcon(new ImageIcon(Management.class.getResource("/gui/resources/img32x32/view-calendar.png")));
+		toolBar.add(btnReservations);
+		
+		JButton btnCustomers = new JButton("Customers");
+		btnCustomers.setIcon(new ImageIcon(Management.class.getResource("/gui/resources/img32x32/edit-group.png")));
+		toolBar.add(btnCustomers);
 		
 		Component horizontalGlue = Box.createHorizontalGlue();
 		toolBar.add(horizontalGlue);
