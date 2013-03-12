@@ -34,7 +34,10 @@ public class InputVerifier
 	
 	public static void verifyDish(Dish input) throws Exception
 	{
-	  if(input.getName() == null || input.getDescripton() == null || input.getPrice() == 0.0 || input.getIngredient_id().length == 0)
+	  if(input == null)
+	    throw new Exception("Invalid empty Dish!");
+	  
+	  if(input.getName() == null || input.getDescripton() == null || input.getPrice() == 0.0 || input.getIngredient_id() == null)
 	    throw new Exception("Please make sure all the fields are filld out, and there is at least one ingredient!");
 	  
 	  //name

@@ -47,7 +47,7 @@ public class DishesFrame extends JPanel
     toolBar.setFloatable(false);
     add(toolBar, BorderLayout.WEST);
     
-    JButton btnAdd = new JButton("New");
+    JButton btnAdd = new JButton("   New   ");
     btnAdd.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent arg0) {
         

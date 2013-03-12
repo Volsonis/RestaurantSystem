@@ -88,6 +88,7 @@ public class Management extends JFrame {
 		mnView.add(mntmIngredients);
 		
 		JMenuItem mntmDishes = new JMenuItem("Dishes");
+		mntmDishes.setIcon(new ImageIcon(Management.class.getResource("/gui/resources/img16x16/draw-circle-2.png")));
 		mnView.add(mntmDishes);
 		
 		JMenuItem mntmMenu = new JMenuItem("Menu");
@@ -123,6 +124,7 @@ public class Management extends JFrame {
 		toolBar.add(btnDishes);
 		
 		JButton btnStaff = new JButton("Staff");
+		btnStaff.setEnabled(false);
 		btnStaff.setIcon(new ImageIcon(Management.class.getResource("/gui/resources/img32x32/identity.png")));
 		toolBar.add(btnStaff);
 		
@@ -131,10 +133,12 @@ public class Management extends JFrame {
 		toolBar.add(btnTables);
 		
 		JButton btnReservations = new JButton("Reservations");
+		btnReservations.setEnabled(false);
 		btnReservations.setIcon(new ImageIcon(Management.class.getResource("/gui/resources/img32x32/view-calendar.png")));
 		toolBar.add(btnReservations);
 		
 		JButton btnCustomers = new JButton("Customers");
+		btnCustomers.setEnabled(false);
 		btnCustomers.setIcon(new ImageIcon(Management.class.getResource("/gui/resources/img32x32/edit-group.png")));
 		toolBar.add(btnCustomers);
 		

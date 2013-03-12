@@ -77,7 +77,7 @@ public class NewOrderPanel extends JPanel
     
     JLabel lblNewLabel_2 = new JLabel("Total:");
     
-    totalLabel = new JLabel("0.0");
+    totalLabel = new JLabel("0.0 £");
     totalLabel.setBorder(new LineBorder(new Color(0, 0, 0)));
     
     JSeparator separator = new JSeparator();
@@ -226,7 +226,7 @@ public class NewOrderPanel extends JPanel
           //remove last item added
           //update price
           order.setPrice(rtd(order.getPrice() - dishesOrdered.get(dishesOrdered.size()-1).getPrice()));
-          totalLabel.setText(String.valueOf(order.getPrice()));
+          totalLabel.setText(String.valueOf(order.getPrice()) + " £");
           //remove from dish list
           dishesOrdered.remove(dishesOrdered.size()-1);
           //remove from table
@@ -260,6 +260,7 @@ public class NewOrderPanel extends JPanel
     toolBar_1.add(horizontalGlue);
     
     JButton btnPay = new JButton("Pay");
+    btnPay.setEnabled(false);
     btnPay.setIcon(new ImageIcon(NewOrderPanel.class.getResource("/gui/resources/img32x32/kwallet.png")));
     toolBar_1.add(btnPay);
     
@@ -268,6 +269,7 @@ public class NewOrderPanel extends JPanel
     toolBar_1.add(btnDiscount);
     
     JButton btnCustomer = new JButton("Customer");
+    btnCustomer.setEnabled(false);
     btnCustomer.setIcon(new ImageIcon(NewOrderPanel.class.getResource("/gui/resources/img32x32/identity.png")));
     toolBar_1.add(btnCustomer);
     
@@ -353,7 +355,7 @@ public class NewOrderPanel extends JPanel
         model.addRow(new Object[]{dish.getName(), dish.getPrice()});
         //update price
         order.setPrice(rtd(order.getPrice() + dish.getPrice()));
-        totalLabel.setText(String.valueOf(rtd(order.getPrice())));
+        totalLabel.setText(String.valueOf(rtd(order.getPrice())) + " £");
         System.out.println(dishesOrdered.size());
       }
     });
@@ -365,7 +367,7 @@ public class NewOrderPanel extends JPanel
     for(int i=model.getRowCount()-1 ; i>=0 ; i--)
       model.removeRow(i);
     
-    totalLabel.setText("");
+    totalLabel.setText("0.0 £");
     order.setPrice(0.0);
     order.setNotes("");
     order.setDish_id(null);
@@ -373,6 +375,7 @@ public class NewOrderPanel extends JPanel
     order.setCustomer_id(0);
     order.setDishes(null);
     dishesOrdered.removeAll(dishesOrdered);
+    tableLabel.setText("");
     revalidate();
     repaint();
   }

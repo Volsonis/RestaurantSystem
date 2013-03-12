@@ -105,8 +105,8 @@ public class AddDish extends JDialog
       }
     });
     
-    final JComboBox comboBox = new JComboBox();
-    comboBox.setModel(new DefaultComboBoxModel(new String[] {"Mains", "Starters", "Desserts", "Sides", "Alcoholoc", "Non-Alcoholic"}));
+    final JComboBox<String> comboBox = new JComboBox<String>();
+    comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Mains", "Starters", "Desserts", "Sides", "Alcoholoc", "Non-Alcoholic"}));
     
     JLabel lblType = new JLabel("Type: ");
     GroupLayout gl_contentPanel = new GroupLayout(contentPanel);

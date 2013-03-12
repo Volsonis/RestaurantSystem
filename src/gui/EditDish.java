@@ -107,8 +107,8 @@ public class EditDish extends JDialog
       }
     });
     
-    final JComboBox comboBox = new JComboBox();
-    comboBox.setModel(new DefaultComboBoxModel(new String[] {"Mains", "Starters", "Desserts", "Sides", "Alcoholic", "Non-Alcoholic"}));
+    final JComboBox<String> comboBox = new JComboBox<String>();
+    comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Mains", "Starters", "Desserts", "Sides", "Alcoholic", "Non-Alcoholic"}));
     comboBox.setSelectedItem(dish.getType());
     
     JLabel lblType = new JLabel("Type: ");
@@ -181,7 +181,7 @@ public class EditDish extends JDialog
               dish.setName(nameTextField.getText());
               dish.setDescripton(descriptionTextField.getText());
               dish.setPrice(Double.parseDouble(priceTextField.getText()));
-              dish.setType((String)comboBox.getSelectedItem());
+              dish.setType((String) comboBox.getSelectedItem());
               
               InputVerifier.verifyDish(dish);
               

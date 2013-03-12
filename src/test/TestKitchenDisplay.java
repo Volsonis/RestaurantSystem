@@ -5,7 +5,7 @@ import gui.Management;
 
 import javax.swing.JFrame;
 
-public class TestKitchenDiplay
+public class TestKitchenDisplay
 {
   public static void main(String[] args)
   {

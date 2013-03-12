@@ -51,7 +51,7 @@ public class IngredientsFrame extends JPanel {
 		toolBar.setFloatable(false);
 		add(toolBar, BorderLayout.WEST);
 		
-		JButton btnAdd = new JButton("New");
+		JButton btnAdd = new JButton("   New   ");
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				JDialog addIngredient = new AddIngredient(parentFrame);
@@ -82,13 +82,6 @@ public class IngredientsFrame extends JPanel {
 		btnRefresh.setVerticalTextPosition(SwingConstants.BOTTOM);
 		btnRefresh.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnRefresh.setIcon(new ImageIcon(IngredientsFrame.class.getResource("/gui/resources/img32x32/view-refresh-4.png")));
-		
-		JButton btnUpdate = new JButton("Update All");
-		toolBar.add(btnUpdate);
-		btnUpdate.setAlignmentX(Component.CENTER_ALIGNMENT);
-		btnUpdate.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnUpdate.setVerticalTextPosition(SwingConstants.BOTTOM);
-		btnUpdate.setIcon(new ImageIcon(IngredientsFrame.class.getResource("/gui/resources/img32x32/update_misc.png")));
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
