@@ -65,13 +65,14 @@ public class InputVerifier
 	  
 	  //dishes
 	  //no dishes
-	  if(input.getDish_id().length == 0 && input.getDishes().length == 0)
+	  if(input.getDishes() == null && input.getDish_id() == null)
 	    throw new Exception("No dishes added to the order!");
 	  
 	  //notes
-	  //too long
-	  if(input.getNotes().length() > 255)
-	    throw new Exception("Note too long! (255 characters maximum!)");
+	  //too long if existant
+	  if(input.getNotes() != null)
+	    if(input.getNotes().length() > 255)
+	      throw new Exception("Note too long! (255 characters maximum!)");
 	  
 	  
 	}

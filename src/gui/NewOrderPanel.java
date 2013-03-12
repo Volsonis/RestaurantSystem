@@ -373,6 +373,8 @@ public class NewOrderPanel extends JPanel
     order.setCustomer_id(0);
     order.setDishes(null);
     dishesOrdered.removeAll(dishesOrdered);
+    revalidate();
+    repaint();
   }
   
   //round to 2 decimals

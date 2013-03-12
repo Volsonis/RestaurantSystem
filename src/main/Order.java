@@ -135,6 +135,16 @@ public class Order
     
     return names;
   }
+  
+  public String dishesToFeed()
+  {
+    String names = "";
+    
+    for(int i=0; i<dishes.length; i++)
+      names += dishes[i] + "\n";
+    
+    return names;
+  }
 
   @Override
   public String toString()
