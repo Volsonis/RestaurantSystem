@@ -127,6 +127,8 @@ public class IngredientPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 			  JDialog editIngredient = new EditIngredient(parentWindow, ingredient);
         editIngredient.setVisible(true);
+        revalidate();
+        repaint();
 			}
 		});
 		

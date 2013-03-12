@@ -81,11 +81,8 @@ public class DBInterface
     row.setName(dish.getName());
     row.setDescription(dish.getDescripton());
     row.setPrice(dish.getPrice());
-    row.insert();
-    
-    //id gets assigned after insert therefore we need this
-    Row drow = DishTable.getRow("name", dish.getName());
-    int dish_id = drow.getDish_id();
+    //id gets returned on insert
+    int dish_id = (int) row.insert();
     
     //add ingredients by id
     for(int i=0; i < dish.getIngredient_id().length; i++)
@@ -132,7 +129,6 @@ public class DBInterface
   		irow.insert();
   	}//for
   }//addDish
-  
   //articles
   //deprecated
   public static void addArticle(int dish_id, int order_number) throws SQLException
@@ -274,13 +270,75 @@ public class DBInterface
   }
   
   //Dish
+  public static void editDish(int dish_id, Dish dish) throws SQLException
+  {
+    DishTable.Row row = DishTable.getRow(dish_id);
+    row.setName(dish.getName());
+    row.setDescription(dish.getDescripton());
+    row.setPrice(dish.getPrice());
+    row.update();
+    
+    //now the ingredients
+    IngredientsTable.Row[] isrows = IngredientsTable.getRows("dish_id", String.valueOf(dish_id));
+    int[] updatedRows = dish.getIngredient_id();
+    
+    Boolean add = true;
+    ArrayList<Integer> rowsToAdd = new ArrayList<Integer>();
+    ArrayList<Integer> rowsToRemove = new ArrayList<Integer>();
+    //i am tired and its late so this is going to be bad and not how i'd usually do it :/
+    //check what should go in and see if it already is in
+    for(int i=0; i<updatedRows.length; i++)
+    {
+      add = true;
+      //rows to add are in newRows, but not in isrows
+      for(int j=0; j<isrows.length; j++)
+        //if its found, we dont have to add again
+        if(updatedRows[i] == isrows[j].getIngredient_id())//if its already in, dont add
+          add=false;
+      if(add)
+        rowsToAdd.add(updatedRows[i]); //here we want to get the id of the ingredient we want to add
+    }
+    
+    //check whats in and see if its supposed to stay in
+    Boolean remove = true;
+    for(int i=0; i<isrows.length; i++)
+    {
+      remove = true;
+      //rows to remove are in isrows, but not in newRows
+      for(int j=0; j<updatedRows.length; j++)
+        //
+        if(isrows[i].getIngredient_id() == updatedRows[j])//if it is in the update, dont remove it
+          remove = false;
+      if(remove)
+        rowsToRemove.add(isrows[i].getIngredients_id()); //here we want to get the id of the row in the ingredients table
+    }
+    //rows that are in both can be ignored
+    
+    //add whats to be added
+    IngredientsTable.Row addisrow;
+    for(int i=0; i<rowsToAdd.size(); i++)
+    {
+      addisrow = IngredientsTable.getRow();
+      addisrow.setDish_id(dish.getID());
+      addisrow.setIngredient_id(rowsToAdd.get(i));
+      addisrow.insert();
+    }
+    
+    //delete what needs to be deleted
+    for(int i=0; i<rowsToRemove.size(); i++)
+    {
+      IngredientsTable.delete(rowsToRemove.get(i));
+    }
+    
+  }
+  
+  //deprecated
   public static void editDishName(int dish_id, String name) throws SQLException
   {
   	DishTable.Row row = DishTable.getRow(dish_id);
   	row.setName(name);
   	row.update();
   }
-  
   //edit description by id
   public static void editDishDescription(int dish_id, String description) throws SQLException
   {
@@ -288,7 +346,6 @@ public class DBInterface
   	row.setDescription(description);
   	row.update();
   }
-  
   //edit description by name
   public static void editDishDescription(String name, String description) throws SQLException
   {
@@ -296,7 +353,6 @@ public class DBInterface
   	row.setDescription(description);
   	row.update("name", name);
   }
-  
   //by id
   public static void editDishPrice(int dish_id, double price) throws SQLException
   {
@@ -304,7 +360,6 @@ public class DBInterface
   	row.setPrice(price);
   	row.update();
   }
-  
   //by name
   public static void editDishPrice(String name, double price) throws SQLException
   {

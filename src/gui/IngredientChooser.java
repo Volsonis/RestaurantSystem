@@ -60,8 +60,16 @@ public class IngredientChooser extends JDialog
     Collections.sort(ingredients, new Ingredient());
     
     final JCheckBox[] checkboxes = new JCheckBox[ingredients.size()];
-    String[] containedIngredients = dish.getIngredients();
-    List<String> containedIngredientsList = Arrays.asList(containedIngredients);
+    
+    //if this is not a new Dish, it will already have dishes added to it
+    String[] containedIngredients;
+    List<String> containedIngredientsList = null;
+    if(dish.getIngredients() != null)
+    {
+      containedIngredients = dish.getIngredients();
+      containedIngredientsList = Arrays.asList(containedIngredients);
+    }
+    
     
     setTitle("IngredientChooser");
     setBounds(100, 100, 260, 410);
@@ -86,10 +94,10 @@ public class IngredientChooser extends JDialog
           for(int i=0; i<checkboxes.length; i++)
           {
             checkboxes[i] = new JCheckBox(ingredients.get(i).getName());
-            if(containedIngredientsList.contains(ingredients.get(i).getName()))
+            //if this is not a new dish, it will already have dishes added to it, make sure they are ticked in the chooser
+            if(containedIngredientsList != null && containedIngredientsList.contains(ingredients.get(i).getName()))
               checkboxes[i].setSelected(true);
             panel.add(checkboxes[i]);
-            
           }
         }
         {

@@ -49,7 +49,8 @@ public class InputVerifier
 	  //TODO price format greater than 4.2f
 	  
 	  //ingredients
-	  //TODO check that there is at least one
+	  if(input.getIngredient_id().length < 1)
+	    throw new Exception("Add at least one Ingredient!");
 	}
 	
 	public static void verifyOrder(Order input) throws Exception

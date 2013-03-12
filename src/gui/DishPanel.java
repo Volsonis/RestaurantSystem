@@ -12,6 +12,7 @@ import javax.swing.JToolBar;
 import java.awt.Dimension;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 
 import db.DBInterface;
 
@@ -98,6 +99,14 @@ public class DishPanel extends JPanel
     toolBar.add(btnDelete);
     
     JButton btnEdit = new JButton("Edit");
+    btnEdit.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        JDialog editDish = new EditDish(parentWindow, dish);
+        editDish.setVisible(true);
+        
+        parentFrame.refresh();
+      }
+    });
     btnEdit.setIcon(new ImageIcon(DishPanel.class.getResource("/gui/resources/img22x22/edit-4.png")));
     toolBar.add(btnEdit);
     
