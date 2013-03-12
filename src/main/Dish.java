@@ -6,6 +6,7 @@ public class Dish
 	private String name;
 	private String descripton;
 	private double price;
+	private String type;
 	private int[] ingredient_id;
 	//it would make sense to chache the name of the ingredients as well
 	private String[] ingredients;
@@ -16,23 +17,25 @@ public class Dish
   }
 
   //used to create a new dish
-	public Dish(String name, String descripton, double price,
+	public Dish(String name, String descripton, double price, String type,
       int[] ingredient_id) {
     super();
     this.name = name;
     this.descripton = descripton;
     this.price = price;
+    this.setType(type);
     this.ingredient_id = ingredient_id;
   }
 	
 	//used to display dishes
-	public Dish(int iD, String name, String descripton, double price,
+	public Dish(int iD, String name, String descripton, double price, String type,
       int[] ingredient_id, String[] ingredients) {
     super();
     ID = iD;
     this.name = name;
     this.descripton = descripton;
     this.price = price;
+    this.setType(type);
     this.ingredient_id = ingredient_id;
     this.setIngredients(ingredients);
   }
@@ -81,7 +84,17 @@ public class Dish
 		this.price = price;
 	}
 
-	public int getID() {
+	public String getType()
+  {
+    return type;
+  }
+
+  public void setType(String type)
+  {
+    this.type = type;
+  }
+
+  public int getID() {
 		return ID;
 	}
 

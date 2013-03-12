@@ -25,6 +25,8 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 
 public class AddDish extends JDialog
 {
@@ -102,6 +104,11 @@ public class AddDish extends JDialog
         ingredientsTextField.revalidate();
       }
     });
+    
+    final JComboBox comboBox = new JComboBox();
+    comboBox.setModel(new DefaultComboBoxModel(new String[] {"Mains", "Starters", "Desserts", "Sides", "Alcoholoc", "Non-Alcoholic"}));
+    
+    JLabel lblType = new JLabel("Type: ");
     GroupLayout gl_contentPanel = new GroupLayout(contentPanel);
     gl_contentPanel.setHorizontalGroup(
       gl_contentPanel.createParallelGroup(Alignment.LEADING)
@@ -117,11 +124,16 @@ public class AddDish extends JDialog
               .addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
                 .addComponent(nameTextField, GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE)
                 .addComponent(descriptionTextField, GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE)
-                .addComponent(priceTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+                .addGroup(gl_contentPanel.createSequentialGroup()
+                  .addComponent(priceTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                  .addGap(18)
+                  .addComponent(lblType)
+                  .addPreferredGap(ComponentPlacement.UNRELATED)
+                  .addComponent(comboBox, 0, 248, Short.MAX_VALUE))))
             .addGroup(gl_contentPanel.createSequentialGroup()
               .addComponent(lblIngredients)
               .addPreferredGap(ComponentPlacement.RELATED)
-              .addComponent(ingredientsTextField, GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE)
+              .addComponent(ingredientsTextField, GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
               .addPreferredGap(ComponentPlacement.RELATED)
               .addComponent(ingredientsChooserButton)))
           .addContainerGap())
@@ -140,7 +152,9 @@ public class AddDish extends JDialog
           .addGap(18)
           .addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
             .addComponent(lblPrice)
-            .addComponent(priceTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+            .addComponent(priceTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+            .addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+            .addComponent(lblType))
           .addGap(18)
           .addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
             .addComponent(lblIngredients)
@@ -164,6 +178,7 @@ public class AddDish extends JDialog
               dish.setName(nameTextField.getText());
               dish.setDescripton(descriptionTextField.getText());
               dish.setPrice(Double.parseDouble(priceTextField.getText()));
+              dish.setType((String)comboBox.getSelectedItem());
               
               InputVerifier.verifyDish(dish);
               

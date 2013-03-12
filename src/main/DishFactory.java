@@ -54,7 +54,7 @@ public class DishFactory
       				ingredient_ids[j] = irow.getIngredient_id();
       				ingredients[j] = irow.getName();
       			}
-      			dishes.add(new Dish(drows[i].getDish_id(), drows[i].getName(), drows[i].getDescription(), drows[i].getPrice(), ingredient_ids, ingredients));
+      			dishes.add(new Dish(drows[i].getDish_id(), drows[i].getName(), drows[i].getDescription(), drows[i].getPrice(), drows[i].getType(), ingredient_ids, ingredients));
       		}
       	}
       	catch(Exception e)

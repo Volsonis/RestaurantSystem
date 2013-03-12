@@ -1,4 +1,6 @@
-package gui;
+package test;
+
+import gui.Management;
 
 import javax.swing.JFrame;
 

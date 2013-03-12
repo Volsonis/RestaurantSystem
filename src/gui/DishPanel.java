@@ -115,10 +115,18 @@ public class DishPanel extends JPanel
     GridBagConstraints gbc_descriptionLabel = new GridBagConstraints();
     gbc_descriptionLabel.anchor = GridBagConstraints.WEST;
     gbc_descriptionLabel.insets = new Insets(0, 0, 0, 5);
-    gbc_descriptionLabel.gridwidth = 3;
     gbc_descriptionLabel.gridx = 0;
     gbc_descriptionLabel.gridy = 1;
     add(descriptionLabel, gbc_descriptionLabel);
+    
+    JLabel typeLabel = new JLabel(dish.getType());
+    typeLabel.setFont(new Font("Calibri", Font.PLAIN, 14));
+    GridBagConstraints gbc_typeLabel = new GridBagConstraints();
+    gbc_typeLabel.anchor = GridBagConstraints.WEST;
+    gbc_typeLabel.insets = new Insets(0, 0, 0, 5);
+    gbc_typeLabel.gridx = 1;
+    gbc_typeLabel.gridy = 1;
+    add(typeLabel, gbc_typeLabel);
 
   }
 
