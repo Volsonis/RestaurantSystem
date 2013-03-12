@@ -113,22 +113,14 @@ public class Management extends JFrame {
 		toolBar.setFloatable(false);
 		contentPane.add(toolBar, BorderLayout.NORTH);
 		
-		JButton btnIngredients = new JButton("Ingredients");
+		JButton btnStock = new JButton("Stock");
 		
-		btnIngredients.setIcon(new ImageIcon(Management.class.getResource("/gui/resources/img32x32/code-block.png")));
-		toolBar.add(btnIngredients);
+		btnStock.setIcon(new ImageIcon(Management.class.getResource("/gui/resources/img32x32/code-block.png")));
+		toolBar.add(btnStock);
 		
-		JButton btnDishes = new JButton("Dishes");
-		btnDishes.setIcon(new ImageIcon(Management.class.getResource("/gui/resources/img32x32/draw-circle-2.png")));
+		JButton btnDishes = new JButton("Menu");
+		btnDishes.setIcon(new ImageIcon(Management.class.getResource("/gui/resources/img32x32/mail-new.png")));
 		toolBar.add(btnDishes);
-		
-		JButton btnDrinks = new JButton("Drinks");
-		btnDrinks.setIcon(new ImageIcon(Management.class.getResource("/gui/resources/img32x32/water_drop_1.png")));
-		toolBar.add(btnDrinks);
-		
-		JButton btnMenu = new JButton("Menu");
-		btnMenu.setIcon(new ImageIcon(Management.class.getResource("/gui/resources/img32x32/mail-new.png")));
-		toolBar.add(btnMenu);
 		
 		JButton btnStaff = new JButton("Staff");
 		btnStaff.setIcon(new ImageIcon(Management.class.getResource("/gui/resources/img32x32/identity.png")));
@@ -145,6 +137,10 @@ public class Management extends JFrame {
 		JButton btnCustomers = new JButton("Customers");
 		btnCustomers.setIcon(new ImageIcon(Management.class.getResource("/gui/resources/img32x32/edit-group.png")));
 		toolBar.add(btnCustomers);
+		
+		JButton btnNewButton = new JButton("Discounts");
+		btnNewButton.setIcon(new ImageIcon(Management.class.getResource("/gui/resources/img32x32/emblem-advertisement-pound.png")));
+		toolBar.add(btnNewButton);
 		
 		Component horizontalGlue = Box.createHorizontalGlue();
 		toolBar.add(horizontalGlue);
@@ -169,7 +165,7 @@ public class Management extends JFrame {
 		panel.add(ingredientsFrame);
 		
 		//action performed on ingredients button
-		btnIngredients.addActionListener(new ActionListener() {
+		btnStock.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         //remove whatever was there first
         panel.removeAll();

@@ -51,10 +51,11 @@ public class PendingordersTable
     public static final String notesColumnName = "notes";
     public static final String customer_idColumnName = "customer_id";
     public static final String tablenumberColumnName = "tablenumber";
+    public static final String discount_idColumnName = "discount_id";
 
     private static String[] allColumns =
     {
-        numberColumnName , valueColumnName , notesColumnName , customer_idColumnName , tablenumberColumnName , 
+        numberColumnName , valueColumnName , notesColumnName , customer_idColumnName , tablenumberColumnName , discount_idColumnName , 
     };
 
     /** You probably want to use the static methods for most of your access, but once in a while you might need to
@@ -192,6 +193,8 @@ public class PendingordersTable
         private boolean customer_idNull = true ;
         private int tablenumber ;
         private boolean tablenumberNull = true ;
+        private int discount_id ;
+        private boolean discount_idNull = true ;
 
         /** for internal use only!   If you need a row object, use getRow(). */
         Row()
@@ -210,6 +213,8 @@ public class PendingordersTable
                 this.customer_id = customer_idNull ? 0 : Str.toInt( data[3] );
                 this.tablenumberNull = ( data[4] == null );
                 this.tablenumber = tablenumberNull ? 0 : Str.toInt( data[4] );
+                this.discount_idNull = ( data[5] == null );
+                this.discount_id = discount_idNull ? 0 : Str.toInt( data[5] );
                 dataLoadedFromDatabase = true ;
             }
         }
@@ -358,6 +363,45 @@ public class PendingordersTable
         }
 
 
+        public int getDiscount_id()
+        {
+            return discount_id ;
+        }
+
+        public void setDiscount_id( int discount_id )
+        {
+            this.discount_id = discount_id ;
+            discount_idNull = false ;
+        }
+
+        public void setDiscount_id( Integer discount_id )
+        {
+            discount_idNull = ( discount_id == null );
+            if ( discount_idNull )
+            {
+                this.discount_id = 0 ;
+            }
+            else
+            {
+                this.discount_id = discount_id.intValue() ;
+            }
+        }
+
+        public boolean isDiscount_idNull()
+        {
+            return discount_idNull ;
+        }
+
+        public void setDiscount_idNull( boolean discount_idNull )
+        {
+            this.discount_idNull = discount_idNull ;
+            if ( discount_idNull )
+            {
+                discount_id = 0 ;
+            }
+        }
+
+
 
         
         private boolean dataLoadedFromDatabase()
@@ -373,6 +417,7 @@ public class PendingordersTable
             data.put( notesColumnName , this.notes );
             data.put( customer_idColumnName , this.customer_idNull ? null : String.valueOf( this.customer_id ) );
             data.put( tablenumberColumnName , this.tablenumberNull ? null : String.valueOf( this.tablenumber ) );
+            data.put( discount_idColumnName , this.discount_idNull ? null : String.valueOf( this.discount_id ) );
             return data ;
         }
 

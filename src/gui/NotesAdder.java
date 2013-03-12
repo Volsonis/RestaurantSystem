@@ -59,6 +59,7 @@ public class NotesAdder extends JDialog
     contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
     getContentPane().add(contentPanel, BorderLayout.CENTER);
     final JTextPane textPane = new JTextPane();
+    textPane.setText(order.getNotes());
     contentPanel.setLayout(new BorderLayout(0, 0));
     {
       contentPanel.add(textPane, BorderLayout.CENTER);

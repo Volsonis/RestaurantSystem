@@ -56,6 +56,11 @@ public class Order extends JFrame
     setContentPane(contentPane);
     contentPane.setLayout(new BorderLayout(0, 0));
     
+    final NewOrderPanel newOrderPanel = new NewOrderPanel(this);
+    
+    final JPanel panel = new JPanel();
+    contentPane.add(panel, BorderLayout.CENTER);
+    
     JToolBar toolBar = new JToolBar();
     toolBar.setFloatable(false);
     contentPane.add(toolBar, BorderLayout.NORTH);
@@ -63,7 +68,9 @@ public class Order extends JFrame
     JButton btnNew = new JButton("New");
     btnNew.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        
+        //put the new NewOrderPanel in the frame
+        panel.removeAll();
+        panel.add(newOrderPanel);
       }
     });
     btnNew.setIcon(new ImageIcon(Order.class.getResource("/gui/resources/img32x32/document-new-6.png")));
@@ -86,10 +93,8 @@ public class Order extends JFrame
     toolBar.add(btnExit);
     btnExit.setIcon(new ImageIcon(Order.class.getResource("/gui/resources/img32x32/dialog-close-2.png")));
     
-    final JPanel panel = new JPanel();
-    contentPane.add(panel, BorderLayout.CENTER);
     
-    final NewOrderPanel newOrderPanel = new NewOrderPanel(this);
+    
     panel.add(newOrderPanel);
     
     btnNew.addActionListener(new ActionListener() {

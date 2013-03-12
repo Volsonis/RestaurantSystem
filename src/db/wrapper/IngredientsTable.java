@@ -49,10 +49,11 @@ public class IngredientsTable
     public static final String ingredients_idColumnName = "ingredients_id";
     public static final String ingredient_idColumnName = "ingredient_id";
     public static final String dish_idColumnName = "dish_id";
+    public static final String quantityColumnName = "quantity";
 
     private static String[] allColumns =
     {
-        ingredients_idColumnName , ingredient_idColumnName , dish_idColumnName , 
+        ingredients_idColumnName , ingredient_idColumnName , dish_idColumnName , quantityColumnName , 
     };
 
     /** You probably want to use the static methods for most of your access, but once in a while you might need to
@@ -235,6 +236,8 @@ public class IngredientsTable
         private int ingredients_id ;
         private int ingredient_id ;
         private int dish_id ;
+        private int quantity ;
+        private boolean quantityNull = true ;
 
         /** for internal use only!   If you need a row object, use getRow(). */
         Row()
@@ -248,6 +251,8 @@ public class IngredientsTable
                 this.ingredients_id =  Str.toInt( data[0] );
                 this.ingredient_id =  Str.toInt( data[1] );
                 this.dish_id =  Str.toInt( data[2] );
+                this.quantityNull = ( data[3] == null );
+                this.quantity = quantityNull ? 0 : Str.toInt( data[3] );
                 dataLoadedFromDatabase = true ;
             }
         }
@@ -290,6 +295,45 @@ public class IngredientsTable
         }
 
 
+        public int getQuantity()
+        {
+            return quantity ;
+        }
+
+        public void setQuantity( int quantity )
+        {
+            this.quantity = quantity ;
+            quantityNull = false ;
+        }
+
+        public void setQuantity( Integer quantity )
+        {
+            quantityNull = ( quantity == null );
+            if ( quantityNull )
+            {
+                this.quantity = 0 ;
+            }
+            else
+            {
+                this.quantity = quantity.intValue() ;
+            }
+        }
+
+        public boolean isQuantityNull()
+        {
+            return quantityNull ;
+        }
+
+        public void setQuantityNull( boolean quantityNull )
+        {
+            this.quantityNull = quantityNull ;
+            if ( quantityNull )
+            {
+                quantity = 0 ;
+            }
+        }
+
+
 
         
         private boolean dataLoadedFromDatabase()
@@ -303,6 +347,7 @@ public class IngredientsTable
             data.put( ingredients_idColumnName , String.valueOf(  this.ingredients_id ) );
             data.put( ingredient_idColumnName , String.valueOf(  this.ingredient_id ) );
             data.put( dish_idColumnName , String.valueOf(  this.dish_id ) );
+            data.put( quantityColumnName , this.quantityNull ? null : String.valueOf( this.quantity ) );
             return data ;
         }
 

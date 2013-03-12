@@ -84,6 +84,7 @@ public class DBInterface
     //id gets returned on insert
     int dish_id = (int) row.insert();
     
+    //TODO handle multiplicities here
     //add ingredients by id
     for(int i=0; i < dish.getIngredient_id().length; i++)
     {
@@ -180,6 +181,7 @@ public class DBInterface
     //now insert the dishes associated with the order into the articles table
     int order_number = row.getNumber();
     
+    //TODO handle multiplicities here
     for(int i=0; i<order.getDish_id().length; i++)
     {
       ArticlesTable.Row arow = ArticlesTable.getRow();

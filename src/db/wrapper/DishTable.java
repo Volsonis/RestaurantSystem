@@ -50,10 +50,11 @@ public class DishTable
     public static final String nameColumnName = "name";
     public static final String descriptionColumnName = "description";
     public static final String priceColumnName = "price";
+    public static final String typeColumnName = "type";
 
     private static String[] allColumns =
     {
-        dish_idColumnName , nameColumnName , descriptionColumnName , priceColumnName , 
+        dish_idColumnName , nameColumnName , descriptionColumnName , priceColumnName , typeColumnName , 
     };
 
     /** You probably want to use the static methods for most of your access, but once in a while you might need to
@@ -238,6 +239,7 @@ public class DishTable
         private String description ;
         private double price ;
         private boolean priceNull = true ;
+        private String type ;
 
         /** for internal use only!   If you need a row object, use getRow(). */
         Row()
@@ -253,6 +255,7 @@ public class DishTable
                 this.description = data[2];
                 this.priceNull = ( data[3] == null );
                 this.price = priceNull ? 0.0 : Str.toDouble( data[3] );
+                this.type = data[4];
                 dataLoadedFromDatabase = true ;
             }
         }
@@ -334,6 +337,17 @@ public class DishTable
         }
 
 
+        public String getType()
+        {
+            return type ;
+        }
+
+        public void setType( String type )
+        {
+            this.type = type ;
+        }
+
+
 
         
         private boolean dataLoadedFromDatabase()
@@ -348,6 +362,7 @@ public class DishTable
             data.put( nameColumnName , this.name );
             data.put( descriptionColumnName , this.description );
             data.put( priceColumnName , this.priceNull ? null : String.valueOf( this.price ) );
+            data.put( typeColumnName , this.type );
             return data ;
         }
 

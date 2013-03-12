@@ -60,8 +60,8 @@ public class InputVerifier
 	    throw new Exception("Price 0! Add something to your order to continue!");
 	  
 	  //give either table number or customer id
-	  if(input.getCustomer_id() == 0 && input.getTablenumber() == 0)
-	    throw new Exception("Provide a tablenumber for an internal order, or a customer for an external order");
+	  //if(input.getCustomer_id() == 0 && input.getTablenumber() == 0)
+	   // throw new Exception("Provide a tablenumber for an internal order, or a customer for an external order");
 	  
 	  //dishes
 	  //no dishes

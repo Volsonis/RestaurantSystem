@@ -52,10 +52,12 @@ public class StaffTable
     public static final String genderColumnName = "gender";
     public static final String dobColumnName = "dob";
     public static final String phoneColumnName = "phone";
+    public static final String codeColumnName = "code";
+    public static final String revenueColumnName = "revenue";
 
     private static String[] allColumns =
     {
-        idColumnName , firstnameColumnName , surnameColumnName , genderColumnName , dobColumnName , phoneColumnName , 
+        idColumnName , firstnameColumnName , surnameColumnName , genderColumnName , dobColumnName , phoneColumnName , codeColumnName , revenueColumnName , 
     };
 
     /** You probably want to use the static methods for most of your access, but once in a while you might need to
@@ -241,6 +243,9 @@ public class StaffTable
         private String gender ;
         private String dob ;
         private String phone ;
+        private String code ;
+        private double revenue ;
+        private boolean revenueNull = true ;
 
         /** for internal use only!   If you need a row object, use getRow(). */
         Row()
@@ -257,6 +262,9 @@ public class StaffTable
                 this.gender = data[3];
                 this.dob = data[4];
                 this.phone = data[5];
+                this.code = data[6];
+                this.revenueNull = ( data[7] == null );
+                this.revenue = revenueNull ? 0.0 : Str.toDouble( data[7] );
                 dataLoadedFromDatabase = true ;
             }
         }
@@ -332,6 +340,56 @@ public class StaffTable
         }
 
 
+        public String getCode()
+        {
+            return code ;
+        }
+
+        public void setCode( String code )
+        {
+            this.code = code ;
+        }
+
+
+        public double getRevenue()
+        {
+            return revenue ;
+        }
+
+        public void setRevenue( double revenue )
+        {
+            this.revenue = revenue ;
+            revenueNull = false ;
+        }
+
+        public void setRevenue( Double revenue )
+        {
+            revenueNull = ( revenue == null );
+            if ( revenueNull )
+            {
+                this.revenue = 0.0 ;
+            }
+            else
+            {
+                this.revenue = revenue.doubleValue() ;
+            }
+        }
+
+        public boolean isRevenueNull()
+        {
+            return revenueNull ;
+        }
+
+        public void setRevenueNull( boolean revenueNull )
+        {
+            this.revenueNull = revenueNull ;
+            if ( revenueNull )
+            {
+                revenue = 0.0 ;
+            }
+        }
+
+
 
         
         private boolean dataLoadedFromDatabase()
@@ -348,6 +406,8 @@ public class StaffTable
             data.put( genderColumnName , this.gender );
             data.put( dobColumnName , this.dob );
             data.put( phoneColumnName , this.phone );
+            data.put( codeColumnName , this.code );
+            data.put( revenueColumnName , this.revenueNull ? null : String.valueOf( this.revenue ) );
             return data ;
         }
 

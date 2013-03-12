@@ -22,14 +22,19 @@ import javax.swing.border.LineBorder;
 import java.awt.Color;
 import javax.swing.ImageIcon;
 
+import db.DBInterface;
+
 import main.Dish;
 import main.DishFactory;
+import main.InputVerifier;
 
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import javax.swing.JTextField;
 
 public class NewOrderPanel extends JPanel
 {
@@ -38,14 +43,14 @@ public class NewOrderPanel extends JPanel
   final JLabel totalLabel;
   final main.Order order;
   final ArrayList<Dish> dishesOrdered;
+  private JTextField tableLabel;
 
   /**
    * Create the panel.
    */
-  public NewOrderPanel(Component parent) {
+  public NewOrderPanel(final Component parent) {
     
     final Component parentFrame = parent;
-    
     //new order
     order = new main.Order();
     dishesOrdered = new ArrayList<Dish>();
@@ -79,12 +84,13 @@ public class NewOrderPanel extends JPanel
     
     JLabel lblNewLabel_3 = new JLabel("New Order");
     
-    JLabel lblNewLabel_4 = new JLabel("0");
-    lblNewLabel_4.setBorder(new LineBorder(new Color(0, 0, 0)));
-    
     JLabel lblTable = new JLabel("Table:");
     
     JScrollPane scrollPane = new JScrollPane();
+    
+    tableLabel = new JTextField();
+    tableLabel.setEditable(false);
+    tableLabel.setColumns(10);
     GroupLayout groupLayout = new GroupLayout(this);
     groupLayout.setHorizontalGroup(
       groupLayout.createParallelGroup(Alignment.LEADING)
@@ -99,15 +105,15 @@ public class NewOrderPanel extends JPanel
             .addGroup(groupLayout.createSequentialGroup()
               .addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
               .addPreferredGap(ComponentPlacement.UNRELATED)
-              .addComponent(lblNewLabel_1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+              .addComponent(lblNewLabel_1, GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE))
             .addComponent(table, GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE))
           .addPreferredGap(ComponentPlacement.RELATED)
           .addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
             .addGroup(groupLayout.createSequentialGroup()
               .addComponent(lblTable)
               .addPreferredGap(ComponentPlacement.RELATED)
-              .addComponent(lblNewLabel_4, GroupLayout.PREFERRED_SIZE, 66, GroupLayout.PREFERRED_SIZE)
-              .addPreferredGap(ComponentPlacement.RELATED)
+              .addComponent(tableLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+              .addPreferredGap(ComponentPlacement.UNRELATED)
               .addComponent(lblNewLabel_3))
             .addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 448, GroupLayout.PREFERRED_SIZE))
           .addPreferredGap(ComponentPlacement.RELATED)
@@ -128,7 +134,7 @@ public class NewOrderPanel extends JPanel
                 .addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
                 .addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE)
                 .addComponent(lblTable)
-                .addComponent(lblNewLabel_4, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
+                .addComponent(tableLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addComponent(lblNewLabel_3))
               .addPreferredGap(ComponentPlacement.RELATED)
               .addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
@@ -139,9 +145,9 @@ public class NewOrderPanel extends JPanel
                     .addComponent(lblNewLabel_2, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
                     .addComponent(totalLabel, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)))
                 .addComponent(scrollPane)))
-            .addComponent(toolBar, GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE))
+            .addComponent(toolBar, GroupLayout.DEFAULT_SIZE, 429, Short.MAX_VALUE))
           .addPreferredGap(ComponentPlacement.RELATED)
-          .addComponent(toolBar_1, GroupLayout.DEFAULT_SIZE, 62, Short.MAX_VALUE)
+          .addComponent(toolBar_1, GroupLayout.DEFAULT_SIZE, 61, Short.MAX_VALUE)
           .addContainerGap())
     );
     
@@ -241,6 +247,12 @@ public class NewOrderPanel extends JPanel
     toolBar_1.add(horizontalStrut_2);
     
     JButton btnCancel = new JButton("Clear");
+    btnCancel.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent arg0) {
+        //reset the order
+        reset();
+      }
+    });
     btnCancel.setIcon(new ImageIcon(NewOrderPanel.class.getResource("/gui/resources/img32x32/dialog-cancel-2.png")));
     toolBar_1.add(btnCancel);
     
@@ -270,10 +282,52 @@ public class NewOrderPanel extends JPanel
     toolBar_1.add(btnNote);
     
     JButton btnTable = new JButton("Table");
+    btnTable.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        //open tableselecter (touchscreen optimised)
+        JDialog ts = new TableSelecter(parentFrame, order);
+        ts.setVisible(true);
+        //update table label
+        tableLabel.setText(String.valueOf(order.getTablenumber()));
+      }
+    });
     btnTable.setIcon(new ImageIcon(NewOrderPanel.class.getResource("/gui/resources/img32x32/draw-square-inverted-corners.png")));
     toolBar_1.add(btnTable);
     
     JButton btnSubmit = new JButton("Submit");
+    btnSubmit.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent arg0) {
+        
+        try
+        {
+          //add the dish ids to the order
+          int[] dish_ids = new int[dishesOrdered.size()];
+          for(int i=0; i<dish_ids.length; i++)
+            dish_ids[i] = dishesOrdered.get(i).getID();
+          order.setDish_id(dish_ids);
+          //verify order
+          InputVerifier.verifyOrder(order);
+          //submit order
+          DBInterface.addOrder(order);
+          
+          //then reset the new order window
+          reset();
+              
+        } catch (SQLException e)
+        {
+          Error err = new Error(parentFrame,"Database Error", e.getMessage());
+          err.setVisible(true);
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
+        catch(Exception e)
+        {
+          Error err = new Error(parentFrame,"Error", e.getMessage());
+          err.setVisible(true);
+          e.printStackTrace();
+        }
+      }
+    });
     btnSubmit.setIcon(new ImageIcon(NewOrderPanel.class.getResource("/gui/resources/img32x32/document-import.png")));
     toolBar_1.add(btnSubmit);
     setLayout(groupLayout);
@@ -300,9 +354,25 @@ public class NewOrderPanel extends JPanel
         //update price
         order.setPrice(rtd(order.getPrice() + dish.getPrice()));
         totalLabel.setText(String.valueOf(rtd(order.getPrice())));
+        System.out.println(dishesOrdered.size());
       }
     });
     return newButton;
+  }
+  
+  public void reset()
+  {
+    for(int i=model.getRowCount()-1 ; i>=0 ; i--)
+      model.removeRow(i);
+    
+    totalLabel.setText("");
+    order.setPrice(0.0);
+    order.setNotes("");
+    order.setDish_id(null);
+    order.setTablenumber(0);
+    order.setCustomer_id(0);
+    order.setDishes(null);
+    dishesOrdered.removeAll(dishesOrdered);
   }
   
   //round to 2 decimals
@@ -311,5 +381,4 @@ public class NewOrderPanel extends JPanel
     DecimalFormat twoDForm = new DecimalFormat("#.##");
       return Double.valueOf(twoDForm.format(d));
   }
-  
 }
