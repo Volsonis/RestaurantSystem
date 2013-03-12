@@ -86,6 +86,7 @@ public class OrderPanel extends JPanel
           e1.printStackTrace();
         }
         //refresh parent frame
+        parentFrame.refresh();
         parentFrame.revalidate();
         parentFrame.repaint();
       }

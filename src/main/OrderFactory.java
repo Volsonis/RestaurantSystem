@@ -31,12 +31,11 @@ public class OrderFactory
         try
         {
           //get all orders
-          orows = PendingordersTable.getAllRows();
-          //orows = OrderTable.getAllRows(con);
+          orows = PendingordersTable.getAllRows(con);
           for(int i=0; i<orows.length; i++)
           {
             //get dishes of this order
-            arows = ArticlesTable.getRows("order_number", orows[i].getNumber());
+            arows = ArticlesTable.getRows("order_number", orows[i].getPendingorders_id());
             int[] dish_ids = new int[arows.length];
             String[] dishes = new String[arows.length];
             for(int j=0; j<arows.length; j++)
@@ -46,7 +45,7 @@ public class OrderFactory
               dish_ids[j] = drow.getDish_id();
               dishes[j] = drow.getName();
             }
-            orders.add(new Order(orows[i].getNumber(), orows[i].getValue(), orows[i].getNotes(), orows[i].getCustomer_id(), orows[i].getTablenumber(), dish_ids, dishes));
+            orders.add(new Order(orows[i].getPendingorders_id(), orows[i].getValue(), orows[i].getNotes(), orows[i].getCustomer_id(), orows[i].getTablenumber(), dish_ids, dishes));
           }
         }
         catch(Exception e)

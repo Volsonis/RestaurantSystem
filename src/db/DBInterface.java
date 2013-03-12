@@ -93,7 +93,6 @@ public class DBInterface
       irow.setIngredient_id(dish.getIngredient_id()[i]);
       irow.insert();
     }//for
-    
   }
   
   
@@ -179,7 +178,7 @@ public class DBInterface
     row.insert();
     
     //now insert the dishes associated with the order into the articles table
-    int order_number = row.getNumber();
+    int order_number = row.getPendingorders_id();
     
     //TODO handle multiplicities here
     for(int i=0; i<order.getDish_id().length; i++)
@@ -411,17 +410,17 @@ public class DBInterface
   }
  
   //Order
-  public static void editOrder(int ordernumber, Order order) throws SQLException
+  public static void editOrder(int pendingorders_id, Order order) throws SQLException
   {
-    PendingordersTable.Row row = PendingordersTable.getRow("number", String.valueOf(ordernumber));
+    PendingordersTable.Row row = PendingordersTable.getRow(pendingorders_id);
     row.setValue(order.getPrice());
     row.setNotes(order.getNotes());
     row.setCustomer_id(order.getCustomer_id());
     row.setTablenumber(order.getTablenumber());
-    row.update("number", String.valueOf(ordernumber));
+    row.update("number", String.valueOf(pendingorders_id));
     
     //now the Dishes
-    ArticlesTable.Row[] arows = ArticlesTable.getRows("order_number", String.valueOf(ordernumber));
+    ArticlesTable.Row[] arows = ArticlesTable.getRows("order_number", String.valueOf(pendingorders_id));
     int[] updatedRows = order.getDish_id();
     
     Boolean add = true;
@@ -462,7 +461,7 @@ public class DBInterface
     {
       addarow = ArticlesTable.getRow();
       addarow.setDish_id(rowsToAdd.get(i));
-      addarow.setOrder_number(ordernumber);
+      addarow.setOrder_number(pendingorders_id);
       addarow.insert();
     }
     

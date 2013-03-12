@@ -46,14 +46,14 @@ public class DiscountTable
 
     public static final String tableName = "Discount";
 
-    public static final String idDiscountColumnName = "idDiscount";
+    public static final String discount_idColumnName = "discount_id";
     public static final String codeColumnName = "code";
     public static final String typeColumnName = "type";
     public static final String amountColumnName = "amount";
 
     private static String[] allColumns =
     {
-        idDiscountColumnName , codeColumnName , typeColumnName , amountColumnName , 
+        discount_idColumnName , codeColumnName , typeColumnName , amountColumnName , 
     };
 
     /** You probably want to use the static methods for most of your access, but once in a while you might need to
@@ -105,6 +105,26 @@ public class DiscountTable
             // The idea is that during unit testing, a different test object will be returned here.
             // To learn more about unit testing with Jenny generated code, visit <a href="http://www.javaranch.com/jenny.jsp">www.javaranch.com/jenny.jsp</a>
             return new Row();
+        }
+
+        /** Instantiate a Row object and fill its content based on a search for the ID. 
+         *
+         * Return null if not found.  Return first item if more than one found.
+         */
+        public Row getRow( Connection con , int discount_id ) throws SQLException
+        {
+            Row row = new Row( this.search( con , "discount_id" , String.valueOf( discount_id ) , allColumns ) );
+            return row.dataLoadedFromDatabase() ? row : null ;
+        }
+
+        /** Instantiate a Row object and fill its content based on a search for the ID.
+         *
+         * Return null if not found.
+         */
+        public Row getRow( long discount_id ) throws SQLException
+        {
+            Row row = new Row( this.search( "discount_id" , String.valueOf( discount_id ) , allColumns ) );
+            return row.dataLoadedFromDatabase() ? row : null ;
         }
 
         /** Instantiate a Row object and fill its content based on a search
@@ -175,6 +195,36 @@ public class DiscountTable
             return rowArray( this.search( allColumns ) );
         }
 
+        public void update( Connection con , int discount_id , Map data ) throws SQLException
+        {
+            this.update( con , "discount_id" , String.valueOf( discount_id ) , data );
+        }
+
+        public void update( int discount_id , Map data ) throws SQLException
+        {
+            this.update( "discount_id" , String.valueOf( discount_id ) , data );
+        }
+
+        public void delete( Connection con , long discount_id ) throws SQLException
+        {
+            this.delete( con , "discount_id" , String.valueOf( discount_id ) );
+        }
+
+        public void delete( long discount_id ) throws SQLException
+        {
+            this.delete( "discount_id" , String.valueOf( discount_id ) );
+        }
+
+        public long insertAndGetID( Connection con , Map data ) throws SQLException
+        {
+            return this.insertAndGetID( con , data , "discount_id" );
+        }
+
+        public long insertAndGetID( Map data ) throws SQLException
+        {
+            return this.insertAndGetID( data , "discount_id" );
+        }
+
 
     }
 
@@ -183,7 +233,7 @@ public class DiscountTable
 
         private boolean dataLoadedFromDatabase = false ;
 
-        private int idDiscount ;
+        private int discount_id ;
         private String code ;
         private String type ;
         private int amount ;
@@ -198,7 +248,7 @@ public class DiscountTable
         {
             if ( data != null )
             {
-                this.idDiscount =  Str.toInt( data[0] );
+                this.discount_id =  Str.toInt( data[0] );
                 this.code = data[1];
                 this.type = data[2];
                 this.amountNull = ( data[3] == null );
@@ -212,14 +262,14 @@ public class DiscountTable
             this( results.getRow(0) );
         }
 
-        public int getIdDiscount()
+        public int getDiscount_id()
         {
-            return idDiscount ;
+            return discount_id ;
         }
 
-        public void setIdDiscount( int idDiscount )
+        public void setDiscount_id( int discount_id )
         {
-            this.idDiscount = idDiscount ;
+            this.discount_id = discount_id ;
         }
 
 
@@ -294,7 +344,7 @@ public class DiscountTable
         private Map buildDataMap()
         {
             Map data = new HashMap();
-            data.put( idDiscountColumnName , String.valueOf(  this.idDiscount ) );
+            data.put( discount_idColumnName , String.valueOf(  this.discount_id ) );
             data.put( codeColumnName , this.code );
             data.put( typeColumnName , this.type );
             data.put( amountColumnName , this.amountNull ? null : String.valueOf( this.amount ) );
@@ -313,16 +363,50 @@ public class DiscountTable
             imp.update( column , searchText , buildDataMap() );
         }
 
-        /** create a new row.*/
-        public void insert( Connection con ) throws SQLException
+        /** update a row object based on the id */
+        public void update( Connection con ) throws SQLException
         {
-            imp.insert( con , buildDataMap() );
+            imp.update( con , discount_id , buildDataMap() );
         }
 
-        /** create a new row.*/
-        public void insert() throws SQLException
+        /** update a row object based on the id */
+        public void update() throws SQLException
         {
-            imp.insert( buildDataMap() );
+            imp.update( discount_id , buildDataMap() );
+        }
+
+        /** create a new row complete with a new ID.
+
+            The current ID is ignored.  The new ID is placed in the row.
+
+            @return the new row ID 
+        */
+        public long insert( Connection con ) throws SQLException
+        {
+            return imp.insertAndGetID( con , buildDataMap() );
+        }
+
+        /** create a new row complete with a new ID.
+
+            The current ID is ignored.  The new ID is placed in the row.
+
+            @return the new row ID 
+        */
+        public long insert() throws SQLException
+        {
+            return imp.insertAndGetID( buildDataMap() );
+        }
+
+        /** delete a row object based on the id */
+        public void delete( Connection con ) throws SQLException
+        {
+            imp.delete( con , discount_id );
+        }
+
+        /** delete a row object based on the id */
+        public void delete() throws SQLException
+        {
+            imp.delete( discount_id );
         }
 
 
@@ -332,6 +416,24 @@ public class DiscountTable
     public static Row getRow()
     {
         return imp.getRow();
+    }
+
+    /** Instantiate a Row object and fill its content based on a search for the ID. 
+     *
+     * Return null if not found.
+     */
+    public static Row getRow( Connection con , int discount_id ) throws SQLException
+    {
+        return imp.getRow( con , discount_id );
+    }
+
+    /** Instantiate a Row object and fill its content based on a search for the ID. 
+     *
+     * Return null if not found.
+     */
+    public static Row getRow( long discount_id ) throws SQLException
+    {
+        return imp.getRow( discount_id );
     }
 
     /** Instantiate a Row object and fill its content based on a search
@@ -494,6 +596,16 @@ public class DiscountTable
         imp.update( column , searchText , data );
     }
 
+    public static void delete( Connection con , long discount_id ) throws SQLException
+    {
+        imp.delete( con , discount_id );
+    }
+
+    public static void delete( long discount_id ) throws SQLException
+    {
+        imp.delete( discount_id );
+    }
+
     public static void delete( Connection con , String column , String searchText ) throws SQLException
     {
         imp.delete( con , column , searchText );
@@ -504,14 +616,14 @@ public class DiscountTable
         imp.delete( column , searchText );
     }
 
-    public static void insert( Connection con , Map data ) throws SQLException
+    public static long insert( Connection con , Map data ) throws SQLException
     {
-        imp.insert( con , data );
+        return imp.insertAndGetID( con , data );
     }
 
-    public static void insert( Map data ) throws SQLException
+    public static long insert( Map data ) throws SQLException
     {
-        imp.insert( data );
+        return imp.insertAndGetID( data );
     }
 
 

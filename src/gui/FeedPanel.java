@@ -12,6 +12,7 @@ import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
+import java.awt.Dimension;
 
 public class FeedPanel extends JPanel
 {
@@ -22,6 +23,10 @@ public class FeedPanel extends JPanel
    * Create the panel.
    */
   public FeedPanel(main.Order order) {
+    setPreferredSize(new Dimension(300, 300));
+    setMinimumSize(new Dimension(300, 300));
+    setSize(new Dimension(300, 300));
+    setMaximumSize(new Dimension(300, 300));
     setBorder(new LineBorder(Color.LIGHT_GRAY));
     
     JButton btnDismiss = new JButton("Done");
