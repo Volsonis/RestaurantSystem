@@ -179,10 +179,8 @@ public class DBInterface
     row.setNotes(order.getNotes());
     row.setCustomer_id(order.getCustomer_id());
     row.setTablenumber(order.getTablenumber());
-    row.insert();
-    
+    int pendingorders_id = (int) row.insert();
     //now insert the dishes associated with the order into the articles table
-    int pendingorders_id = row.getPendingorders_id();
     
     //TODO handle multiplicities here
     for(int i=0; i<order.getDish_id().length; i++)
@@ -227,7 +225,7 @@ public class DBInterface
   //table
   public static void addTable(Table table) throws SQLException
   {
-    db.wrapper.Table.Row row = db.wrapper.Table.getRow();
+    db.wrapper.TablesTable.Row row = db.wrapper.TablesTable.getRow();
     row.setTabledetails(table.getTabledetails());
     row.setRevenue(table.getRevenue());
     row.insert();
@@ -605,7 +603,7 @@ public class DBInterface
     row.setCustomer_id(order.getCustomer_id());
     row.setTablenumber(order.getTablenumber());
     row.setDiscount_id(order.getDiscount_id());
-    row.insert();
+    int processedOrders_id = (int) row.insert();
     
     ProcessedarticlesTable.Row parow;
     //put into Processedarticles
@@ -613,12 +611,12 @@ public class DBInterface
     {
       parow = ProcessedarticlesTable.getRow();
       parow.setDish_id(arows[i].getDish_id());
-      parow.setProcessedorders_id(arows[i].getPendingorders_id());
+      parow.setProcessedorders_id(processedOrders_id);
       parow.insert();
     }
     
     //increase table revenue
-    db.wrapper.Table.Row trow = db.wrapper.Table.getRow("table_id", String.valueOf(order.getTablenumber()));
+    db.wrapper.TablesTable.Row trow = db.wrapper.TablesTable.getRow("table_id", String.valueOf(order.getTablenumber()));
     if(trow.getTable_id() != 0) // if this is not the second time we come past here
     {
       trow.setRevenue(trow.getRevenue()+order.getPrice());
@@ -645,9 +643,9 @@ public class DBInterface
     row.setTime(new java.sql.Time(new java.util.Date().getTime()).toString());
     row.setNotes(order.getNotes());
     row.setCustomer_id(order.getCustomer_id());
-    row.setTablenumber(0); // when it gets put back we dont want the tablerevenuie to count
+    row.setTablenumber(order.getTablenumber()); // when it gets put back we dont want the tablerevenuie to count
     row.setDiscount_id(order.getDiscount_id());
-    row.insert();
+    int newId = (int)row.insert();
     
     //put into articles
     ArticlesTable.Row arow;
@@ -656,7 +654,7 @@ public class DBInterface
     {
       arow = ArticlesTable.getRow();
       arow.setDish_id(parows[i].getDish_id());
-      arow.setPendingorders_id((parows[i].getProcessedorders_id()));
+      arow.setPendingorders_id(newId);
       arow.insert();
     }
   }

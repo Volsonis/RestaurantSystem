@@ -51,28 +51,29 @@ public class Error extends JDialog {
       }
 		});
 		
-		JTextArea textArea = new JTextArea();
-		textArea.setFont(new Font("Calibri", Font.PLAIN, 16));
-		textArea.setEditable(false);
+		JScrollPane scrollPane = new JScrollPane();
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
-		  gl_contentPane.createParallelGroup(Alignment.TRAILING)
+		  gl_contentPane.createParallelGroup(Alignment.LEADING)
 		    .addGroup(gl_contentPane.createSequentialGroup()
-		      .addContainerGap(191, Short.MAX_VALUE)
-		      .addComponent(btnOk)
-		      .addGap(186))
-		    .addComponent(textArea, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 424, Short.MAX_VALUE)
+		      .addGap(168)
+		      .addComponent(btnOk, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
+		      .addContainerGap(164, Short.MAX_VALUE))
+		    .addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 424, Short.MAX_VALUE)
 		);
 		gl_contentPane.setVerticalGroup(
 		  gl_contentPane.createParallelGroup(Alignment.LEADING)
 		    .addGroup(gl_contentPane.createSequentialGroup()
-		      .addComponent(textArea, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE)
+		      .addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE)
 		      .addPreferredGap(ComponentPlacement.RELATED)
-		      .addComponent(btnOk)
-		      .addContainerGap(12, Short.MAX_VALUE))
+		      .addComponent(btnOk, GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE))
 		);
-		contentPane.setLayout(gl_contentPane);
 		
-		textArea.setText(errortype + ": " +message);
+		JTextArea textArea = new JTextArea();
+		textArea.setText(errortype + ": " + message);
+		textArea.setFont(new Font("Calibri", Font.PLAIN, 16));
+		textArea.setEditable(false);
+		scrollPane.setViewportView(textArea);
+		contentPane.setLayout(gl_contentPane);
 	}
 }

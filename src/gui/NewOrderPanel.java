@@ -43,6 +43,7 @@ public class NewOrderPanel extends JPanel
   final JLabel totalLabel;
   final main.Order order;
   final ArrayList<Dish> dishesOrdered;
+  private ArrayList<Dish> allDishes;
   private JTextField tableLabel;
   private JPanel mainButtonPanel;
 
@@ -180,6 +181,21 @@ public class NewOrderPanel extends JPanel
     btnMains.setIcon(new ImageIcon(NewOrderPanel.class.getResource("/gui/resources/img32x32/draw-circle-2.png")));
     toolBar.add(btnMains);
     
+    Component verticalStrut_5 = Box.createVerticalStrut(20);
+    toolBar.add(verticalStrut_5);
+    
+    JButton btnSides = new JButton("Sides");
+    btnSides.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent arg0) {
+        createButtons("Sides");
+      }
+    });
+    btnSides.setMinimumSize(new Dimension(110, 40));
+    btnSides.setMaximumSize(new Dimension(110, 40));
+    btnSides.setIcon(new ImageIcon(NewOrderPanel.class.getResource("/gui/resources/img32x32/draw-halfcircle1.png")));
+    btnSides.setPreferredSize(new Dimension(110, 40));
+    toolBar.add(btnSides);
+    
     Component verticalStrut_1 = Box.createVerticalStrut(20);
     toolBar.add(verticalStrut_1);
     
@@ -229,6 +245,11 @@ public class NewOrderPanel extends JPanel
     toolBar.add(verticalStrut_4);
     
     JButton btnAll = new JButton("All");
+    btnAll.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        createAllButtons();
+      }
+    });
     btnAll.setPreferredSize(new Dimension(110, 40));
     btnAll.setMinimumSize(new Dimension(110, 40));
     btnAll.setMaximumSize(new Dimension(110, 40));
@@ -236,6 +257,7 @@ public class NewOrderPanel extends JPanel
     toolBar.add(btnAll);
     
     mainButtonPanel = new JPanel();
+    mainButtonPanel.setPreferredSize(new Dimension(450, 400));
     scrollPane.setViewportView(mainButtonPanel);
     mainButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
     
@@ -287,6 +309,7 @@ public class NewOrderPanel extends JPanel
     toolBar_1.add(btnPay);
     
     JButton btnDiscount = new JButton("Discount");
+    btnDiscount.setEnabled(false);
     btnDiscount.setIcon(new ImageIcon(NewOrderPanel.class.getResource("/gui/resources/img32x32/emblem-advertisement-pound.png")));
     toolBar_1.add(btnDiscount);
     
@@ -356,6 +379,9 @@ public class NewOrderPanel extends JPanel
     toolBar_1.add(btnSubmit);
     setLayout(groupLayout);
     
+    allDishes = new ArrayList<Dish>();
+    DishFactory.refreshDishes(allDishes);
+    
     createAllButtons();
     
   }
@@ -363,8 +389,6 @@ public class NewOrderPanel extends JPanel
   private void createAllButtons()
   {
     mainButtonPanel.removeAll();
-    ArrayList<Dish> allDishes = new ArrayList<Dish>();
-    DishFactory.refreshDishes(allDishes);
     JButton[] allButtons = new JButton[allDishes.size()];
     for(int i=0 ; i<allDishes.size() ; i++)
     {
@@ -372,13 +396,14 @@ public class NewOrderPanel extends JPanel
       mainButtonPanel.add(allButtons[i]);
       //TODO check if out of stock and disable button
     }
+    
+    mainButtonPanel.revalidate();
+    mainButtonPanel.repaint();
   }
   
   private void createButtons(String type)
   {
     mainButtonPanel.removeAll();
-    ArrayList<Dish> allDishes = new ArrayList<Dish>();
-    DishFactory.refreshDishes(allDishes);
     JButton[] allButtons = new JButton[allDishes.size()];
     for(int i=0 ; i<allDishes.size() ; i++)
     {
@@ -387,6 +412,9 @@ public class NewOrderPanel extends JPanel
         mainButtonPanel.add(allButtons[i]);
       //TODO check if out of stock and disable button
     }
+    
+    mainButtonPanel.revalidate();
+    mainButtonPanel.repaint();
   }
   
   private JButton createDishButton(final Dish dish)
@@ -421,6 +449,8 @@ public class NewOrderPanel extends JPanel
     order.setDishes(null);
     dishesOrdered.removeAll(dishesOrdered);
     tableLabel.setText("");
+    DishFactory.refreshDishes(allDishes);
+    createAllButtons();
     revalidate();
     repaint();
   }

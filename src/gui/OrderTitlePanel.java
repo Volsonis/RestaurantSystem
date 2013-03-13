@@ -27,10 +27,10 @@ public class OrderTitlePanel extends JPanel
    * Create the panel.
    */
   public OrderTitlePanel() {
-    setMaximumSize(new Dimension(1024, 30));
+    setMaximumSize(new Dimension(800, 25));
     GridBagLayout gridBagLayout = new GridBagLayout();
     gridBagLayout.columnWidths = new int[]{217, 98, 120, 0, 0};
-    gridBagLayout.rowHeights = new int[]{30, 0};
+    gridBagLayout.rowHeights = new int[]{25, 0};
     gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
     gridBagLayout.rowWeights = new double[]{0.0, Double.MIN_VALUE};
     setLayout(gridBagLayout);
@@ -52,7 +52,7 @@ public class OrderTitlePanel extends JPanel
     add(tableLabel, gbc_tableLabel);
     
     JLabel priceLabel = new JLabel("Price");
-    priceLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+    priceLabel.setFont(new Font("Calibri", Font.PLAIN, 16));
     GridBagConstraints gbc_priceLabel = new GridBagConstraints();
     gbc_priceLabel.insets = new Insets(0, 0, 0, 5);
     gbc_priceLabel.gridx = 2;

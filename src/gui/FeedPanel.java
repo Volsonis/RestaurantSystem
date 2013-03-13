@@ -11,10 +11,16 @@ import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.border.LineBorder;
+
+import main.InputVerifier;
+
+import db.DBInterface;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.sql.SQLException;
 
 public class FeedPanel extends JPanel
 {
@@ -25,7 +31,7 @@ public class FeedPanel extends JPanel
   /**
    * Create the panel.
    */
-  public FeedPanel(final main.Order order) {
+  public FeedPanel(final main.Order order, final FeedFrame parentFrame) {
     setPreferredSize(new Dimension(300, 400));
     setMinimumSize(new Dimension(300, 400));
     setSize(new Dimension(300, 400));
@@ -33,6 +39,29 @@ public class FeedPanel extends JPanel
     setBorder(new LineBorder(Color.LIGHT_GRAY));
     
     JButton btnDismiss = new JButton("Done");
+    btnDismiss.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        
+        try
+        {
+          InputVerifier.verifyOrder(order);
+          DBInterface.processOrder(order);
+        } catch (SQLException e1)
+        {
+          Error err = new Error(null,"Database Error: ", e1.getMessage());
+          err.setVisible(true);
+          // TODO Auto-generated catch block
+          e1.printStackTrace();
+        } catch (Exception e1)
+        {
+          Error err = new Error(null, "Error: ", e1.getMessage());
+          err.setVisible(true);
+          // TODO Auto-generated catch block
+          e1.printStackTrace();
+        }
+        parentFrame.refresh();
+      }
+    });
     btnDismiss.setIcon(new ImageIcon(FeedPanel.class.getResource("/gui/resources/img32x32/dialog-ok-apply-2.png")));
     
     JLabel lblOrder = new JLabel("Order:");

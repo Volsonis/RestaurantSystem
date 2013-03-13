@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import javax.swing.JScrollPane;
 
 import main.OrderFactory;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class FeedFrame extends JPanel
 {
@@ -30,7 +32,7 @@ public class FeedFrame extends JPanel
     OrderFactory.refreshOrders(orders);
     
     for(int i=0; i<orders.size(); i++)
-      orderPanels.add(new FeedPanel(orders.get(i)));
+      orderPanels.add(new FeedPanel(orders.get(i), this));
     
     JToolBar toolBar = new JToolBar();
     toolBar.setOrientation(SwingConstants.VERTICAL);
@@ -38,6 +40,11 @@ public class FeedFrame extends JPanel
     add(toolBar, BorderLayout.WEST);
     
     JButton btnRefresh = new JButton("Refresh");
+    btnRefresh.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        refresh();
+        }
+    });
     btnRefresh.setIcon(new ImageIcon(FeedFrame.class.getResource("/gui/resources/img32x32/view-refresh-4.png")));
     toolBar.add(btnRefresh);
     
@@ -64,13 +71,13 @@ public class FeedFrame extends JPanel
     orderPanels.removeAll(orderPanels);
     for(int i=0; i<orders.size(); i++)
     {
-      orderPanels.add(new FeedPanel(orders.get(i)));
+      orderPanels.add(new FeedPanel(orders.get(i), this));
       //add them back to the frame
       panel.add(orderPanels.get(i));
     }//for
     
-    revalidate();
-    repaint();
+    panel.revalidate();
+    panel.repaint();
   }//refresh
 
 }

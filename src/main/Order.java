@@ -81,8 +81,6 @@ public class Order
     
     //put itself into the ProcessedOrder Table
     
-    //TODO implement delete Order in DBInterface
-    
     
     return procOrder;
   }

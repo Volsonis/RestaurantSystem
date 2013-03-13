@@ -21,6 +21,8 @@ import main.Dish;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
+import javax.swing.border.LineBorder;
+import java.awt.Color;
 
 public class OrderPanel extends JPanel
 {
@@ -29,10 +31,12 @@ public class OrderPanel extends JPanel
    * Create the panel.
    */
   public OrderPanel(final Component parentWindow, final main.Order order, final OrdersFrame parentFrame) {
-    setMaximumSize(new Dimension(1024, 80));
+    setBorder(new LineBorder(Color.LIGHT_GRAY));
+    setPreferredSize(new Dimension(800, 55));
+    setMaximumSize(new Dimension(1024, 60));
     GridBagLayout gridBagLayout = new GridBagLayout();
     gridBagLayout.columnWidths = new int[]{217, 98, 120, 0, 0};
-    gridBagLayout.rowHeights = new int[]{40, 40, 0};
+    gridBagLayout.rowHeights = new int[]{30, 25, 0};
     gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
     gridBagLayout.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
     setLayout(gridBagLayout);
@@ -54,7 +58,7 @@ public class OrderPanel extends JPanel
     add(tableLabel, gbc_tableLabel);
     
     JLabel priceLabel = new JLabel(String.valueOf(order.getPrice()));
-    priceLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+    priceLabel.setFont(new Font("Calibri", Font.PLAIN, 16));
     GridBagConstraints gbc_priceLabel = new GridBagConstraints();
     gbc_priceLabel.insets = new Insets(0, 0, 5, 5);
     gbc_priceLabel.gridx = 2;
@@ -108,6 +112,11 @@ public class OrderPanel extends JPanel
     toolBar.add(btnNotes);
     
     JButton btnEdit = new JButton("Edit");
+    btnEdit.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        //TODO create a newOrderPanel with the given order
+      }
+    });
     btnEdit.setFont(new Font("Tahoma", Font.PLAIN, 14));
     btnEdit.setIcon(new ImageIcon(OrderPanel.class.getResource("/gui/resources/img32x32/edit-4.png")));
     toolBar.add(btnEdit);

@@ -18,6 +18,8 @@ import javax.swing.JPanel;
 import javax.swing.JToolBar;
 
 import db.DBInterface;
+import javax.swing.border.LineBorder;
+import java.awt.Color;
 
 public class ArchivePanel extends JPanel
 {
@@ -26,10 +28,11 @@ public class ArchivePanel extends JPanel
    * Create the panel.
    */
   public ArchivePanel(final main.Order order, final ArchiveFrame parentFrame) {
-    setMaximumSize(new Dimension(1024, 80));
+    setBorder(new LineBorder(Color.LIGHT_GRAY));
+    setMaximumSize(new Dimension(1024, 60));
     GridBagLayout gridBagLayout = new GridBagLayout();
     gridBagLayout.columnWidths = new int[]{99, 101, 99, 100, 101, 100, 100, 42, 43, 47, 0};
-    gridBagLayout.rowHeights = new int[]{40, 40, 0};
+    gridBagLayout.rowHeights = new int[]{30, 30, 0};
     gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
     gridBagLayout.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
     setLayout(gridBagLayout);
@@ -42,7 +45,7 @@ public class ArchivePanel extends JPanel
     gbc_numberLabel.gridy = 0;
     add(numberLabel, gbc_numberLabel);
     
-    JLabel customerLabel = new JLabel(String.valueOf(order.getTablenumber()));
+    JLabel customerLabel = new JLabel(String.valueOf(order.getCustomer_id()));
     customerLabel.setFont(new Font("Calibri", Font.PLAIN, 16));
     GridBagConstraints gbc_customerLabel = new GridBagConstraints();
     gbc_customerLabel.insets = new Insets(0, 0, 5, 5);
@@ -99,7 +102,7 @@ public class ArchivePanel extends JPanel
         //delete order and references from db
         try
         {
-          DBInterface.deleteOrder(order);//reverse
+          DBInterface.reverseOrder(order);//reverse
         } catch (SQLException e1)
         {
           Error err = new Error(null,"Database Error", e1.getMessage());

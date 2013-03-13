@@ -49,7 +49,7 @@ public class TableSelecter extends JDialog
   public TableSelecter(Component parent, final main.Order order) {
     setIconImage(Toolkit.getDefaultToolkit().getImage(TableSelecter.class.getResource("/gui/resources/img16x16/draw-square-inverted-corners.png")));
     setTitle("Table Selecter");
-    setBounds(100, 100, 184, 300);
+    setBounds(100, 100, 188, 300);
     setModalityType(Dialog.ModalityType.DOCUMENT_MODAL);
     getContentPane().setLayout(new BorderLayout());
     contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
