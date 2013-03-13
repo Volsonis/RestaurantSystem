@@ -81,6 +81,7 @@ public class DBInterface
     row.setName(dish.getName());
     row.setDescription(dish.getDescripton());
     row.setPrice(dish.getPrice());
+    row.setType(dish.getType());
     //id gets returned on insert
     int dish_id = (int) row.insert();
     
@@ -129,6 +130,8 @@ public class DBInterface
   		irow.insert();
   	}//for
   }//addDish
+  
+  /*
   //articles
   //deprecated
   public static void addArticle(int dish_id, int order_number) throws SQLException
@@ -158,14 +161,14 @@ public class DBInterface
       /*
       if(dishes[i] == null)
         throw new InvalidInputException("Array passed to addArticles by string has values == null");
-      */
+      
       row = ArticlesTable.getRow();
       row.setOrder_number(order_number);
       row.setDish_id(DishTable.getRow("name", dishes[i]).getDish_id());
       row.insert();
     }
   }
- 
+ */
   
   //order
   public static void addOrder(Order order) throws SQLException
@@ -178,13 +181,13 @@ public class DBInterface
     row.insert();
     
     //now insert the dishes associated with the order into the articles table
-    int order_number = row.getPendingorders_id();
+    int pendingorders_id = row.getPendingorders_id();
     
     //TODO handle multiplicities here
     for(int i=0; i<order.getDish_id().length; i++)
     {
       ArticlesTable.Row arow = ArticlesTable.getRow();
-      arow.setOrder_number(order_number);
+      arow.setPendingorders_id(pendingorders_id);
       arow.setDish_id(order.getDish_id()[i]);
       arow.insert();
     }
@@ -277,6 +280,7 @@ public class DBInterface
     row.setName(dish.getName());
     row.setDescription(dish.getDescripton());
     row.setPrice(dish.getPrice());
+    row.setType(dish.getType());
     row.update();
     
     //now the ingredients
@@ -417,7 +421,7 @@ public class DBInterface
     row.setNotes(order.getNotes());
     row.setCustomer_id(order.getCustomer_id());
     row.setTablenumber(order.getTablenumber());
-    row.update("number", String.valueOf(pendingorders_id));
+    row.update();
     
     //now the Dishes
     ArticlesTable.Row[] arows = ArticlesTable.getRows("order_number", String.valueOf(pendingorders_id));
@@ -461,7 +465,7 @@ public class DBInterface
     {
       addarow = ArticlesTable.getRow();
       addarow.setDish_id(rowsToAdd.get(i));
-      addarow.setOrder_number(pendingorders_id);
+      addarow.setPendingorders_id(pendingorders_id);
       addarow.insert();
     }
     
@@ -474,18 +478,36 @@ public class DBInterface
   }
   public static void editOrderNote(Order order) throws SQLException
   {
-    PendingordersTable.Row row = PendingordersTable.getRow("number", String.valueOf(order.getNumber()));
+    PendingordersTable.Row row = PendingordersTable.getRow(order.getPendingorders_id());
     row.setNotes(order.getNotes());
-    row.update("number", String.valueOf(order.getNumber()));
+    row.update();
   }
   
   //DELETE
   //Ingredient
   public static void deleteIngredient(Ingredient ingredient) throws SQLException
   {
+    IngredientsTable.Row[] rows = IngredientsTable.getRows("ingredient_id", ingredient.getId());
+    //keep track of the dishes, that lost an ingredient
+
     IngredientsTable.delete("ingredient_id", String.valueOf(ingredient.getId()));
     
-    //TODO make sure there can't be a dish without ingredients
+    //make sure there can't be a dish without ingredients
+    //after deletion check if those dishes still have an entry in the IngredientsTable.
+    //if not, remove this dish
+    IngredientsTable.Row[] newRows = IngredientsTable.getAllRows();
+    Boolean remove = true;
+    for(int i=0; i<rows.length; i++)
+    {
+      remove = true;
+      for(int j=0; j< newRows.length; j++)
+      {
+        if(rows[i].getDish_id() == newRows[i].getDish_id())
+          remove = false;
+      }
+      if(remove)
+        hardDeleteDish(rows[i].getDish_id()); //removes dish without ingredient
+    }
     
     IngredientTable.delete(ingredient.getId());
   }
@@ -501,13 +523,32 @@ public class DBInterface
   
   
   //Dish
-  public static void deleteDish(Dish dish) throws SQLException
+  public static void hardDeleteDish(int dish_id) throws SQLException
   {
     //delete all references to that dish from associated tables first: articles, ingredients, processedArticles
     //articles
-    //TODO check for interference and prevent delete eg by throwing a new exception
-    ArticlesTable.delete("dish_id", String.valueOf(dish.getID()));
+    //TODO check for interference in the ArticlesTable, if there is none, just delete the dish. Reasoning:
+    //If the customer doesnt get a dish he paid for its bad. If it is deleted out of the reference inside the system, the monetary aspect is still preserved, so I dont worry about that
+    ArticlesTable.delete("dish_id", String.valueOf(dish_id));
     
+    //ingredients
+    IngredientsTable.delete("dish_id", String.valueOf(dish_id));
+    
+    //processedArticles
+    ProcessedarticlesTable.delete("dish_id", String.valueOf(dish_id));
+    
+    //now i can actually delete the dish
+    DishTable.delete(dish_id);
+  }
+  public static void deleteDish(Dish dish) throws Exception
+  {
+    //check if dish is in AriclesTable, if so, do not allow to delete. The manager will have to wait till its cooked to alter it
+    ArticlesTable.Row[] rows = ArticlesTable.getAllRows();
+    for(int i=0; i<rows.length; i++)
+    {
+      if(rows[i].getDish_id() == dish.getID())
+        throw new Exception("Cannot delete this dish right now, as it is being cooked!");
+    }
     //ingredients
     IngredientsTable.delete("dish_id", String.valueOf(dish.getID()));
     
@@ -516,7 +557,6 @@ public class DBInterface
     
     //now i can actually delete the dish
     DishTable.delete(dish.getID());
-    
   }
   //deprecated
   public static void deleteDish(String name) throws SQLException
@@ -539,9 +579,9 @@ public class DBInterface
   public static void deleteOrder(Order order) throws SQLException
   {
     //first do the references
-    ArticlesTable.delete("order_number", String.valueOf(order.getNumber()));
+    ArticlesTable.delete("pendingorders_id", String.valueOf(order.getPendingorders_id()));
     //then the order
-    PendingordersTable.delete("number", String.valueOf(order.getNumber()));
+    PendingordersTable.delete(order.getPendingorders_id());
   }
   
   

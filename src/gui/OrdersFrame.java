@@ -27,6 +27,7 @@ public class OrdersFrame extends JPanel
   Box box;
   ArrayList<main.Order> orders;
   final Component parentFrame;
+  OrderTitlePanel otp;
   
   /**
    * Create the panel.
@@ -70,14 +71,15 @@ public class OrdersFrame extends JPanel
     box.setAutoscrolls(true);
     scrollPane.setViewportView(box);
     
-    //refresh();
+    refresh();
   }
   
   public void refresh()
   {
     
     box.removeAll();
-    
+    otp = new OrderTitlePanel();
+    box.add(otp);
     OrderFactory.refreshOrders(orders);
     
     JPanel[] ip = new JPanel[orders.size()];

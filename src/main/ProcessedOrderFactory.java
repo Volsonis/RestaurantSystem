@@ -1,6 +1,7 @@
 package main;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -9,19 +10,21 @@ import javax.swing.JFrame;
 import db.DBInterface;
 import db.wrapper.ArticlesTable;
 import db.wrapper.DishTable;
-import db.wrapper.PendingordersTable;
+import db.wrapper.ProcessedarticlesTable;
+import db.wrapper.ProcessedordersTable;
 
-public class OrderFactory
+public class ProcessedOrderFactory
 {
+
   public static void createOrders(ArrayList<Order> orders)
   {
     //initialize the arraylist
     if(orders == null)
       orders = new ArrayList<Order>();
     //create needed variables
-    PendingordersTable.Row orows[]; //rows of orders
+    ProcessedordersTable.Row prows[]; //rows of processed orders
     DishTable.Row drow; //current Dish (article) row
-    ArticlesTable.Row arows[]; //row of all dishes (articles) of an order
+    ProcessedarticlesTable.Row parows[]; //row of all dishes (articles) of an order
     try
     {
       Class.forName( "com.mysql.jdbc.Driver" ).newInstance();
@@ -31,21 +34,21 @@ public class OrderFactory
         try
         {
           //get all orders
-          orows = PendingordersTable.getAllRows(con);
-          for(int i=0; i<orows.length; i++)
+          prows = ProcessedordersTable.getAllRows(con);
+          for(int i=0; i<prows.length; i++)
           {
             //get dishes of this order
-            arows = ArticlesTable.getRows("pendingorders_id", orows[i].getPendingorders_id());
-            int[] dish_ids = new int[arows.length];
-            String[] dishes = new String[arows.length];
-            for(int j=0; j<arows.length; j++)
+            parows = ProcessedarticlesTable.getRows("processedorders_id", prows[i].getProcessedorders_id());
+            int[] dish_ids = new int[parows.length];
+            String[] dishes = new String[parows.length];
+            for(int j=0; j<parows.length; j++)
             {
               //add a dish of that order to the string array
-              drow = DishTable.getRow(con, arows[j].getDish_id());
+              drow = DishTable.getRow(con, parows[j].getDish_id());
               dish_ids[j] = drow.getDish_id();
               dishes[j] = drow.getName();
             }
-            orders.add(new Order(orows[i].getPendingorders_id(), orows[i].getValue(), orows[i].getNotes(), orows[i].getCustomer_id(), orows[i].getTablenumber(), dish_ids, dishes));
+            orders.add(new Order(prows[i].getProcessedorders_id(), prows[i].getValue(), Date.valueOf(prows[i].getDate()), prows[i].getNotes(), prows[i].getCustomer_id(), prows[i].getTablenumber(), dish_ids, dishes));
           }
         }
         catch(Exception e)

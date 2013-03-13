@@ -61,6 +61,7 @@ public class KitchenDisplay extends JFrame
     
     final JPanel panel = new JPanel();
     final JPanel feed = new FeedFrame();
+    final JPanel archive = new ArchiveFrame();
     JButton orderQueueButton = new JButton("Live Queue");
     orderQueueButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -79,6 +80,18 @@ public class KitchenDisplay extends JFrame
     toolBar.add(orderQueueButton);
     
     JButton btnArchive = new JButton("Archive");
+    btnArchive.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        panel.removeAll();
+        
+        panel.add(archive);
+        
+        archive.setVisible(true);
+        
+        revalidate();
+        repaint();
+      }
+    });
     btnArchive.setIcon(new ImageIcon(KitchenDisplay.class.getResource("/gui/resources/img32x32/document-open-8.png")));
     toolBar.add(btnArchive);
     

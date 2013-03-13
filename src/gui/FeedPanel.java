@@ -39,7 +39,7 @@ public class FeedPanel extends JPanel
     textField.setEditable(false);
     textField.setFont(new Font("Calibri", Font.PLAIN, 18));
     textField.setColumns(10);
-    textField.setText(String.valueOf(order.getNumber()));
+    textField.setText(String.valueOf(order.getPendingorders_id()));
     
     JLabel lblNewLabel = new JLabel("In: ");
     lblNewLabel.setFont(new Font("Calibri", Font.PLAIN, 18));

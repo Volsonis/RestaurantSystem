@@ -56,6 +56,7 @@ public class Order extends JFrame
     setContentPane(contentPane);
     contentPane.setLayout(new BorderLayout(0, 0));
     
+    final OrdersFrame ordersFrame = new OrdersFrame(this);
     final NewOrderPanel newOrderPanel = new NewOrderPanel(this);
     
     contentPane.add(newOrderPanel, BorderLayout.CENTER);
@@ -67,8 +68,11 @@ public class Order extends JFrame
     JButton btnNew = new JButton("New");
     btnNew.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
+        contentPane.remove(ordersFrame);
         //put the new NewOrderPanel in the frame
         contentPane.add(newOrderPanel, BorderLayout.CENTER);
+        revalidate();
+        repaint();
       }
     });
     btnNew.setIcon(new ImageIcon(Order.class.getResource("/gui/resources/img32x32/document-new-6.png")));
@@ -92,7 +96,6 @@ public class Order extends JFrame
     btnExit.setIcon(new ImageIcon(Order.class.getResource("/gui/resources/img32x32/dialog-close-2.png")));
     
 
-    final OrdersFrame ordersFrame = new OrdersFrame(this);
     btnOrders.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         contentPane.remove(newOrderPanel);

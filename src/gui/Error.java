@@ -21,6 +21,9 @@ import javax.swing.SwingConstants;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JFormattedTextField;
+import javax.swing.JTextArea;
+import java.awt.Font;
 
 public class Error extends JDialog {
 
@@ -41,39 +44,35 @@ public class Error extends JDialog {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		
-		JPanel panel = new JPanel();
-		
 		JButton btnOk = new JButton("OK");
 		btnOk.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent arg0) {
         setVisible(false);
       }
 		});
+		
+		JTextArea textArea = new JTextArea();
+		textArea.setFont(new Font("Calibri", Font.PLAIN, 16));
+		textArea.setEditable(false);
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addComponent(panel, GroupLayout.DEFAULT_SIZE, 424, Short.MAX_VALUE)
-				.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
-					.addContainerGap(189, Short.MAX_VALUE)
-					.addComponent(btnOk)
-					.addGap(186))
+		  gl_contentPane.createParallelGroup(Alignment.TRAILING)
+		    .addGroup(gl_contentPane.createSequentialGroup()
+		      .addContainerGap(191, Short.MAX_VALUE)
+		      .addComponent(btnOk)
+		      .addGap(186))
+		    .addComponent(textArea, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 424, Short.MAX_VALUE)
 		);
 		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE)
-					.addGap(18)
-					.addComponent(btnOk)
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+		  gl_contentPane.createParallelGroup(Alignment.LEADING)
+		    .addGroup(gl_contentPane.createSequentialGroup()
+		      .addComponent(textArea, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE)
+		      .addPreferredGap(ComponentPlacement.RELATED)
+		      .addComponent(btnOk)
+		      .addContainerGap(12, Short.MAX_VALUE))
 		);
-		panel.setLayout(new BorderLayout(0, 0));
-		
-		JScrollPane scrollPane = new JScrollPane();
-		panel.add(scrollPane, BorderLayout.CENTER);
 		contentPane.setLayout(gl_contentPane);
-		JLabel label = new JLabel(message);
-		scrollPane.setViewportView(label);
-		label.setVerticalAlignment(SwingConstants.TOP);
+		
+		textArea.setText(errortype + ": " +message);
 	}
 }

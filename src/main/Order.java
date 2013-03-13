@@ -8,8 +8,9 @@ public class Order
 
  
 
-  private int number;
+  private int pendingorders_id;
   private double price;
+  private Date date;
   private String notes;
   private int customer_id;
   private int tablenumber;
@@ -23,10 +24,33 @@ public class Order
     //empty constructor to build an order
   }
 
+  public Order(int number, double price, Date date, String notes, int customer_id,
+      int tablenumber, int[] dish_id, String[] dishes) {
+    super();
+    this.pendingorders_id = number;
+    this.price = price;
+    this.date = date;
+    this.notes = notes;
+    this.customer_id = customer_id;
+    this.tablenumber = tablenumber;
+    this.dish_id = dish_id;
+    this.dishes = dishes;
+  }
+  
+  public Date getDate()
+  {
+    return date;
+  }
+
+  public void setDate(Date date)
+  {
+    this.date = date;
+  }
+
   public Order(int number, double price, String notes, int customer_id,
       int tablenumber, int[] dish_id, String[] dishes) {
     super();
-    this.number = number;
+    this.pendingorders_id = number;
     this.price = price;
     this.notes = notes;
     this.customer_id = customer_id;
@@ -38,7 +62,7 @@ public class Order
   public Order(int number, double price, String notes, int tablenumber,
       int[] dish_id, String[] dishes) {
     super();
-    this.number = number;
+    this.pendingorders_id = number;
     this.price = price;
     this.notes = notes;
     this.tablenumber = tablenumber;
@@ -49,7 +73,7 @@ public class Order
   public ProcessedOrder process()
   {
     Date date = new Date();
-    ProcessedOrder procOrder = new ProcessedOrder(number, price, date, notes, customer_id, tablenumber, dish_id, dishes);
+    ProcessedOrder procOrder = new ProcessedOrder(pendingorders_id, price, date, notes, customer_id, tablenumber, dish_id, dishes);
     
     //remove itself from the databse
     
@@ -121,9 +145,9 @@ public class Order
     this.dishes = dishes;
   }
 
-  public int getNumber()
+  public int getPendingorders_id()
   {
-    return number;
+    return pendingorders_id;
   }
   
   public String dishesToString()
@@ -149,7 +173,7 @@ public class Order
   @Override
   public String toString()
   {
-    return "Order [number=" + number + ", price=" + price + ", notes=" + notes
+    return "Order [number=" + pendingorders_id + ", price=" + price + ", notes=" + notes
         + ", customer_id=" + customer_id + ", tablenumber=" + tablenumber + "]";
   }
   

@@ -46,14 +46,14 @@ public class ArticlesTable
 
     public static final String tableName = "Articles";
 
-    public static final String order_numberColumnName = "order_number";
-    public static final String dish_idColumnName = "dish_id";
     public static final String articles_idColumnName = "articles_id";
+    public static final String dish_idColumnName = "dish_id";
+    public static final String pendingorders_idColumnName = "pendingorders_id";
     public static final String quantityColumnName = "quantity";
 
     private static String[] allColumns =
     {
-        order_numberColumnName , dish_idColumnName , articles_idColumnName , quantityColumnName , 
+        articles_idColumnName , dish_idColumnName , pendingorders_idColumnName , quantityColumnName , 
     };
 
     /** You probably want to use the static methods for most of your access, but once in a while you might need to
@@ -233,9 +233,9 @@ public class ArticlesTable
 
         private boolean dataLoadedFromDatabase = false ;
 
-        private int order_number ;
-        private int dish_id ;
         private int articles_id ;
+        private int dish_id ;
+        private int pendingorders_id ;
         private int quantity ;
         private boolean quantityNull = true ;
 
@@ -248,9 +248,9 @@ public class ArticlesTable
         {
             if ( data != null )
             {
-                this.order_number =  Str.toInt( data[0] );
+                this.articles_id =  Str.toInt( data[0] );
                 this.dish_id =  Str.toInt( data[1] );
-                this.articles_id =  Str.toInt( data[2] );
+                this.pendingorders_id =  Str.toInt( data[2] );
                 this.quantityNull = ( data[3] == null );
                 this.quantity = quantityNull ? 0 : Str.toInt( data[3] );
                 dataLoadedFromDatabase = true ;
@@ -262,14 +262,14 @@ public class ArticlesTable
             this( results.getRow(0) );
         }
 
-        public int getOrder_number()
+        public int getArticles_id()
         {
-            return order_number ;
+            return articles_id ;
         }
 
-        public void setOrder_number( int order_number )
+        public void setArticles_id( int articles_id )
         {
-            this.order_number = order_number ;
+            this.articles_id = articles_id ;
         }
 
 
@@ -284,14 +284,14 @@ public class ArticlesTable
         }
 
 
-        public int getArticles_id()
+        public int getPendingorders_id()
         {
-            return articles_id ;
+            return pendingorders_id ;
         }
 
-        public void setArticles_id( int articles_id )
+        public void setPendingorders_id( int pendingorders_id )
         {
-            this.articles_id = articles_id ;
+            this.pendingorders_id = pendingorders_id ;
         }
 
 
@@ -344,9 +344,9 @@ public class ArticlesTable
         private Map buildDataMap()
         {
             Map data = new HashMap();
-            data.put( order_numberColumnName , String.valueOf(  this.order_number ) );
-            data.put( dish_idColumnName , String.valueOf(  this.dish_id ) );
             data.put( articles_idColumnName , String.valueOf(  this.articles_id ) );
+            data.put( dish_idColumnName , String.valueOf(  this.dish_id ) );
+            data.put( pendingorders_idColumnName , String.valueOf(  this.pendingorders_id ) );
             data.put( quantityColumnName , this.quantityNull ? null : String.valueOf( this.quantity ) );
             return data ;
         }

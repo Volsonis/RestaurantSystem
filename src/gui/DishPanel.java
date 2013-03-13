@@ -90,6 +90,12 @@ public class DishPanel extends JPanel
           err.setVisible(true);
           // TODO Auto-generated catch block
           e.printStackTrace();
+        } catch (Exception e)
+        {
+          Error err = new Error(parentWindow,"Deletion Error", e.getMessage());
+          err.setVisible(true);
+          // TODO Auto-generated catch block
+          e.printStackTrace();
         }
         //refresh parent frame
         parentFrame.refresh();

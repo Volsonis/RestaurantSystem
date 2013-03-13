@@ -37,7 +37,7 @@ public class OrderPanel extends JPanel
     gridBagLayout.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
     setLayout(gridBagLayout);
     
-    JLabel numberLabel = new JLabel(String.valueOf(order.getNumber()));
+    JLabel numberLabel = new JLabel(String.valueOf(order.getPendingorders_id()));
     numberLabel.setFont(new Font("Calibri", Font.PLAIN, 16));
     GridBagConstraints gbc_numberLabel = new GridBagConstraints();
     gbc_numberLabel.insets = new Insets(0, 0, 5, 5);

@@ -99,8 +99,9 @@ public class AddDish extends JDialog
         IngredientChooser ic = new IngredientChooser(parentFrame, dish);
         ic.setVisible(true);
         
-        //put the new text in and revalidate
-        ingredientsTextField.setText(dish.ingredientsToString());
+        //put the new text in and revalidate if there is a dish
+        if(dish.getIngredients() != null)
+          ingredientsTextField.setText(dish.ingredientsToString());
         ingredientsTextField.revalidate();
       }
     });
