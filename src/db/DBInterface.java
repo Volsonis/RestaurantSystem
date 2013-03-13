@@ -18,6 +18,7 @@ import db.wrapper.IngredientTable;
 import db.wrapper.IngredientsTable;
 import db.wrapper.PendingordersTable;
 import db.wrapper.ProcessedarticlesTable;
+import db.wrapper.ProcessedordersTable;
 import db.wrapper.ReservationTable;
 import main.*;
 
@@ -511,7 +512,6 @@ public class DBInterface
     
     IngredientTable.delete(ingredient.getId());
   }
-  
   //deprecated
   /* on deleting an ingredient I have to delete all the entries in the IngredientsTable associated with it first*/
   public static void deleteIngredient(String ingredient) throws SQLException
@@ -584,6 +584,82 @@ public class DBInterface
     PendingordersTable.delete(order.getPendingorders_id());
   }
   
+  //ProcessOrder
+  public static void processOrder(Order order) throws SQLException
+  {
+    //this puts an order from Pendingorders to Processedorders
+    //remove articles
+    ArticlesTable.Row[] arows = ArticlesTable.getRows("pendingorders_id", order.getPendingorders_id());
+    ArticlesTable.delete("pendingorders_id", String.valueOf(order.getPendingorders_id()));
+    
+    //remove pendingorders
+    PendingordersTable.Row prow = PendingordersTable.getRow(order.getPendingorders_id());
+    PendingordersTable.delete(order.getPendingorders_id());
+    
+    //put into processedordersTable
+    ProcessedordersTable.Row row = ProcessedordersTable.getRow();
+    row.setNumber(prow.getPendingorders_id());
+    row.setValue(prow.getValue());
+    row.setDate(new java.sql.Date(new java.util.Date().getTime()).toString());
+    row.setNotes(order.getNotes());
+    row.setCustomer_id(order.getCustomer_id());
+    row.setTablenumber(order.getTablenumber());
+    row.setDiscount_id(order.getDiscount_id());
+    row.insert();
+    
+    ProcessedarticlesTable.Row parow;
+    //put into Processedarticles
+    for(int i=0; i<arows.length; i++)
+    {
+      parow = ProcessedarticlesTable.getRow();
+      parow.setDish_id(arows[i].getDish_id());
+      parow.setProcessedorders_id(arows[i].getPendingorders_id());
+      parow.insert();
+    }
+    
+    //increase table revenue
+    db.wrapper.Table.Row trow = db.wrapper.Table.getRow("table_id", String.valueOf(order.getTablenumber()));
+    if(trow.getTable_id() != 0) // if this is not the second time we come past here
+    {
+      trow.setRevenue(trow.getRevenue()+order.getPrice());
+      trow.update("table_id", String.valueOf(order.getTablenumber()));
+    }
+
+  }
+  
+  //ReverseOrder
+  public static void reverseOrder(Order order) throws SQLException
+  {
+    //this puts an order from Processedorders to Pendingorders (but we can skip tablenumber, since we already harvested that information)
+    //remove processedarticles
+    ProcessedarticlesTable.Row[] parows = ProcessedarticlesTable.getRows("processedorders_id", order.getPendingorders_id());
+    ProcessedarticlesTable.delete("processedorders_id", String.valueOf(order.getPendingorders_id()));
+    
+    //remove processedOrder
+    ProcessedordersTable.Row porow = ProcessedordersTable.getRow(order.getPendingorders_id());
+    ProcessedordersTable.delete(order.getPendingorders_id());
+    
+    //put into pendingordersTable
+    PendingordersTable.Row row = PendingordersTable.getRow();
+    row.setValue(porow.getValue());
+    row.setTime(new java.sql.Time(new java.util.Date().getTime()).toString());
+    row.setNotes(order.getNotes());
+    row.setCustomer_id(order.getCustomer_id());
+    row.setTablenumber(0); // when it gets put back we dont want the tablerevenuie to count
+    row.setDiscount_id(order.getDiscount_id());
+    row.insert();
+    
+    //put into articles
+    ArticlesTable.Row arow;
+    //put into Processedarticles
+    for(int i=0; i<parows.length; i++)
+    {
+      arow = ArticlesTable.getRow();
+      arow.setDish_id(parows[i].getDish_id());
+      arow.setPendingorders_id((parows[i].getProcessedorders_id()));
+      arow.insert();
+    }
+  }
   
   //GET
   //ingredients of
@@ -597,7 +673,6 @@ public class DBInterface
   {
   	return IngredientsTable.getRows("dish_id", dish_id).length;
   }
-  
   
   
   //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------

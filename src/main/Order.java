@@ -14,6 +14,7 @@ public class Order
   private String notes;
   private int customer_id;
   private int tablenumber;
+  private int discount_id;
   private int[] dish_id;
   private String[] dishes;
   
@@ -35,6 +36,7 @@ public class Order
     this.tablenumber = tablenumber;
     this.dish_id = dish_id;
     this.dishes = dishes;
+    this.discount_id = 0;
   }
   
   public Date getDate()
@@ -160,6 +162,18 @@ public class Order
     return names;
   }
   
+  
+  
+  public int getDiscount_id()
+  {
+    return discount_id;
+  }
+
+  public void setDiscount_id(int discount_id)
+  {
+    this.discount_id = discount_id;
+  }
+
   public String dishesToFeed()
   {
     String names = "";

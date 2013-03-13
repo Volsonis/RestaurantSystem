@@ -44,6 +44,7 @@ public class NewOrderPanel extends JPanel
   final main.Order order;
   final ArrayList<Dish> dishesOrdered;
   private JTextField tableLabel;
+  private JPanel mainButtonPanel;
 
   /**
    * Create the panel.
@@ -155,6 +156,7 @@ public class NewOrderPanel extends JPanel
     btnStarters.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         //TODO load starters buttons
+        createButtons("Starters");
       }
     });
     btnStarters.setPreferredSize(new Dimension(110, 40));
@@ -167,6 +169,11 @@ public class NewOrderPanel extends JPanel
     toolBar.add(verticalStrut);
     
     JButton btnMains = new JButton("Mains");
+    btnMains.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        createButtons("Mains");
+      }
+    });
     btnMains.setPreferredSize(new Dimension(110, 40));
     btnMains.setMinimumSize(new Dimension(110, 40));
     btnMains.setMaximumSize(new Dimension(110, 40));
@@ -177,6 +184,11 @@ public class NewOrderPanel extends JPanel
     toolBar.add(verticalStrut_1);
     
     JButton btnDeserts = new JButton("Desserts");
+    btnDeserts.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        createButtons("Desserts");
+      }
+    });
     btnDeserts.setPreferredSize(new Dimension(110, 40));
     btnDeserts.setMinimumSize(new Dimension(110, 40));
     btnDeserts.setMaximumSize(new Dimension(110, 40));
@@ -187,6 +199,11 @@ public class NewOrderPanel extends JPanel
     toolBar.add(verticalStrut_2);
     
     JButton btnSoftDrinks = new JButton("S. Drinks");
+    btnSoftDrinks.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        createButtons("Non-Alcoholic");
+      }
+    });
     btnSoftDrinks.setPreferredSize(new Dimension(110, 40));
     btnSoftDrinks.setMinimumSize(new Dimension(110, 40));
     btnSoftDrinks.setMaximumSize(new Dimension(110, 40));
@@ -197,6 +214,11 @@ public class NewOrderPanel extends JPanel
     toolBar.add(verticalStrut_3);
     
     JButton btnDrinks = new JButton("Drinks");
+    btnDrinks.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        createButtons("Alcoholic");
+      }
+    });
     btnDrinks.setPreferredSize(new Dimension(110, 40));
     btnDrinks.setMinimumSize(new Dimension(110, 40));
     btnDrinks.setMaximumSize(new Dimension(110, 40));
@@ -213,7 +235,7 @@ public class NewOrderPanel extends JPanel
     btnAll.setIcon(new ImageIcon(NewOrderPanel.class.getResource("/gui/resources/img32x32/draw-donut.png")));
     toolBar.add(btnAll);
     
-    JPanel mainButtonPanel = new JPanel();
+    mainButtonPanel = new JPanel();
     scrollPane.setViewportView(mainButtonPanel);
     mainButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
     
@@ -334,6 +356,13 @@ public class NewOrderPanel extends JPanel
     toolBar_1.add(btnSubmit);
     setLayout(groupLayout);
     
+    createAllButtons();
+    
+  }
+  
+  private void createAllButtons()
+  {
+    mainButtonPanel.removeAll();
     ArrayList<Dish> allDishes = new ArrayList<Dish>();
     DishFactory.refreshDishes(allDishes);
     JButton[] allButtons = new JButton[allDishes.size()];
@@ -341,6 +370,22 @@ public class NewOrderPanel extends JPanel
     {
       allButtons[i] = createDishButton(allDishes.get(i));
       mainButtonPanel.add(allButtons[i]);
+      //TODO check if out of stock and disable button
+    }
+  }
+  
+  private void createButtons(String type)
+  {
+    mainButtonPanel.removeAll();
+    ArrayList<Dish> allDishes = new ArrayList<Dish>();
+    DishFactory.refreshDishes(allDishes);
+    JButton[] allButtons = new JButton[allDishes.size()];
+    for(int i=0 ; i<allDishes.size() ; i++)
+    {
+      allButtons[i] = createDishButton(allDishes.get(i));
+      if(allDishes.get(i).getType().equals(type))
+        mainButtonPanel.add(allButtons[i]);
+      //TODO check if out of stock and disable button
     }
   }
   
