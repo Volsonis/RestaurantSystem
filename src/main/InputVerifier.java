@@ -1,5 +1,10 @@
 package main;
 
+import java.sql.SQLException;
+
+import db.wrapper.IngredientTable;
+import db.wrapper.IngredientsTable;
+
 /*
  * A class to verify that the input passed to the database is within the constraints
  */
@@ -141,6 +146,26 @@ public class InputVerifier
 	  if(input.getPhone().length() > 16)
 	    throw new Exception("Phonenumber too long! (16 characters maximum!)");
 	  //TODO check phonenumber only numbers and valid
+	}
+	
+	public static boolean checkStock(Dish input) throws SQLException
+	{
+	  //true if in stock, false if not
+	  Boolean inStock = true;
+	  //get the ingredients of that dish
+	  IngredientTable.Row row[] = IngredientTable.getAllRows();
+	  
+	  int[] containedIngredients = input.getIngredient_id();
+	  
+	  for(int i=0; i<containedIngredients.length; i++)
+	  {
+	    for(int j=0; j<row.length; j++)
+	    {
+	      if(row[j].getIngredient_id() == containedIngredients[i] && row[j].getStock() < 1)
+	          inStock = false;
+	    }
+	  }
+	  return inStock;
 	}
 	
 	

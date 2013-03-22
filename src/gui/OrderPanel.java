@@ -115,6 +115,21 @@ public class OrderPanel extends JPanel
     btnEdit.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         //TODO create a newOrderPanel with the given order
+        parentFrame.removeAll();
+        try
+        {
+          parentFrame.add(new EditOrderPanel(parentWindow, order, parentFrame));
+        } catch (SQLException e1)
+        {
+          Error err = new Error(parentWindow,"Database Error", e1.getMessage());
+          err.setVisible(true);
+          // TODO Auto-generated catch block
+          e1.printStackTrace();
+        }
+        parentFrame.revalidate();
+        parentFrame.repaint();
+        parentWindow.revalidate();
+        parentWindow.repaint();
       }
     });
     btnEdit.setFont(new Font("Tahoma", Font.PLAIN, 14));

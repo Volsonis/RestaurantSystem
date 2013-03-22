@@ -16,6 +16,7 @@ import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.sql.SQLException;
 
 public class Order extends JFrame
 {
@@ -45,8 +46,9 @@ public class Order extends JFrame
 
   /**
    * Create the frame.
+   * @throws SQLException 
    */
-  public Order() {
+  public Order() throws SQLException {
     setIconImage(Toolkit.getDefaultToolkit().getImage(Order.class.getResource("/gui/resources/img16x16/cart-go.png")));
     setTitle("RestaurantSystem - Order");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -56,21 +58,28 @@ public class Order extends JFrame
     setContentPane(contentPane);
     contentPane.setLayout(new BorderLayout(0, 0));
     
-    final OrdersFrame ordersFrame = new OrdersFrame(this);
-    final NewOrderPanel newOrderPanel = new NewOrderPanel(this);
     
-    contentPane.add(newOrderPanel, BorderLayout.CENTER);
     
-    JToolBar toolBar = new JToolBar();
+    contentPane.add(new NewOrderPanel(contentPane), BorderLayout.CENTER);
+    
+    final JToolBar toolBar = new JToolBar();
     toolBar.setFloatable(false);
     contentPane.add(toolBar, BorderLayout.NORTH);
     
     JButton btnNew = new JButton("New");
     btnNew.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        contentPane.remove(ordersFrame);
+        contentPane.removeAll();
+        contentPane.add(toolBar, BorderLayout.NORTH);
         //put the new NewOrderPanel in the frame
-        contentPane.add(newOrderPanel, BorderLayout.CENTER);
+        try
+        {
+          contentPane.add(new NewOrderPanel(contentPane), BorderLayout.CENTER);
+        } catch (SQLException e1)
+        {
+          // TODO Auto-generated catch block
+          e1.printStackTrace();
+        }
         revalidate();
         repaint();
       }
@@ -98,8 +107,10 @@ public class Order extends JFrame
 
     btnOrders.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        contentPane.remove(newOrderPanel);
-        contentPane.add(ordersFrame, BorderLayout.CENTER);
+        contentPane.removeAll();
+        contentPane.add(toolBar, BorderLayout.NORTH);
+        
+        contentPane.add(new OrdersFrame(contentPane), BorderLayout.CENTER);
         revalidate();
         repaint();
       }

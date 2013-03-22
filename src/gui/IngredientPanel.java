@@ -129,6 +129,7 @@ public class IngredientPanel extends JPanel {
         editIngredient.setVisible(true);
         revalidate();
         repaint();
+        parentFrame.refresh();
 			}
 		});
 		
@@ -159,4 +160,6 @@ public class IngredientPanel extends JPanel {
 		toolBar.add(btnEdit);
 
 	}
+	
+	//TODO implement own refresh => better efficiency
 }

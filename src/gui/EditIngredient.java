@@ -56,7 +56,7 @@ public class EditIngredient extends JDialog {
 	  super((Frame) parent); //for modailty i need to pass the parent through to here and use the super constructor to lock that parent down
 	  final Component parentFrame = parent;
 		setIconImage(Toolkit.getDefaultToolkit().getImage(EditIngredient.class.getResource("/gui/resources/img16x16/list-add-5.png")));
-		setTitle("Add Ingredient");
+		setTitle("Edit Ingredient");
 		setBounds(100, 100, 450, 243);
 		setModalityType(Dialog.ModalityType.DOCUMENT_MODAL);
 		getContentPane().setLayout(new BorderLayout());
@@ -154,17 +154,19 @@ public class EditIngredient extends JDialog {
 				  public void actionPerformed(ActionEvent arg0) {
 				    try
             {
-				      Ingredient newIngredient = new Ingredient(nameTextField.getText(), Integer.parseInt(stockTextField.getText()),  
-                  Double.parseDouble(priceTextField.getText()), new java.sql.Date(dateChooser.getDate().getTime()));
-				      
 				      /*
-				      ingredient.setName(nameTextField.getText());
-				      ingredient.setExpires(dateChooser.getDate());
-				      ingredient.setPrice(Double.parseDouble(priceTextField.getText()));
-				      ingredient.setStock(Integer.parseInt(stockTextField.getText()));
-				      */
+				      Ingredient newIngredient = new Ingredient(
+				          nameTextField.getText(), Integer.parseInt(stockTextField.getText()),  
+                  Double.parseDouble(priceTextField.getText()), 
+                  new java.sql.Date(dateChooser.getDate().getTime()));
+				      */ 
 				      
-				      InputVerifier.verifyIngredient(newIngredient);
+				      ingredient.setName(nameTextField.getText());
+				      ingredient.setStock(Integer.parseInt(stockTextField.getText()));
+				      ingredient.setPrice(Double.parseDouble(priceTextField.getText()));
+				      ingredient.setExpires((new java.sql.Date(dateChooser.getDate().getTime())));
+				      
+				      InputVerifier.verifyIngredient(ingredient);
 				      
 				      DBInterface.editIngredient(ingredient.getId(), ingredient);
 				      

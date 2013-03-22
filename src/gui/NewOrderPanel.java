@@ -49,8 +49,9 @@ public class NewOrderPanel extends JPanel
 
   /**
    * Create the panel.
+   * @throws SQLException 
    */
-  public NewOrderPanel(final Component parent) {
+  public NewOrderPanel(final Component parent) throws SQLException {
     
     final Component parentFrame = parent;
     //new order
@@ -156,8 +157,14 @@ public class NewOrderPanel extends JPanel
     JButton btnStarters = new JButton("Starters");
     btnStarters.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        //TODO load starters buttons
-        createButtons("Starters");
+        try
+        {
+          createButtons("Starters");
+        } catch (SQLException e1)
+        {
+          // TODO Auto-generated catch block
+          e1.printStackTrace();
+        }
       }
     });
     btnStarters.setPreferredSize(new Dimension(110, 40));
@@ -172,7 +179,14 @@ public class NewOrderPanel extends JPanel
     JButton btnMains = new JButton("Mains");
     btnMains.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        createButtons("Mains");
+        try
+        {
+          createButtons("Mains");
+        } catch (SQLException e1)
+        {
+
+          e1.printStackTrace();
+        }
       }
     });
     btnMains.setPreferredSize(new Dimension(110, 40));
@@ -187,7 +201,14 @@ public class NewOrderPanel extends JPanel
     JButton btnSides = new JButton("Sides");
     btnSides.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent arg0) {
-        createButtons("Sides");
+        try
+        {
+          createButtons("Sides");
+        } catch (SQLException e)
+        {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
       }
     });
     btnSides.setMinimumSize(new Dimension(110, 40));
@@ -202,7 +223,14 @@ public class NewOrderPanel extends JPanel
     JButton btnDeserts = new JButton("Desserts");
     btnDeserts.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        createButtons("Desserts");
+        try
+        {
+          createButtons("Desserts");
+        } catch (SQLException e1)
+        {
+          // TODO Auto-generated catch block
+          e1.printStackTrace();
+        }
       }
     });
     btnDeserts.setPreferredSize(new Dimension(110, 40));
@@ -217,7 +245,14 @@ public class NewOrderPanel extends JPanel
     JButton btnSoftDrinks = new JButton("S. Drinks");
     btnSoftDrinks.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        createButtons("Non-Alcoholic");
+        try
+        {
+          createButtons("Non-Alcoholic");
+        } catch (SQLException e1)
+        {
+          // TODO Auto-generated catch block
+          e1.printStackTrace();
+        }
       }
     });
     btnSoftDrinks.setPreferredSize(new Dimension(110, 40));
@@ -232,7 +267,14 @@ public class NewOrderPanel extends JPanel
     JButton btnDrinks = new JButton("Drinks");
     btnDrinks.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        createButtons("Alcoholic");
+        try
+        {
+          createButtons("Alcoholic");
+        } catch (SQLException e1)
+        {
+          // TODO Auto-generated catch block
+          e1.printStackTrace();
+        }
       }
     });
     btnDrinks.setPreferredSize(new Dimension(110, 40));
@@ -247,7 +289,14 @@ public class NewOrderPanel extends JPanel
     JButton btnAll = new JButton("All");
     btnAll.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        createAllButtons();
+        try
+        {
+          createAllButtons();
+        } catch (SQLException e1)
+        {
+          // TODO Auto-generated catch block
+          e1.printStackTrace();
+        }
       }
     });
     btnAll.setPreferredSize(new Dimension(110, 40));
@@ -294,7 +343,14 @@ public class NewOrderPanel extends JPanel
     btnCancel.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent arg0) {
         //reset the order
-        reset();
+        try
+        {
+          reset();
+        } catch (SQLException e)
+        {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
       }
     });
     btnCancel.setIcon(new ImageIcon(NewOrderPanel.class.getResource("/gui/resources/img32x32/dialog-cancel-2.png")));
@@ -362,7 +418,7 @@ public class NewOrderPanel extends JPanel
               
         } catch (SQLException e)
         {
-          Error err = new Error(parentFrame,"Database Error", e.getMessage());
+          Error err = new Error(parent,"Database Error", e.getMessage());
           err.setVisible(true);
           // TODO Auto-generated catch block
           e.printStackTrace();
@@ -386,7 +442,7 @@ public class NewOrderPanel extends JPanel
     
   }
   
-  private void createAllButtons()
+  private void createAllButtons() throws SQLException
   {
     mainButtonPanel.removeAll();
     JButton[] allButtons = new JButton[allDishes.size()];
@@ -401,7 +457,7 @@ public class NewOrderPanel extends JPanel
     mainButtonPanel.repaint();
   }
   
-  private void createButtons(String type)
+  private void createButtons(String type) throws SQLException
   {
     mainButtonPanel.removeAll();
     JButton[] allButtons = new JButton[allDishes.size()];
@@ -410,14 +466,13 @@ public class NewOrderPanel extends JPanel
       allButtons[i] = createDishButton(allDishes.get(i));
       if(allDishes.get(i).getType().equals(type))
         mainButtonPanel.add(allButtons[i]);
-      //TODO check if out of stock and disable button
     }
     
     mainButtonPanel.revalidate();
     mainButtonPanel.repaint();
   }
   
-  private JButton createDishButton(final Dish dish)
+  private JButton createDishButton(final Dish dish) throws SQLException
   {
     JButton newButton = new JButton(dish.getName());
     newButton.addActionListener(new ActionListener() {
@@ -432,10 +487,15 @@ public class NewOrderPanel extends JPanel
         System.out.println(dishesOrdered.size());
       }
     });
+    
+    //TODO check if out of stock and disable button
+    if(!InputVerifier.checkStock(dish))
+      newButton.setEnabled(false);
+    
     return newButton;
   }
   
-  public void reset()
+  public void reset() throws SQLException
   {
     for(int i=model.getRowCount()-1 ; i>=0 ; i--)
       model.removeRow(i);

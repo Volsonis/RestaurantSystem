@@ -423,7 +423,7 @@ public class DBInterface
     row.update();
     
     //now the Dishes
-    ArticlesTable.Row[] arows = ArticlesTable.getRows("order_number", String.valueOf(pendingorders_id));
+    ArticlesTable.Row[] arows = ArticlesTable.getRows("pendingorders_id", String.valueOf(pendingorders_id));
     int[] updatedRows = order.getDish_id();
     
     Boolean add = true;
@@ -454,10 +454,11 @@ public class DBInterface
         if(arows[i].getDish_id() == updatedRows[j])//if it is in the update, dont remove it
           remove = false;
       if(remove)
-        rowsToRemove.add(arows[i].getDish_id()); //here we want to get the id of the row in the ingredients table
+        rowsToRemove.add(arows[i].getArticles_id()); //here we want to get the id of the row in the ingredients table
     }
     //rows that are in both can be ignored
     
+    System.out.println("Adding rows: " + rowsToAdd.size());
     //add whats to be added
     ArticlesTable.Row addarow;
     for(int i=0; i<rowsToAdd.size(); i++)
@@ -468,6 +469,7 @@ public class DBInterface
       addarow.insert();
     }
     
+    System.out.println("Removing rows: " + rowsToRemove.size());
     //delete what needs to be deleted
     for(int i=0; i<rowsToRemove.size(); i++)
     {
