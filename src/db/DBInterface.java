@@ -189,6 +189,16 @@ public class DBInterface
       arow.setPendingorders_id(pendingorders_id);
       arow.setDish_id(order.getDish_id()[i]);
       arow.insert();
+      
+      //now decrease the stock of the given dishes
+      IngredientsTable.Row[] isrows = IngredientsTable.getRows("dish_id", order.getDish_id()[i]);
+      IngredientTable.Row irow;
+      for(int j=0; j<isrows.length; j++)
+      {
+        irow = IngredientTable.getRow(isrows[j].getIngredient_id());
+        irow.setStock(irow.getStock() -1);
+        irow.update();
+      }
     }
   }
   
@@ -467,6 +477,15 @@ public class DBInterface
       addarow.setDish_id(rowsToAdd.get(i));
       addarow.setPendingorders_id(pendingorders_id);
       addarow.insert();
+      //i will decrease the ingredient stock of the newly added dishes' ingredients
+      IngredientsTable.Row[] isrows = IngredientsTable.getRows("dish_id", rowsToAdd.get(i));
+      IngredientTable.Row irow;
+      for(int j=0; j<isrows.length; j++)
+      {
+        irow = IngredientTable.getRow(isrows[j].getIngredient_id());
+        irow.setStock(irow.getStock() -1);
+        irow.update();
+      }
     }
     
     System.out.println("Removing rows: " + rowsToRemove.size());
@@ -474,6 +493,7 @@ public class DBInterface
     for(int i=0; i<rowsToRemove.size(); i++)
     {
       ArticlesTable.delete(rowsToRemove.get(i));
+      // i will not add the ingredients back here, as i see them as lost!
     }
     
   }

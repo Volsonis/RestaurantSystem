@@ -418,7 +418,7 @@ public class NewOrderPanel extends JPanel
               
         } catch (SQLException e)
         {
-          Error err = new Error(parent,"Database Error", e.getMessage());
+          Error err = new Error(null,"Database Error", e.getMessage());
           err.setVisible(true);
           // TODO Auto-generated catch block
           e.printStackTrace();

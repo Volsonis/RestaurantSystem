@@ -35,7 +35,7 @@ public class Error extends JDialog {
 	 */
 	public Error(Component parent, String errortype, String message)
 	{
-	  super((Frame) parent);
+	  super();
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Error.class.getResource("/gui/resources/img16x16/dialog-close-2.png")));
 		setTitle(errortype);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
